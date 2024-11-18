@@ -1,7 +1,6 @@
 # Project Title
 
 GameDeal Finder
-NOTES FROM LECTURE: DONT have login page, dont think about it from now
 
 ## Overview
 
@@ -52,7 +51,7 @@ Gamers:
 - Server libraries:
   - knex
   - express
-  - bcrypt for password hashing (maybe from 11-18 demo)
+  - bcrypt for password hashing\* [(see Future Implementations) ](#future-implementations)
   -
 
 ### APIs
@@ -228,14 +227,14 @@ ADD HIDDEN ADMIN PAGE
   - Allow adding new games or editing existing games.
   - Create add or POST endpoint `/games/add`
   - Create edit or PUT endpoint `/games/:id/edit`
-  - Hidden Form page that can't be navigated to, but can be accessed by typing in the URL manually
+  - Hidden Form page (not meant to be pretty since) that can't be navigated to, but can be accessed by typing in the URL manually
 
 - Feature: Hidden Admin Mode - Add/edit Prices
 
   - Allow adding new games or editing existing prices.
   - Create add or POST endpoint `/prices/add`
   - Create edit or PUT endpoint `/prices/:id/edit`
-  - Hidden Form page that can't be navigated to, but can be accessed by typing in the URL manually
+  - Hidden Form page (not meant to be pretty since) that can't be navigated to, but can be accessed by typing in the URL manually
 
 - Bug fixes
 
@@ -245,7 +244,7 @@ ADD HIDDEN ADMIN PAGE
 
 ## Future Implementations
 
-####### Your project will be marked based on what you committed to in the above document. Here, you can list any additional features you may complete after the MVP of your application is built, or if you have extra time before the Capstone due date.
+###### Your project will be marked based on what you committed to in the above document. Here, you can list any additional features you may complete after the MVP of your application is built, or if you have extra time before the Capstone due date.
 
 - Feature: Search games on home page
   - Make search bar in header functional. Users can type text to filter the table of displayed games (text will search each variable for all rows)
