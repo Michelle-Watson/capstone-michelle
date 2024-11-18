@@ -29,7 +29,7 @@ Gamers:
 
 ###### List the functionality that your app will include. These can be written as user stories or descriptions with related details. Do not describe _how_ these features are implemented, only _what_ needs to be implemented.
 
-- As a user, I want to search for a video game by title and see prices across different platforms.
+- As a user, I want to see video games by title and see prices across different platforms.
 - As a user, I want to click on a link that takes me directly to the store page where I can purchase the game.
 - As a user, I want to see a list of platforms and their current price for a specific game.
 - As a user, I want to see the game’s current price, regular price, and any discounts applied (if available).
@@ -79,7 +79,7 @@ Gamers:
 ![](home.jpg)
 
 - Display results with game prices from different platforms (e.g., Steam, GOG).
-- Search bar to enter game titles
+- Search bar to enter game titles (non-functional for PoC)
 
 #### Game Detail Page
 
@@ -190,6 +190,8 @@ Response (example: `/games/1/prices`):
 ]
 ```
 
+ADD HIDDEN ADMIN PAGE
+
 ## Roadmap
 
 ####### Scope your project as a sprint. Break down the tasks that will need to be completed and map out timeframes for implementation working back from the capstone due date.
@@ -221,8 +223,21 @@ Response (example: `/games/1/prices`):
 - Feature: View Game Details - Table of Prices
 
   - Implement table of game prices from multiple platforms on the game details page. Table contains platform name, platform logo, URL to buy the game on that specific platform, and price on that platform
-  - Create GET /games/:id
-  - Create GET /prices/:id (?)
+  - Create GET /games/:id/prices
+
+- Feature: Hidden Admin Mode - Add/edit Games
+
+  - Allow adding new games or editing existing games.
+  - Create add or POST endpoint `/games/add`
+  - Create edit or PUT endpoint `/games/:id/edit`
+  - Hidden Form page that can't be navigated to, but can be accessed by typing in the URL manually
+
+- Feature: Hidden Admin Mode - Add/edit Prices
+
+  - Allow adding new games or editing existing prices.
+  - Create add or POST endpoint `/prices/add`
+  - Create edit or PUT endpoint `/prices/:id/edit`
+  - Hidden Form page that can't be navigated to, but can be accessed by typing in the URL manually
 
 - Bug fixes
 
@@ -241,4 +256,6 @@ Response (example: `/games/1/prices`):
 - Allow users to favourite games, and view their favourite games
 - Allow users to 'watch' games, and get email notified of price drops (when the price is lower than the price at the time of them favouriting the game)
 - Allow users to filter search results (ex. exclude prices from a specific platform)
+- Only allow admin users to add/edit games and game prices
+- Use a webscraper to ensure prices are always up to date (fetched real time)
 - Unit and Integration Tests
