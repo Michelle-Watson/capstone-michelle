@@ -93,6 +93,8 @@ Gamers:
 
 ##### Describe your data and the relationships between the data points. You can show this visually using diagrams, or write it out.
 
+![](sql-diagram.png)
+
 ### Endpoints
 
 ##### List endpoints that your server will implement, including HTTP methods, parameters, and example responses.
