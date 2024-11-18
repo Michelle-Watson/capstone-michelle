@@ -34,8 +34,6 @@ Gamers:
 - As a user, I want to see a list of platforms and their current price for a specific game.
 - As a user, I want to see the game’s current price, regular price, and any discounts applied (if available).
 - As a user, I want the app to display the platform’s logo (e.g., Steam, GOG) alongside the price for easy identification.
-- As a user, I want to be able to filter results by platform, price range, or discount percentage (optional).
-- As a logged in user, I want to be able to favourite games that I like, and view them on a page of favourite games (optional).
 
 ## Implementation
 
