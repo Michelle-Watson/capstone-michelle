@@ -65,7 +65,14 @@ Gamers:
 
 ### Sitemap
 
+- Home page
+- Game Detail Page
+
 ##### List the pages of your app with brief descriptions. You can show this visually, or write it out.
+
+### Mockups
+
+##### Provide visuals of your app's screens. You can use pictures of hand-drawn sketches, or wireframing tools like Figma.
 
 #### Home page (List Games page)
 
@@ -82,10 +89,6 @@ Gamers:
 - In a table below, list prices from supported platforms, with links to buy on each platform.
 - Optionally show sale discounts and comparisons (within the table)
 
-### Mockups
-
-##### Provide visuals of your app's screens. You can use pictures of hand-drawn sketches, or wireframing tools like Figma.
-
 ### Data
 
 ##### Describe your data and the relationships between the data points. You can show this visually using diagrams, or write it out.
@@ -98,8 +101,51 @@ Gamers:
 
 ##### Scope your project as a sprint. Break down the tasks that will need to be completed and map out timeframes for implementation working back from the capstone due date.
 
+- Create client
+
+  - react project with routes and boilerplate pages
+
+- Create server
+
+  - express project with routing, with placeholder 200 responses
+
+- Create migrations
+
+- Gather 10 sample game and price data (10 games, each with at least 1 pricing on 2 platforms)
+
+- Create seeds with sample game data
+
+- Feature: List games on home page
+
+  - Implement list games home page (header includes non-functional search bar)and table with list of games in games database (box art, title, description, price on the Steam platform)
+  - Create GET /games endpoint
+
+- Feature: View Game Details - Hero
+
+  - Implement view game details page
+  - Create GET /games/:id
+
+- Feature: View Game Details - Table of Prices
+
+  - Implement table of game prices from multiple platforms on the game details page. Table contains platform name, platform logo, URL to buy the game on that specific platform, and price on that platform
+  - Create GET /games/:id
+  - Create GET /prices/:id (?)
+
+- Bug fixes
+
+- DEMO DAY
+
 ---
 
 ## Future Implementations
 
 ##### Your project will be marked based on what you committed to in the above document. Here, you can list any additional features you may complete after the MVP of your application is built, or if you have extra time before the Capstone due date.
+
+- Feature: Search games on home page
+  - Make search bar in header functional. Users can type text to filter the table of displayed games (text will search each variable for all rows)
+- View price history of games
+- Allow users to make an account
+- Allow users to favourite games, and view their favourite games
+- Allow users to 'watch' games, and get email notified of price drops (when the price is lower than the price at the time of them favouriting the game)
+- Allow users to filter search results (ex. exclude prices from a specific platform)
+- Unit and Integration Tests
