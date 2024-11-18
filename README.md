@@ -232,7 +232,7 @@ ADD HIDDEN ADMIN PAGE
 - Feature: Hidden Admin Mode - Add/edit Prices
 
   - Allow adding new games or editing existing prices.
-  - Create add or POST endpoint `/games/:id/prices/add`
+  - Create add or POST endpoint `/games/prices/add`
   - Create edit or PUT endpoint `/games/:id/prices/edit`
   - Hidden Form page (not meant to be pretty since) that can't be navigated to, but can be accessed by typing in the URL manually
 
