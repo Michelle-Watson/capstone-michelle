@@ -210,17 +210,17 @@ ADD HIDDEN ADMIN PAGE
 - Feature: List games on home page
 
   - Implement list games home page (header includes non-functional search bar)and table with list of games in games database (box art, title, description, price on the Steam platform)
-  - Create GET /games endpoint
+  - Create GET `/games` endpoint
 
 - Feature: View Game Details - Hero
 
   - Implement view game details page
-  - Create GET /games/:id
+  - Create GET `/games/:id`
 
 - Feature: View Game Details - Table of Prices
 
   - Implement table of game prices from multiple platforms on the game details page. Table contains platform name, platform logo, URL to buy the game on that specific platform, and price on that platform
-  - Create GET /games/:id/prices
+  - Create GET `/games/:id/prices`
 
 - Feature: Hidden Admin Mode - Add/edit Games
 
@@ -232,8 +232,8 @@ ADD HIDDEN ADMIN PAGE
 - Feature: Hidden Admin Mode - Add/edit Prices
 
   - Allow adding new games or editing existing prices.
-  - Create add or POST endpoint `/prices/add`
-  - Create edit or PUT endpoint `/prices/:id/edit`
+  - Create add or POST endpoint `/games/:id/prices/add`
+  - Create edit or PUT endpoint `/games/:id/prices/edit`
   - Hidden Form page (not meant to be pretty since) that can't be navigated to, but can be accessed by typing in the URL manually
 
 - Bug fixes
