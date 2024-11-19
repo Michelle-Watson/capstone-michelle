@@ -88,13 +88,17 @@ Gamers:
 - In a table below, list prices from supported platforms, with links to buy on each platform.
 - Optionally show sale discounts and comparisons (within the table)
 
+#### ADMIN: Add/Edit Game Page
+
 ![](Add-Edit-Game.jpg)
 
-- Show de
+- Allow admin user to add/edit a game from the game database
 
-![](Add-Edit price.jpg)
+#### Game Detail Page
 
-- Show de
+![](Add-Edit-Prices.jpg)
+
+- Allow admin user to add/edit a price from the price database
 
 ### Data
 
