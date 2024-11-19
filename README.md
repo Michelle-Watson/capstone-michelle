@@ -64,6 +64,8 @@ Gamers:
 
 - Home page
 - Game Detail Page
+- Add/Edit Game
+- Add/Edit Price
 
 ###### List the pages of your app with brief descriptions. You can show this visually, or write it out.
 
@@ -86,6 +88,14 @@ Gamers:
 - In a table below, list prices from supported platforms, with links to buy on each platform.
 - Optionally show sale discounts and comparisons (within the table)
 
+![](Add-Edit-Game.jpg)
+
+- Show de
+
+![](Add-Edit price.jpg)
+
+- Show de
+
 ### Data
 
 ###### Describe your data and the relationships between the data points. You can show this visually using diagrams, or write it out.
@@ -101,33 +111,12 @@ Gamers:
 - fetch a list of all games, with basic details like title, description, and release date.
 - Platform-specific prices not available here, just the general game data
 
-Parameters (future):
-
-- title: Name of the video game
-
-Response:
-
-```
-[
-    {
-        "id": 1,
-        "title": "Cyberpunk 2077",
-        "description": "A futuristic RPG set in Night City.",
-        "release_date": "2020-12-10"
-    },
-    ...
-]
-```
-
-**GET /games/:id**
-
-- returns detailed information for a specific game, including its description, release date, and a list of available prices from various platforms.
-
 Parameters:
 
-- id: game id
+- title: Name of the video game
+  - Future feature allows for users to make a search query
 
-Response (example: `/games/1`):
+Response:
 
 ```
 [
@@ -151,6 +140,71 @@ Response (example: `/games/1`):
 ]
 ```
 
+**POST /games**
+
+- User can add a game to the database
+
+Parameters:
+
+- title: Name of the video game
+- description: Description oof the game
+- release_date: The release date of the game
+
+Response:
+
+```
+
+{
+    "title": "Cyberpunk 2077",
+    "description": "A futuristic RPG set in Night City.",
+    "release_date": "2020-12-10"
+}
+
+```
+
+**GET /games/:id**
+
+- returns detailed information for a specific game, including its description, release date, and a list of available prices from various platforms.
+
+Parameters:
+
+- id: game id
+
+Response (example: `/games/1`):
+
+```
+
+{
+    "id": 1,
+    "title": "Cyberpunk 2077",
+    "description": "A futuristic RPG set in Night City.",
+    "release_date": "2020-12-10"
+}
+
+```
+
+**PUT /games/:id**
+
+- User can update an existing game in the database
+
+Parameters:
+
+- title: Name of the video game
+- description: Description oof the game
+- release_date: The release date of the game
+
+Response (example: `/games/1`):
+
+```
+
+{
+    "title": "Cyberpunk 2077",
+    "description": "A futuristic RPG set in Night City.",
+    "release_date": "2020-12-10"
+}
+
+```
+
 **GET /games/:id/prices**
 
 - fetches the prices for a specific game from multiple platforms.
@@ -162,32 +216,118 @@ Parameters:
 Response (example: `/games/1/prices`):
 
 ```
+
 [
     {
-        "id": 1,
-        "platform_name": "Steam",
-        "original_price": 59.99,
-        "discount": 0.2,
-        "discounted_price": 47.99,
-        "url": "https://store.steampowered.com/app/1091500",
-        "created_at": "2024-11-18T10:00:00Z",
-        "updated_at": "2024-11-19T14:00:00Z"
+    "id": 1,
+    "platform_name": "Steam",
+    "original_price": 59.99,
+    "discount": 0.2,
+    "discounted_price": 47.99,
+    "url": "https://store.steampowered.com/app/1091500",
+    "created_at": "2024-11-18T10:00:00Z",
+    "updated_at": "2024-11-19T14:00:00Z"
     },
     {
-        "id": 2,
-        "platform_name": "GOG",
-        "original_price": 59.99,
-        "discount": 0.1,
-        "discounted_price": 53.99,
-        "url": "https://www.gog.com/game/cyberpunk_2077",
-        "created_at": "2024-11-18T10:00:00Z",
-        "updated_at": "2024-11-19T14:00:00Z"
+    "id": 2,
+    "platform_name": "GOG",
+    "original_price": 59.99,
+    "discount": 0.1,
+    "discounted_price": 53.99,
+    "url": "https://www.gog.com/game/cyberpunk_2077",
+    "created_at": "2024-11-18T10:00:00Z",
+    "updated_at": "2024-11-19T14:00:00Z"
     },
-...
+    ...
 ]
+
 ```
 
-ADD HIDDEN ADMIN PAGE
+**GET /prices**
+
+- fetch a list of all prices across all platforms for all games
+
+Response:
+
+```
+[
+    {
+    "id": 1,
+    "platform_name": "Steam",
+    "original_price": 59.99,
+    "discount": 0.2,
+    "discounted_price": 47.99,
+    "url": "https://store.steampowered.com/app/1091500"
+    },
+
+    {
+    "id": 2,
+    "platform_name": "GOG",
+    "original_price": 59.99,
+    "discount": 0.1,
+    "discounted_price": 53.99,
+    "url": "https://www.gog.com/game/cyberpunk_2077"
+    },
+    ...
+]
+
+```
+
+**POST /prices**
+
+- Create a new price entry for the prices database
+
+Parameters:
+
+- game_id: Foreign key linking to the games table.
+- platform_name: The platform where the game is available (e.g., Steam, GOG).
+- url: URL to the store page where users can purchase the game.
+- original_price: The original price of the game without any discount.
+- discount: Discount percentage (if applicable).
+- discounted_price: Price after the discount has been applied.
+
+Response:
+
+```
+
+{
+    "id": 1,
+    "platform_name": "Steam",
+    "original_price": 59.99,
+    "discount": 0.2,
+    "discounted_price": 47.99,
+    "url": "https://store.steampowered.com/app/1091500"
+}
+
+```
+
+**PUT /prices/:id**
+
+- Update price entry for the prices database
+
+Parameters:
+
+- game_id: Foreign key linking to the games table.
+- platform_name: The platform where the game is available (e.g., Steam, GOG).
+- url: URL to the store page where users can purchase the game.
+- original_price: The original price of the game without any discount.
+- discount: Discount percentage (if applicable).
+- discounted_price: Price after the discount has been applied.
+
+Response:
+
+```
+
+{
+    "id": 1,
+    "platform_name": "Steam",
+    "original_price": 59.99,
+    "discount": 0.2,
+    "discounted_price": 47.99,
+    "url": "https://store.steampowered.com/app/1091500"
+}
+
+```
 
 ## Roadmap
 
@@ -225,15 +365,16 @@ ADD HIDDEN ADMIN PAGE
 - Feature: Hidden Admin Mode - Add/edit Games
 
   - Allow adding new games or editing existing games.
-  - Create add or POST endpoint `/games/add`
-  - Create edit or PUT endpoint `/games/:id/edit`
+  - Create add or POST endpoint at `/games`, client side can access this from `/games/add`
+  - Create edit or PUT endpoint `/games/:id`, client side can access this from `/games/:id/edit`
   - Hidden Form page (not meant to be pretty since) that can't be navigated to, but can be accessed by typing in the URL manually
 
 - Feature: Hidden Admin Mode - Add/edit Prices
 
   - Allow adding new games or editing existing prices.
-  - Create add or POST endpoint `/games/prices/add`
-  - Create edit or PUT endpoint `/games/:id/prices/edit`
+  - Create add or POST endpoint at `/prices`, client side can access this from `/prices/add`
+  - Create edit or PUT endpoint at `/prices/:id`, client side can access this from `/prices/:id/edit`
+    - Why is this the client side URL? So that the game_id is the same as the id from the URL? So that admin doesn't need to input it themselves. Send useParams in body request
   - Hidden Form page (not meant to be pretty since) that can't be navigated to, but can be accessed by typing in the URL manually
 
 - Bug fixes
@@ -256,3 +397,11 @@ ADD HIDDEN ADMIN PAGE
 - Only allow admin users to add/edit games and game prices
 - Use a webscraper to ensure prices are always up to date (fetched real time)
 - Unit and Integration Tests
+
+```
+
+```
+
+```
+
+```
