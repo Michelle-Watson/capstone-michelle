@@ -126,19 +126,9 @@ Response:
 [
     {
         "id": 1,
-        "platform_name": "Steam",
-        "original_price": 59.99,
-        "discount": 0.2,
-        "discounted_price": 47.99,
-        "url": "https://store.steampowered.com/app/1091500"
-    },
-    {
-        "id": 2,
-        "platform_name": "GOG",
-        "original_price": 59.99,
-        "discount": 0.1,
-        "discounted_price": 53.99,
-        "url": "https://www.gog.com/game/cyberpunk_2077"
+        "title": "Cyberpunk 2077",
+        "description": "A futuristic RPG set in Night City.",
+        "release_date": "2020-12-10"
     },
 ...
 ]
@@ -159,9 +149,10 @@ Response:
 ```
 
 {
-    "title": "Cyberpunk 2077",
-    "description": "A futuristic RPG set in Night City.",
-    "release_date": "2020-12-10"
+    "id": 2,
+    "title": "The Witcher 3",
+    "description": "An open-world RPG...",
+    "release_date": "2015-05-19"
 }
 
 ```
@@ -202,6 +193,7 @@ Response (example: `/games/1`):
 ```
 
 {
+    "id": 1,
     "title": "Cyberpunk 2077",
     "description": "A futuristic RPG set in Night City.",
     "release_date": "2020-12-10"
@@ -220,31 +212,25 @@ Parameters:
 Response (example: `/games/1/prices`):
 
 ```
-
 [
     {
-    "id": 1,
-    "platform_name": "Steam",
-    "original_price": 59.99,
-    "discount": 0.2,
-    "discounted_price": 47.99,
-    "url": "https://store.steampowered.com/app/1091500",
-    "created_at": "2024-11-18T10:00:00Z",
-    "updated_at": "2024-11-19T14:00:00Z"
+        "id": 1,
+        "platform_name": "Steam",
+        "original_price": 59.99,
+        "discount": 0.2,
+        "discounted_price": 47.99,
+        "url": "https://store.steampowered.com/app/1091500"
     },
     {
-    "id": 2,
-    "platform_name": "GOG",
-    "original_price": 59.99,
-    "discount": 0.1,
-    "discounted_price": 53.99,
-    "url": "https://www.gog.com/game/cyberpunk_2077",
-    "created_at": "2024-11-18T10:00:00Z",
-    "updated_at": "2024-11-19T14:00:00Z"
+        "id": 2,
+        "platform_name": "GOG",
+        "original_price": 59.99,
+        "discount": 0.1,
+        "discounted_price": 53.99,
+        "url": "https://www.gog.com/game/cyberpunk_2077"
     },
-    ...
+...
 ]
-
 ```
 
 **GET /prices**
@@ -256,21 +242,21 @@ Response:
 ```
 [
     {
-    "id": 1,
-    "platform_name": "Steam",
-    "original_price": 59.99,
-    "discount": 0.2,
-    "discounted_price": 47.99,
-    "url": "https://store.steampowered.com/app/1091500"
+        "id": 1,
+        "platform_name": "Steam",
+        "original_price": 59.99,
+        "discount": 0.2,
+        "discounted_price": 47.99,
+        "url": "https://store.steampowered.com/app/1091500"
     },
 
     {
-    "id": 2,
-    "platform_name": "GOG",
-    "original_price": 59.99,
-    "discount": 0.1,
-    "discounted_price": 53.99,
-    "url": "https://www.gog.com/game/cyberpunk_2077"
+        "id": 2,
+        "platform_name": "GOG",
+        "original_price": 59.99,
+        "discount": 0.1,
+        "discounted_price": 53.99,
+        "url": "https://www.gog.com/game/cyberpunk_2077"
     },
     ...
 ]
@@ -293,16 +279,25 @@ Parameters:
 Response:
 
 ```
-
-{
-    "id": 1,
-    "platform_name": "Steam",
-    "original_price": 59.99,
-    "discount": 0.2,
-    "discounted_price": 47.99,
-    "url": "https://store.steampowered.com/app/1091500"
-}
-
+[
+    {
+        "id": 1,
+        "platform_name": "Steam",
+        "original_price": 59.99,
+        "discount": 0.2,
+        "discounted_price": 47.99,
+        "url": "https://store.steampowered.com/app/1091500"
+    },
+    {
+        "id": 2,
+        "platform_name": "GOG",
+        "original_price": 59.99,
+        "discount": 0.1,
+        "discounted_price": 53.99,
+        "url": "https://www.gog.com/game/cyberpunk_2077"
+    },
+    ...
+]
 ```
 
 **PUT /prices/:id**
@@ -321,7 +316,6 @@ Parameters:
 Response:
 
 ```
-
 {
     "id": 1,
     "platform_name": "Steam",
@@ -330,7 +324,6 @@ Response:
     "discounted_price": 47.99,
     "url": "https://store.steampowered.com/app/1091500"
 }
-
 ```
 
 ## Roadmap
