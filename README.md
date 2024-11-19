@@ -28,7 +28,7 @@ Gamers:
 
 ###### List the functionality that your app will include. These can be written as user stories or descriptions with related details. Do not describe _how_ these features are implemented, only _what_ needs to be implemented.
 
-- As a user, I want to see video games by title and see prices across different platforms.
+- As a user, I want to see a list of video games with their title.
 - As a user, I want to click on a link that takes me directly to the store page where I can purchase the game.
 - As a user, I want to see a list of platforms and their current price for a specific game.
 - As a user, I want to see the game’s current price, regular price, and any discounts applied (if available).
