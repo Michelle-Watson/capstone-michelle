@@ -159,7 +159,7 @@ Response:
 
 **GET /games/:id**
 
-- returns detailed information for a specific game, including its description, release date, and a list of available prices from various platforms.
+- returns detailed information for a specific game, including its title, description and release date.
 
 Parameters:
 
@@ -195,7 +195,7 @@ Response (example: `/games/1`):
 {
     "id": 1,
     "title": "Cyberpunk 2077",
-    "description": "A futuristic RPG set in Night City.",
+    "description": "A very cool futuristic RPG set in Night City.",
     "release_date": "2020-12-10"
 }
 
@@ -215,6 +215,7 @@ Response (example: `/games/1/prices`):
 [
     {
         "id": 1,
+        "game_id": 1,
         "platform_name": "Steam",
         "original_price": 59.99,
         "discount": 0.2,
@@ -223,13 +224,14 @@ Response (example: `/games/1/prices`):
     },
     {
         "id": 2,
+        "game_id": 1,
         "platform_name": "GOG",
         "original_price": 59.99,
         "discount": 0.1,
         "discounted_price": 53.99,
         "url": "https://www.gog.com/game/cyberpunk_2077"
     },
-...
+    ...
 ]
 ```
 
@@ -243,6 +245,7 @@ Response:
 [
     {
         "id": 1,
+        "game_id": 1,
         "platform_name": "Steam",
         "original_price": 59.99,
         "discount": 0.2,
@@ -282,6 +285,7 @@ Response:
 [
     {
         "id": 1,
+        "game_id": 1,
         "platform_name": "Steam",
         "original_price": 59.99,
         "discount": 0.2,
@@ -290,6 +294,7 @@ Response:
     },
     {
         "id": 2,
+        "game_id": 1,
         "platform_name": "GOG",
         "original_price": 59.99,
         "discount": 0.1,
@@ -318,6 +323,7 @@ Response:
 ```
 {
     "id": 1,
+    "game_id": 1,
     "platform_name": "Steam",
     "original_price": 59.99,
     "discount": 0.2,
