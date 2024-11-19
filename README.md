@@ -62,12 +62,12 @@ Gamers:
 
 ### Sitemap
 
+###### List the pages of your app with brief descriptions. You can show this visually, or write it out.
+
 - Home page
 - Game Detail Page
 - Add/Edit Game
 - Add/Edit Price
-
-###### List the pages of your app with brief descriptions. You can show this visually, or write it out.
 
 ### Mockups
 
