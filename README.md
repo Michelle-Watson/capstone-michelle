@@ -392,19 +392,11 @@ Response:
 
 - Feature: Search games on home page
   - Make search bar in header functional. Users can type text to filter the table of displayed games (text will search each variable for all rows)
+- Use a webscraper to ensure prices are always up to date (fetched real time)
 - View price history of games
 - Allow users to make an account
 - Allow users to favourite games, and view their favourite games
 - Allow users to 'watch' games, and get email notified of price drops (when the price is lower than the price at the time of them favouriting the game)
 - Allow users to filter search results (ex. exclude prices from a specific platform)
 - Only allow admin users to add/edit games and game prices
-- Use a webscraper to ensure prices are always up to date (fetched real time)
 - Unit and Integration Tests
-
-```
-
-```
-
-```
-
-```
