@@ -1,3 +1,4 @@
+// Import dotenv to process environment variables from `.env` file.
 import "dotenv/config";
 
 const { DB_HOST, DB_NAME, DB_PASSWORD, DB_USER } = process.env;
