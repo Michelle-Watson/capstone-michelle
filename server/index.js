@@ -3,7 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 
 import gameRoutes from "./routes/game-routes.js";
-import priceRoutes from "./routes/price-routes.js";
+// import priceRoutes from "./routes/price-routes.js";
 
 const app = express();
 app.use(cors());
