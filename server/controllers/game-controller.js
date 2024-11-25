@@ -15,4 +15,23 @@ const index = async (_req, res) => {
   }
 };
 
-export { index };
+const findOne = async (req, res) => {
+  try {
+    const gameFound = await knex("games").where({ id: req.params.id });
+
+    if (gameFound.length === 0) {
+      return res.status(404).json({
+        message: `Game with ID ${req.params.id} not found`,
+      });
+    }
+
+    const gameData = gameFound[0];
+    res.json(gameData);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to retrieve game data for game with ID ${req.params.id}`,
+    });
+  }
+};
+
+export { index, findOne };
