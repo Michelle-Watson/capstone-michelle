@@ -9,6 +9,6 @@ router.route("/").get(gameController.index);
 router.route("/:id").get(gameController.findOne);
 // router.route("/:id").get(gameController.findOne).put(gameController.editGame);
 
-// router.route("/:id/prices").get(gameController.getPrice);
+router.route("/:id/prices").get(gameController.getPricesForGame);
 
 export default router;

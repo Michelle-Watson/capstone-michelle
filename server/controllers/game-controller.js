@@ -34,4 +34,18 @@ const findOne = async (req, res) => {
   }
 };
 
-export { index, findOne };
+const getPricesForGame = async (req, res) => {
+  try {
+    const prices = await knex("games")
+      .join("prices", "prices.game_id", "games.id")
+      .where({ game_id: req.params.id });
+
+    res.json(prices);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to retrieve prices for game with ID ${req.params.id}: ${error}`,
+    });
+  }
+};
+
+export { index, findOne, getPricesForGame };
