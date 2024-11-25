@@ -3,8 +3,7 @@ import * as gameController from "../controllers/game-controller.js";
 import express from "express";
 const router = express.Router();
 
-router.route("/").get(gameController.index);
-// router.route("/").get(gameController.index).post(gameController.createGame);
+router.route("/").get(gameController.index).post(gameController.createGame);
 
 router.route("/:id").get(gameController.findOne);
 // router.route("/:id").get(gameController.findOne).put(gameController.editGame);

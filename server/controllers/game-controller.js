@@ -48,4 +48,41 @@ const getPricesForGame = async (req, res) => {
   }
 };
 
-export { index, findOne, getPricesForGame };
+const createGame = async (req, res) => {
+  const { title, description, release_date } = req.body;
+
+  // Validate the required fields
+  if (
+    !title?.trim() ||
+    !description?.trim() ||
+    !release_date?.trim() ||
+    isNaN(new Date(release_date)) // Check if the release date is a valid date
+  ) {
+    return res.status(400).json({
+      message:
+        "Invalid or missing data in request body. Please ensure all fields are provided and the release date is valid.",
+    });
+  }
+
+  try {
+    // Create a new game object to insert into the database
+    const newGame = {
+      title,
+      description,
+      release_date,
+    };
+
+    // const result = await knex("user").games(req.body);
+    // Insert the new game into the 'games' table
+    const [newGameId] = await knex("games").insert(newGame).returning("*");
+
+    // Return the newly created game along with its ID
+    res.status(201).json({ id: newGameId, ...newGame });
+  } catch (error) {
+    res.status(500).json({
+      message: `Error creating game:  ${error}`,
+    });
+  }
+};
+
+export { index, findOne, getPricesForGame, createGame };
