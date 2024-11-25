@@ -85,4 +85,52 @@ const createGame = async (req, res) => {
   }
 };
 
-export { index, findOne, getPricesForGame, createGame };
+const editGame = async (req, res) => {
+  const { title, description, release_date } = req.body;
+
+  // Validate the required fields
+  if (
+    !title?.trim() ||
+    !description?.trim() ||
+    !release_date?.trim() ||
+    isNaN(new Date(release_date)) // Check if the release date is a valid date
+  ) {
+    return res.status(400).json({
+      message:
+        "Invalid or missing data in request body. Please ensure all fields are provided and the release date is valid.",
+    });
+  }
+
+  try {
+    // Update the game in the 'games' table
+    const gameUpdated = await knex("games")
+      .where({ id: req.params.id }) // Find the game by the ID provided in the URL
+      .update({
+        title,
+        description,
+        release_date,
+      });
+
+    // If no rows were updated, it means the game with the provided ID was not found
+    if (gameUpdated === 0) {
+      return res.status(404).json({
+        message: `Unable to find game with ID ${req.params.id}`,
+      });
+    }
+
+    // Retrieve updated game from the database
+    const editedGame = await knex("games")
+      .where({ id: req.params.id })
+      .select("id", "title", "description", "release_date")
+      .first(); // Only return the first result (since IDs are unique)
+
+    // Send the updated game back in the response
+    res.status(200).json(editedGame);
+  } catch (error) {
+    res
+      .status(500)
+      .send(`Error editing game with ID ${req.params.id}: ${error}`);
+  }
+};
+
+export { index, findOne, getPricesForGame, createGame, editGame };
