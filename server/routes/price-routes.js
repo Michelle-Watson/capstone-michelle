@@ -6,6 +6,8 @@ const router = express.Router();
 router.route("/").get(priceController.index);
 //   .post(priceController.createPriceItem);
 
+router.route("/:id").get(priceController.findOne);
+
 // router
 // .route("/:id")
 //   .get(priceController.findOne)
