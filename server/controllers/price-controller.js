@@ -79,14 +79,37 @@ const addPrice = async (req, res) => {
     !game_id ||
     !platform_name?.trim() ||
     isNaN(original_price) ||
-    isNaN(discount) ||
-    (discounted_price !== undefined && isNaN(discounted_price)) || // Only check for discounted_price if it's provided
     !url?.trim() ||
     !isValidUrl(url) // URL validation
   ) {
     return res.status(400).json({
       message:
         "Invalid or missing data in request body. Ensure all fields are provided, and prices are valid numbers.",
+    });
+  }
+
+  // If discount is provided, ensure it's a valid number
+  if (discount !== undefined && isNaN(discount)) {
+    return res.status(400).json({
+      message: "Discount must be a valid number.",
+    });
+  }
+
+  // If discounted_price is provided, ensure it's a valid number
+  if (discounted_price !== undefined && isNaN(discounted_price)) {
+    return res.status(400).json({
+      message: "Discounted price must be a valid number.",
+    });
+  }
+
+  // Check the conditions for missing discount or discounted_price
+  if (
+    (discount === undefined && discounted_price === undefined) || // Cannot have both missing
+    (discounted_price === undefined && discount === undefined) // Both discount and discounted_price cannot be missing at the same time
+  ) {
+    return res.status(400).json({
+      message:
+        "Either discount or discounted_price must be provided. Ensure at least one of them is present.",
     });
   }
 
@@ -103,22 +126,39 @@ const addPrice = async (req, res) => {
 
     // Ensure that price fields are treated as numbers
     const validOriginalPrice = parseFloat(original_price);
-    const validDiscount = parseFloat(discount);
-    const validDiscountedPrice =
-      discounted_price !== undefined ? parseFloat(discounted_price) : null;
 
-    // Calculate the discounted price if it's not provided
-    const calculatedDiscountedPrice =
-      validDiscountedPrice !== null
-        ? validDiscountedPrice
-        : validOriginalPrice * (1 - validDiscount / 100); // Apply the discount percentage
+    let validDiscount = null;
+    if (discount) {
+      validDiscount = parseFloat(discount);
+    }
+
+    let validDiscountedPrice = null;
+    if (discounted_price) {
+      validDiscountedPrice = parseFloat(discounted_price);
+    }
+
+    // Calculate the discount if it's missing and discounted_price is provided
+    let calculatedDiscount = validDiscount;
+    let calculatedDiscountedPrice = validDiscountedPrice;
+
+    if (validDiscount === null && validDiscountedPrice !== null) {
+      // If discount is not provided, but discounted_price is, calculate the discount percentage
+      calculatedDiscount =
+        ((validOriginalPrice - validDiscountedPrice) / validOriginalPrice) *
+        100;
+      calculatedDiscountedPrice = validDiscountedPrice; // Use provided discounted price
+    } else if (validDiscount !== null && validDiscountedPrice === null) {
+      // If discounted_price is not provided, calculate it from original_price and discount percentage
+      calculatedDiscountedPrice =
+        validOriginalPrice * (1 - calculatedDiscount / 100);
+    }
 
     // Create the new price object
     const newPrice = {
       game_id,
       platform_name,
       original_price: validOriginalPrice,
-      discount: validDiscount,
+      discount: calculatedDiscount,
       discounted_price: calculatedDiscountedPrice, // Use the calculated discounted price
       url,
     };
