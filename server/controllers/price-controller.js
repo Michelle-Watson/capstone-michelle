@@ -306,6 +306,29 @@ const editPrice = async (req, res) => {
     });
   }
 };
+const removePrice = async (req, res) => {
+  try {
+    // Attempt to delete the price item from the 'prices' table
+    const priceDeleted = await knex("prices")
+      .where({ id: req.params.id })
+      .delete();
+
+    // If no item was deleted, return a 404 error
+    if (!priceDeleted) {
+      return res
+        .status(404)
+        .json({ message: `Price item with ID ${req.params.id} not found` });
+    }
+
+    // Return status 204 (No Content) to indicate successful deletion with no content to return
+    res.sendStatus(204);
+  } catch (error) {
+    // Handle any errors and send a response with status 500 (Internal Server Error)
+    res.status(500).json({
+      message: `Unable to delete price item: ${error.message}`,
+    });
+  }
+};
 
 // Helper function to validate the URL
 const isValidUrl = (url) => {
@@ -314,4 +337,4 @@ const isValidUrl = (url) => {
   return regex.test(url);
 };
 
-export { index, findOne, addPrice, editPrice };
+export { index, findOne, addPrice, editPrice, removePrice };

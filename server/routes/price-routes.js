@@ -8,6 +8,7 @@ router.route("/").get(priceController.index).post(priceController.addPrice);
 router
   .route("/:id")
   .get(priceController.findOne)
-  .put(priceController.editPrice);
+  .put(priceController.editPrice)
+  .delete(priceController.removePrice);
 
 export default router;
