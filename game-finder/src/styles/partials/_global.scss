@@ -1,0 +1,155 @@
+@use "./variables" as *;
+@use "./typography";
+@use "./mixins" as *;
+
+#root {
+  font-family: "TitilliumWeb", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: $White;
+  color: $Instock-Black;
+  text-align: left;
+
+  width: 100%;
+  overflow: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+//TYPE STYLES
+h1 {
+  @include page-header;
+}
+h2 {
+  @include subheader;
+}
+h3 {
+  @include labels-links-buttons;
+}
+h4 {
+  @include table-header;
+}
+p {
+  .p1 {
+    @include body-large;
+  }
+  .p2 {
+    @include body-medium;
+  }
+  .p3 {
+    @include body-small;
+  }
+}
+// Need to explicitly specify font family for input and text area, otherwise its consolas
+input,
+textarea,
+select {
+  font-family: "TitilliumWeb", sans-serif;
+}
+
+a,
+label,
+button {
+  text-decoration: none;
+}
+
+//BUTTON
+.button {
+  font-family: "TitilliumWeb", sans-serif;
+  text-decoration: none;
+  text-align: center;
+  border-radius: 1.25rem;
+  padding: 0.5rem 1.3125rem;
+  border: none;
+  cursor: pointer;
+  font-weight: $demi-600;
+  width: 100%;
+  min-height: 2.5rem;
+  height: 2.5rem;
+
+  min-width: fit-content;
+
+  @include tablet {
+    height: 2.75rem;
+    min-height: 2.75rem;
+    max-width: fit-content;
+
+    padding: 0 1rem;
+  }
+
+  &--primary {
+    background-color: $Instock-Indigo;
+    color: $White;
+
+    &:hover {
+      background-color: $Instock-Black;
+    }
+  }
+
+  &--secondary {
+    background-color: $White;
+    color: $Slate;
+    border: 0.0625rem solid $Cloud;
+
+    &:hover {
+      color: $Instock-Indigo;
+      border: 0.0625rem solid $Instock-Indigo;
+    }
+  }
+  &--delete {
+    background-color: $Red;
+    color: $White;
+    &:hover {
+      background-color: $Instock-Black;
+    }
+  }
+}
+
+//INPUT FIELD
+input,
+textarea,
+::placeholder {
+  font-family: "TitilliumWeb", sans-serif;
+}
+
+.input-field {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  display: flex;
+  color: $Instock-Black;
+  font-weight: $demi-600;
+  margin-bottom: 0.25rem;
+}
+
+.input-control {
+  border-radius: 1.25rem;
+  border: 0.0625rem solid $Cloud;
+  background-color: $White;
+  width: 100%;
+  color: $Slate;
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  min-height: 2.5rem;
+  height: 2.5rem;
+
+  @include tablet {
+    padding: 0.625rem 1.125rem;
+    min-height: 2.75rem;
+    height: 2.75rem;
+  }
+
+  @include desktop {
+    padding: 0.75rem 1.25rem;
+  }
+}

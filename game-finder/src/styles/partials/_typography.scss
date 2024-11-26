@@ -1,0 +1,17 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+// TYPEFACE & WEIGHTS
+@font-face {
+  font-family: "TitilliumWeb";
+  src: url("/assets/fonts/TitilliumWeb-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+}
+
+// Titillium Web Regular - 400
+@font-face {
+  font-family: "TitilliumWeb";
+  src: url("/assets/fonts/TitilliumWeb-Regular.ttf") format("truetype");
+  font-weight: 400;
+  // 400 is deafult
+}
