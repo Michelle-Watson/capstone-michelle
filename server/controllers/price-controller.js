@@ -187,6 +187,126 @@ const addPrice = async (req, res) => {
   }
 };
 
+const editPrice = async (req, res) => {
+  const {
+    game_id,
+    platform_name,
+    original_price,
+    discount,
+    discounted_price,
+    url,
+  } = req.body;
+  const priceId = req.params.id; // Get the price ID from the URL params
+
+  // Validate the required fields
+  if (
+    !game_id ||
+    !platform_name?.trim() ||
+    isNaN(original_price) ||
+    !url?.trim() ||
+    !isValidUrl(url) // URL validation
+  ) {
+    return res.status(400).json({
+      message:
+        "Invalid or missing data in request body. Ensure all fields are provided, and prices are valid numbers.",
+    });
+  }
+
+  // If discount is provided, ensure it's a valid number
+  if (discount !== undefined && isNaN(discount)) {
+    return res.status(400).json({
+      message: "Discount must be a valid number.",
+    });
+  }
+
+  // If discounted_price is provided, ensure it's a valid number
+  if (discounted_price !== undefined && isNaN(discounted_price)) {
+    return res.status(400).json({
+      message: "Discounted price must be a valid number.",
+    });
+  }
+
+  // Check the conditions for missing discount or discounted_price
+  if (
+    (discount === undefined && discounted_price === undefined) || // Cannot have both missing
+    (discounted_price === undefined && discount === undefined) // Both discount and discounted_price cannot be missing at the same time
+  ) {
+    return res.status(400).json({
+      message:
+        "Either discount or discounted_price must be provided. Ensure at least one of them is present.",
+    });
+  }
+
+  try {
+    // Check if the price exists in the 'prices' table
+    const priceExists = await knex("prices").where("id", priceId).first();
+
+    if (!priceExists) {
+      return res.status(404).json({ message: "Price record not found" });
+    }
+
+    // Ensure that price fields are treated as numbers
+    const validOriginalPrice = parseFloat(original_price);
+
+    let validDiscount = null;
+    if (discount) {
+      validDiscount = parseFloat(discount);
+    }
+
+    let validDiscountedPrice = null;
+    if (discounted_price) {
+      validDiscountedPrice = parseFloat(discounted_price);
+    }
+
+    // Calculate the discount if it's missing and discounted_price is provided
+    let calculatedDiscount = validDiscount;
+    let calculatedDiscountedPrice = validDiscountedPrice;
+
+    if (validDiscount === null && validDiscountedPrice !== null) {
+      // If discount is not provided, but discounted_price is, calculate the discount percentage
+      calculatedDiscount =
+        ((validOriginalPrice - validDiscountedPrice) / validOriginalPrice) *
+        100;
+      calculatedDiscountedPrice = validDiscountedPrice; // Use provided discounted price
+    } else if (validDiscount !== null && validDiscountedPrice === null) {
+      // If discounted_price is not provided, calculate it from original_price and discount percentage
+      calculatedDiscountedPrice =
+        validOriginalPrice * (1 - calculatedDiscount / 100);
+    }
+
+    // Create the updated price object
+    const updatedPrice = {
+      game_id,
+      platform_name,
+      original_price: validOriginalPrice,
+      discount: calculatedDiscount,
+      discounted_price: calculatedDiscountedPrice, // Use the calculated discounted price
+      url,
+    };
+
+    // Update the existing price in the 'prices' table
+    await knex("prices").where("id", priceId).update(updatedPrice);
+
+    // Retrieve the updated price
+    const updatedPriceData = await knex("prices").where("id", priceId).first();
+
+    // Ensure the returned price fields are numbers
+    const formattedUpdatedPrice = {
+      ...updatedPriceData,
+      original_price: parseFloat(updatedPriceData.original_price),
+      discount: parseFloat(updatedPriceData.discount),
+      discounted_price: parseFloat(updatedPriceData.discounted_price),
+    };
+
+    // Return the updated price with the related game_id and other details
+    res.status(200).json(formattedUpdatedPrice);
+  } catch (error) {
+    res.status(500).json({
+      message: `Error updating price for game with ID ${req.body.game_id}: ${error}`,
+    });
+  }
+};
+
 // Helper function to validate the URL
 const isValidUrl = (url) => {
   const regex =
@@ -194,4 +314,4 @@ const isValidUrl = (url) => {
   return regex.test(url);
 };
 
-export { index, findOne, addPrice };
+export { index, findOne, addPrice, editPrice };
