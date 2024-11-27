@@ -23,17 +23,19 @@ export default function GameList({ games, fetchGames }) {
   };
   return (
     <div className={styles.gameList}>
-      <h1 className={styles.title}>List of Games</h1>
-      <div className={styles.searchHeader}>
-        <form className={styles.searchHeader__form}>
-          <input
-            type="text"
-            className={styles.searchHeader__input}
-            placeholder="Search games..."
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </form>
+      <div className={styles.header}>
+        <h1 className={styles.title}>List of Games</h1>
+        <div className={styles.searchHeader}>
+          <form className={styles.searchHeader__form}>
+            <input
+              type="text"
+              className={styles.searchHeader__input}
+              placeholder="Search games..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </form>
+        </div>
       </div>
       <table className={styles.table}>
         <thead>

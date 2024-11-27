@@ -18,7 +18,7 @@ export default function Header() {
           </Link>
 
           {/* Search bar on the right */}
-          <div className="search-header">
+          {/* <div className="search-header">
             <form className="search-header__form">
               <input
                 className="search-header__input"
@@ -26,7 +26,7 @@ export default function Header() {
                 placeholder="Search..."
               />
             </form>
-          </div>
+          </div> */}
         </nav>
       </header>
     </>
