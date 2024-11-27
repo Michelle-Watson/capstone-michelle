@@ -7,26 +7,56 @@
 @import "bootstrap/scss/forms";
 @import "bootstrap/scss/buttons";
 
+// Import your project's partials
+@import "../../styles/partials/global";
+@import "../../styles/partials/mixins";
+@import "../../styles/partials/typography";
+@import "../../styles/partials/variables";
+
 .gameList {
-  margin: 2rem;
+  margin: 20px;
 
   .title {
     font-size: 24px;
     margin-bottom: 20px;
   }
 
-  .searchContainer {
+  .searchHeader {
+    display: flex;
     margin-bottom: 20px;
-  }
-
-  .searchInput {
     width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+
+    &__form {
+      width: 100%;
+    }
+
+    &__input {
+      padding: 0.625rem;
+      @include labels-links-buttons;
+      border-radius: 1.25rem;
+      width: 100%; // Make the input take full width
+      padding-left: 2rem;
+      border: 0;
+      outline: solid 0.0625rem $Cloud;
+      background: url("../../assets/icons/search-24px.svg") no-repeat left
+        center;
+      background-position: right 1rem center;
+      color: $GameFinder-Purple-200;
+
+      &:focus {
+        outline: solid 0.125rem $GameFinder-Purple-1-button;
+        background: none;
+      }
+
+      &::placeholder {
+        color: $Slate;
+      }
+
+      transition: all 0.5s;
+    }
   }
 
+  // Keep Bootstrap styles for table and button
   .table {
     @extend .table;
     @extend .table-striped;
