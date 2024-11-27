@@ -7,8 +7,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: $White;
-  color: $Instock-Black;
+  background-color: $night-bg;
+  color: $GameFinder-Purple-200;
   text-align: left;
 
   width: 100%;
@@ -87,11 +87,11 @@ button {
   }
 
   &--primary {
-    background-color: $Instock-Indigo;
-    color: $White;
+    background-color: $GameFinder-Purple-1-button;
+    color: $night-bg;
 
     &:hover {
-      background-color: $Instock-Black;
+      background-color: $GameFinder-Aqua;
     }
   }
 
@@ -101,15 +101,15 @@ button {
     border: 0.0625rem solid $Cloud;
 
     &:hover {
-      color: $Instock-Indigo;
-      border: 0.0625rem solid $Instock-Indigo;
+      color: $GameFinder-Purple-1-button;
+      border: 0.0625rem solid $GameFinder-Purple-1-button;
     }
   }
   &--delete {
     background-color: $Red;
     color: $White;
     &:hover {
-      background-color: $Instock-Black;
+      background-color: $night-bg;
     }
   }
 }
@@ -127,7 +127,7 @@ textarea,
 
 .input-label {
   display: flex;
-  color: $Instock-Black;
+  color: $GameFinder-Purple-200;
   font-weight: $demi-600;
   margin-bottom: 0.25rem;
 }

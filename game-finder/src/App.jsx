@@ -1,34 +1,28 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.scss";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Games from "./pages/Games/Games";
+import GameDetailsWithPrices from "./pages/GameDetailsWithPrices/GameDetailsWithPrices";
+import GameEdit from "./pages/GameEdit/GameEdit";
+import GameAdd from "./pages/GameAdd/GameAdd";
+import PricesEdit from "./pages/PricesEdit/PricesEdit";
+import PricesAdd from "./pages/PricesAdd/PricesAdd";
 
+// App component that uses BrowserRouter and Routes to render different pages based on the current URL path.
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <h1>Header placeholder</h1>
+      <Routes>
+        <Route path="/" element={<Games />} />
+        <Route path="games" element={<Games />} />
+        <Route path="games/:id" element={<GameDetailsWithPrices />} />
+        <Route path="games/add" element={<GameAdd />} />
+        <Route path="games/:id/edit" element={<GameEdit />} />
+        <Route path="prices/add" element={<PricesAdd />} />
+        <Route path="prices/:id/edit" element={<PricesEdit />} />
+      </Routes>
+      <h1>Footer placeholder</h1>
+    </BrowserRouter>
   );
 }
 
