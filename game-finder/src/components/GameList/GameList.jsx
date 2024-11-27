@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-// personal styles
-import "./GameList.scss";
 
 // separate bootstrap styles for the game list component using a module
-import styles from "./GameList.module.scss";
+// import styles from "./GameList.scss";
+// personal styles
+import "./GameList2.scss";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -34,14 +34,14 @@ export default function GameList({ games, fetchGames }) {
     "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/469600/capsule_231x87.jpg?t=1732210582"; // Placeholder image URL
 
   return (
-    <div className={styles.gameList}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>List of Games</h1>
-        <div className={styles.searchHeader}>
-          <form className={styles.searchHeader__form}>
+    <div className="gameList">
+      <div className="header">
+        <h1 className="title">List of Games</h1>
+        <div className="searchHeader">
+          <form className="searchHeader__form">
             <input
               type="text"
-              className={styles.searchHeader__input}
+              className="searchHeader__input"
               placeholder="Search games..."
               value={searchTerm}
               onChange={handleSearchChange}
@@ -49,7 +49,7 @@ export default function GameList({ games, fetchGames }) {
           </form>
         </div>
       </div>
-      <table className={styles.table}>
+      <table className="table table-sm">
         <thead>
           <tr>
             <th></th>
@@ -65,7 +65,7 @@ export default function GameList({ games, fetchGames }) {
                 <img
                   src={placeholderImageUrl}
                   alt={game.title}
-                  className={styles.gameArt}
+                  className="gameArt"
                 />
               </td>
               <td>{game.title}</td>

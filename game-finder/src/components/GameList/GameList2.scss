@@ -1,26 +1,30 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/typography" as *;
+@use "../../styles/partials/variables" as *;
 
-// Import only the Bootstrap components you need
-@import "bootstrap/scss/tables";
-@import "bootstrap/scss/forms";
-@import "bootstrap/scss/buttons";
+// .td {
+//   padding: 0;
+// }
 
-// Import your project's partials
-@import "../../styles/partials/global";
-@import "../../styles/partials/mixins";
-@import "../../styles/partials/typography";
-@import "../../styles/partials/variables";
+// .mytable > tbody > tr > td
+// // .mytable > tbody > tr > th,
+// // .mytable > tfoot > tr > td,
+// // .mytable > tfoot > tr > th,
+// // .mytable > thead > tr > td,
+// // .mytable > thead > tr > th
+// {
+//   padding: 0;
+// }
 
 .gameList {
-  margin: 20px;
+  margin: 1.25rem;
 
   .header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 
     @include tablet {
       flex-direction: row;
@@ -32,6 +36,7 @@
   .title {
     font-size: 24px;
     margin: 0;
+    @include subheader;
   }
 
   .searchHeader {
@@ -72,20 +77,9 @@
     }
   }
 
-  // Keep Bootstrap styles for table and button
-  .table {
-    @extend .table;
-    @extend .table-striped;
-    @extend .table-hover;
-  }
-
-  .button {
-    @extend .btn;
-    @extend .btn-primary;
-  }
-
   // Style for the game art image
   .gameArt {
+    // Same dimensions as Steamdb.info
     width: 107px;
     height: 40px;
     object-fit: cover; // Ensure the image is properly scaled within the container

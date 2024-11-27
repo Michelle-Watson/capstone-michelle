@@ -1,0 +1,95 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// Import only the Bootstrap components I need
+@import "bootstrap/scss/tables"; // got table of games
+@import "bootstrap/scss/forms"; // for search header
+@import "bootstrap/scss/buttons"; // for button
+
+// Import partials
+@import "../../styles/partials/global";
+@import "../../styles/partials/mixins";
+@import "../../styles/partials/typography";
+@import "../../styles/partials/variables";
+
+.gameList {
+  margin: 1.25rem;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .title {
+    font-size: 24px;
+    margin: 0;
+    @include subheader;
+  }
+
+  .searchHeader {
+    flex-grow: 1;
+    max-width: 100%;
+
+    @include tablet {
+      max-width: 60%;
+    }
+
+    &__form {
+      width: 100%;
+    }
+
+    &__input {
+      padding: 0.625rem;
+      @include labels-links-buttons;
+      border-radius: 1.25rem;
+      width: 100%;
+      padding-left: 2rem;
+      border: 0;
+      outline: solid 0.0625rem $Cloud;
+      background: url("../../assets/icons/search-24px.svg") no-repeat left
+        center;
+      background-position: right 1rem center;
+      color: $GameFinder-Purple-200;
+
+      &:focus {
+        outline: solid 0.125rem $GameFinder-Purple-1-button;
+        background: none;
+      }
+
+      &::placeholder {
+        color: $Slate;
+      }
+
+      transition: all 0.5s;
+    }
+  }
+
+  // Keep Bootstrap styles for table and button
+  .table {
+    @extend .table;
+    @extend .table-striped;
+    @extend .table-hover;
+  }
+
+  .button {
+    @extend .btn;
+    @extend .btn-primary;
+  }
+
+  // Style for the game art image
+  .gameArt {
+    // Same dimensions as Steamdb.info
+    width: 107px;
+    height: 40px;
+    object-fit: cover; // Ensure the image is properly scaled within the container
+  }
+}
