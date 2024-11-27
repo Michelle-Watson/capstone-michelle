@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 // separate bootstrap styles for the game list component using a module
 // import styles from "./GameList.scss";
 // personal styles
-import "./GameList2.scss";
-
+// import "./GameList2.scss";
+import "./GameList.scss";
 // import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function GameList({ games, fetchGames }) {

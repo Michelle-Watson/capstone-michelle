@@ -1,13 +1,23 @@
+// Required
 @import "bootstrap/scss/functions";
+
+// Default variable overrides must come after function imports, but before rest of imports
+// https://getbootstrap.com/docs/5.0/customize/sass/#variable-defaults
+$table-cell-padding-y: 0;
+// $table-cell-padding-x: 0.0625rem;
+$table-cell-padding-y-sm: 0;
+// $table-cell-padding-x-sm: 0.0625rem;
+
+// Required
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
 
 // Import only the Bootstrap components I need
-@import "bootstrap/scss/tables"; // got table of games
+@import "bootstrap/scss/tables"; // table of games
 @import "bootstrap/scss/forms"; // for search header
-@import "bootstrap/scss/buttons"; // for button
+@import "bootstrap/scss/buttons"; // for button (optional)
 
-// Import partials
+// Import personal partials
 @import "../../styles/partials/global";
 @import "../../styles/partials/mixins";
 @import "../../styles/partials/typography";
@@ -92,4 +102,8 @@
     height: 40px;
     object-fit: cover; // Ensure the image is properly scaled within the container
   }
+}
+
+.table-sm {
+  padding: 0;
 }
