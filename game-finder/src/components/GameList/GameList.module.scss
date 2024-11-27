@@ -83,4 +83,11 @@
     @extend .btn;
     @extend .btn-primary;
   }
+
+  // Style for the game art image
+  .gameArt {
+    width: 107px;
+    height: 40px;
+    object-fit: cover; // Ensure the image is properly scaled within the container
+  }
 }

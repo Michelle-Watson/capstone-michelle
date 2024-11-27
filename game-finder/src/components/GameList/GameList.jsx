@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // personal styles
 import "./GameList.scss";
 
-// seperate bootstrap styles for the game list component using a module
+// separate bootstrap styles for the game list component using a module
 import styles from "./GameList.module.scss";
 
 // import "bootstrap/dist/css/bootstrap.min.css";
@@ -29,6 +29,10 @@ export default function GameList({ games, fetchGames }) {
     event.preventDefault();
     setSearchTerm(event.target.value);
   };
+
+  const placeholderImageUrl =
+    "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/469600/capsule_231x87.jpg?t=1732210582"; // Placeholder image URL
+
   return (
     <div className={styles.gameList}>
       <div className={styles.header}>
@@ -48,6 +52,7 @@ export default function GameList({ games, fetchGames }) {
       <table className={styles.table}>
         <thead>
           <tr>
+            <th></th>
             <th>Title</th>
             <th>Release Date</th>
             <th>Description</th>
@@ -56,6 +61,13 @@ export default function GameList({ games, fetchGames }) {
         <tbody>
           {filteredGames.map((game) => (
             <tr key={game.id}>
+              <td>
+                <img
+                  src={placeholderImageUrl}
+                  alt={game.title}
+                  className={styles.gameArt}
+                />
+              </td>
               <td>{game.title}</td>
               <td>{new Date(game.release_date).toLocaleDateString()}</td>
               <td>{game.description}</td>
