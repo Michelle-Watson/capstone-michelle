@@ -1,0 +1,40 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+
+// Import only the Bootstrap components you need
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+
+.gameList {
+  margin: 2rem;
+
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .searchContainer {
+    margin-bottom: 20px;
+  }
+
+  .searchInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .table {
+    @extend .table;
+    @extend .table-striped;
+    @extend .table-hover;
+  }
+
+  .button {
+    @extend .btn;
+    @extend .btn-primary;
+  }
+}
