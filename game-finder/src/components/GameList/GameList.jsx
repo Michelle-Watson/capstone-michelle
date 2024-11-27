@@ -12,13 +12,21 @@ export default function GameList({ games, fetchGames }) {
   const [filteredGames, setFilteredGames] = useState(games);
 
   useEffect(() => {
-    setFilteredGames(
-      games.filter((game) =>
-        game.title.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+    if (searchTerm) {
+      const filtered = games.filter((game) =>
+        [game.title, game.description, game.release_date]
+          .join(" ")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      );
+      setFilteredGames(filtered);
+    } else {
+      setFilteredGames(games);
+    }
   }, [games, searchTerm]);
+
   const handleSearchChange = (event) => {
+    event.preventDefault();
     setSearchTerm(event.target.value);
   };
   return (
