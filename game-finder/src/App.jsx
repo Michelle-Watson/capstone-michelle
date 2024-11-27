@@ -1,5 +1,6 @@
 import "./App.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./components/Header/Header";
 import Games from "./pages/Games/Games";
 import GameDetailsWithPrices from "./pages/GameDetailsWithPrices/GameDetailsWithPrices";
 import GameEdit from "./pages/GameEdit/GameEdit";
@@ -11,7 +12,8 @@ import PricesAdd from "./pages/PricesAdd/PricesAdd";
 function App() {
   return (
     <BrowserRouter>
-      <h1>Header placeholder</h1>
+      {/* <h1>Header placeholder</h1> */}
+      <Header />
       <Routes>
         <Route path="/" element={<Games />} />
         <Route path="games" element={<Games />} />

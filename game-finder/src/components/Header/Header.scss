@@ -1,0 +1,66 @@
+@use "../../styles/partials/global" as *;
+@use "../../styles/partials/mixins" as *;
+@use "../../styles/partials/typography" as *;
+@use "../../styles/partials/variables" as *;
+
+.nav {
+  padding: 2rem 2rem; // top-bot, left-right
+}
+
+.nav__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+
+  @include tablet {
+    flex-direction: row;
+  }
+}
+
+// image and text for logo
+.nav__logo {
+  display: flex;
+  // have logo and text be inline with each other
+  align-items: center;
+  color: $GameFinder-Purple-200;
+  @include page-header;
+}
+
+/////////////////////////////////////////////
+
+// Search Bar
+.search-header {
+  display: flex;
+
+  &__form {
+  }
+
+  &__input {
+    padding: 0.625rem;
+    @include labels-links-buttons;
+    border-radius: 1.25rem;
+    width: 20rem;
+    // padding between left side of form field and user input
+    padding-left: 2rem;
+    border: 0;
+    outline: solid 0.0625rem $Cloud;
+    background: url("../../assets/icons/search-24px.svg") no-repeat left center;
+    // position search icon on right end of input
+    background-position: right 1rem center;
+
+    color: $GameFinder-Purple-200;
+
+    &:focus {
+      outline: solid 0.125rem $GameFinder-Purple-1-button;
+      background: none;
+    }
+
+    &::placeholder {
+      color: $Slate;
+    }
+
+    transition: all 0.5s;
+  }
+}
