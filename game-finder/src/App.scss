@@ -37,10 +37,15 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
+.footer {
+  position: relative;
+  top: -2rem;
+  // z-index: 0; // Place below the header if needed
 
-.read-the-docs {
-  color: #888;
+  display: flex;
+  justify-content: center;
+
+  @include body-small {
+    color: $GameFinder-Purple-100;
+  }
 }

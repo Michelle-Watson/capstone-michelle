@@ -23,7 +23,9 @@ function App() {
         <Route path="prices/add" element={<PricesAdd />} />
         <Route path="prices/:id/edit" element={<PricesEdit />} />
       </Routes>
-      <h1>Footer placeholder</h1>
+      <footer className="footer">
+        <p>© GameFinder Inc. All Rights Reserved.</p>
+      </footer>
     </BrowserRouter>
   );
 }
