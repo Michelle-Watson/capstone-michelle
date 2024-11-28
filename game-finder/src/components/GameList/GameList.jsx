@@ -31,9 +31,6 @@ export default function GameList({ games, fetchGames }) {
     setSearchTerm(event.target.value);
   };
 
-  const placeholderImageUrl =
-    "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/469600/capsule_231x87.jpg?t=1732210582"; // Placeholder image URL
-
   return (
     <div className="main-container">
       {/* Center the content */}
@@ -67,7 +64,7 @@ export default function GameList({ games, fetchGames }) {
                 <td>
                   <Link to={`/games/${game.id}`} className="gameList__link">
                     <img
-                      src={placeholderImageUrl}
+                      src={game.imageurlSmall}
                       alt={game.title}
                       className="gameArt"
                     />

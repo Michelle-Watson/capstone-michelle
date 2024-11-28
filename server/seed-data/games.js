@@ -83,7 +83,7 @@ export default [
       "DAVE THE DIVER is a casual, singleplayer adventure RPG featuring deep-sea exploration and fishing during the day and sushi restaurant management at night. Join Dave and his quirky friends as they seek to uncover the secrets of the mysterious Blue Hole.",
     release_date: "2023-06-28",
     imageurlSmall:
-      "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/271590/capsule_231x87.jpg?t=1732792194",
+      "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1868140/cfdc3d184fb5f3cbf9fff9b25bb1bce6f1baf673/capsule_231x87.jpg",
     imageurlBig:
       "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1868140/header.jpg?t=1732813395",
   },
