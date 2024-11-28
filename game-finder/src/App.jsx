@@ -13,19 +13,21 @@ function App() {
   return (
     <BrowserRouter>
       {/* <h1>Header placeholder</h1> */}
-      <Header />
-      <Routes>
-        <Route path="/" element={<Games />} />
-        <Route path="games" element={<Games />} />
-        <Route path="games/:id" element={<GameDetailsWithPrices />} />
-        <Route path="games/add" element={<GameAdd />} />
-        <Route path="games/:id/edit" element={<GameEdit />} />
-        <Route path="prices/add" element={<PricesAdd />} />
-        <Route path="prices/:id/edit" element={<PricesEdit />} />
-      </Routes>
-      <footer className="footer">
-        <p>© GameFinder Inc. All Rights Reserved.</p>
-      </footer>
+      <div className="app-body">
+        <Header />
+        <Routes>
+          <Route path="/" element={<Games />} />
+          <Route path="games" element={<Games />} />
+          <Route path="games/:id" element={<GameDetailsWithPrices />} />
+          <Route path="games/add" element={<GameAdd />} />
+          <Route path="games/:id/edit" element={<GameEdit />} />
+          <Route path="prices/add" element={<PricesAdd />} />
+          <Route path="prices/:id/edit" element={<PricesEdit />} />
+        </Routes>
+        <footer className="footer">
+          <p>© GameFinder Inc. All Rights Reserved.</p>
+        </footer>
+      </div>
     </BrowserRouter>
   );
 }
