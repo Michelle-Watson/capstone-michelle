@@ -109,6 +109,12 @@ $table-cell-padding-y-sm: 0;
 }
 
 .high-discount {
-  color: $GameFinder-Aqua;
+  background-color: rgba(
+    red($GameFinder-Aqua),
+    green($GameFinder-Aqua),
+    blue($GameFinder-Aqua),
+    0.3
+  ) !important;
+  color: $GameFinder-Aqua !important;
   font-weight: $bold-700;
 }
