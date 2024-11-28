@@ -25,7 +25,7 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
   };
 
   const placeholderImageUrl =
-    "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/469600/capsule_231x87.jpg?t=1732210582";
+    "https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg";
 
   return (
     <div className="gameList">
@@ -59,10 +59,21 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
               <td>
                 <Link to={price.url} target="_blank" className="gameList__link">
                   <img
+                    src={`/assets/icons/${price.platform_name.toLowerCase()}.svg`}
+                    alt={price.platform_name}
+                    className="logoArt"
+                  />
+                  {/* 
+                  <img
                     src={placeholderImageUrl}
                     alt={price.platform_name}
-                    className="gameArt"
+                    className="logoArt"
                   />
+                  <img
+                    src={`/assets/icons/${price.platform_name.toLowerCase()}.svg`}
+                    alt={price.platform_name}
+                    className="logoArt"
+                  /> */}
                 </Link>
               </td>
               <td>{price.platform_name}</td>

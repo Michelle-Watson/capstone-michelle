@@ -88,6 +88,15 @@ $table-cell-padding-y-sm: 0;
     @extend .table;
     @extend .table-striped;
     @extend .table-hover;
+
+    td {
+      vertical-align: middle; // Center text vertically
+    }
+
+    td:first-child {
+      width: 1%; // make the cell as narrow as possible
+      white-space: nowrap; // Prevents wrapping
+    }
   }
 
   .button {
@@ -101,6 +110,13 @@ $table-cell-padding-y-sm: 0;
     width: 107px;
     height: 40px;
     object-fit: cover; // Ensure the image is properly scaled within the container
+  }
+  .logoArt {
+    width: 32px;
+    height: 32px;
+    object-fit: contain; // cover -> contain
+    display: block; // removes extra space below the image
+    margin: 0 auto; // centers the image horizontally in its cell
   }
 }
 

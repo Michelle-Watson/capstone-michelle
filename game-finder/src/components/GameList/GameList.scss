@@ -88,6 +88,9 @@ $table-cell-padding-y-sm: 0;
     @extend .table;
     @extend .table-striped;
     @extend .table-hover;
+    td {
+      vertical-align: middle; // Center text vertically
+    }
   }
 
   .button {

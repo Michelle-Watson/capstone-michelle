@@ -17,16 +17,7 @@ export default function GameInfo({ currentGame }) {
       </div>
       <div className="gameInfo__details">
         <h2>{title}</h2>
-        {/* <p>{description}</p> */}
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque
-          necessitatibus laborum corporis a blanditiis voluptatibus deleniti
-          architecto delectus illo, provident libero dolores repudiandae, unde
-          enim odio, ducimus esse aut iure? Lorem ipsum dolor sit amet
-          consectetur adipisicing elit. Neque necessitatibus laborum corporis a
-          blanditiis voluptatibus deleniti architecto delectus illo, provident
-          libero dolores repudiandae, unde enim odio, ducimus esse aut iure?
-        </p>
+        <p>{description}</p>
         <p>Release Date: {new Date(release_date).toLocaleDateString()}</p>
       </div>
     </div>
