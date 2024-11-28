@@ -1,0 +1,124 @@
+// Import personal partials
+@import "../../styles/partials/global";
+@import "../../styles/partials/mixins";
+@import "../../styles/partials/typography";
+@import "../../styles/partials/variables";
+
+.warehouse-management {
+  display: flex;
+  justify-content: center;
+  padding: 0 $padding-spacing-base-unit * 2;
+  @include tablet {
+    padding: 0 $padding-spacing-base-unit $padding-spacing-base-unit * 4;
+  }
+  @include desktop {
+    padding: 0 $padding-spacing-base-unit $padding-spacing-base-unit * 8;
+  }
+}
+
+.warehouse-form {
+  background-color: $White;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  border-radius: 0.25rem;
+  max-width: 600px;
+  width: 100%;
+  @include tablet {
+    max-width: 1000px;
+  }
+
+  &__header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: $gutter-mobile;
+    padding: $padding-spacing-base-unit * 2 $padding-spacing-base-unit * 4;
+  }
+
+  &__divider {
+    border-top: 0.0625rem solid $Cloud;
+    margin: 0;
+
+    &--tablet {
+      @include tablet {
+        margin: $padding-spacing-base-unit * 4 0;
+      }
+    }
+  }
+
+  &__sections {
+    @include tablet {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+
+  &__warehouse-details,
+  &__contact-details {
+    flex-grow: 1;
+    padding: $padding-spacing-base-unit $padding-spacing-base-unit * 4;
+
+    @include tablet {
+      max-width: 50%; // Ensures both sections stay at this width even when empty or with fewer elements or error state
+      min-width: 50%; // Ensures both sections stay at this width even when empty or with fewer elements or error state
+    }
+  }
+
+  &__section-title {
+    font-weight: bold;
+  }
+
+  &__input-field {
+    margin-bottom: 1rem;
+  }
+
+  &__input-label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  // Apply red border when input has error class
+  .input-control {
+    border: 1px solid $Cloud; // Default border color
+    // color: $Instock-Black;
+    color: $GameFinder-Aqua;
+
+    &.warehouse-form__input-control--error {
+      border-color: $Red; // Red border when there’s an error
+    }
+  }
+
+  &__error-message {
+    color: $Red;
+    font-size: 12px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center; // Align icon and text
+  }
+  // Icon styling within error message
+  &__error-icon {
+    margin-right: 4px; // Add spacing between icon and text
+    width: 1rem; // Set icon size
+    height: 1rem;
+  }
+
+  &__actions-container {
+    display: flex;
+    gap: $gutter-mobile;
+    justify-content: center;
+    background-color: $Light-Grey;
+    padding: $padding-spacing-base-unit * 3 $padding-spacing-base-unit * 4;
+    flex-direction: row;
+    @include tablet {
+      justify-content: end;
+      padding: 0 $padding-spacing-base-unit * 4;
+    }
+  }
+
+  &__button--link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
