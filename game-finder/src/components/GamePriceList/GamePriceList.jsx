@@ -1,22 +1,22 @@
 import "./GamePriceList.scss";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 export default function GamePriceList({ priceList, getPricesforGame }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredpriceList, setFilteredpriceList] = useState(priceList);
 
   useEffect(() => {
-    if (searchTerm) {
-      const filtered = priceList.filter((price) =>
-        [price.platform_name, price.discount, price.discounted_price]
-          .join(" ")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-      );
-      setFilteredpriceList(filtered);
-    } else {
-      setFilteredpriceList(priceList);
-    }
+    const filtered = priceList.filter((price) =>
+      [price.platform_name, price.discount, price.discounted_price]
+        .join(" ")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    );
+    const sortedFiltered = [...filtered].sort(
+      (a, b) => a.discounted_price - b.discounted_price
+    );
+    setFilteredpriceList(sortedFiltered);
   }, [priceList, searchTerm]);
 
   const handleSearchChange = (event) => {
@@ -25,7 +25,7 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
   };
 
   const placeholderImageUrl =
-    "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/469600/capsule_231x87.jpg?t=1732210582"; // Placeholder image URL
+    "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/469600/capsule_231x87.jpg?t=1732210582";
 
   return (
     <div className="gameList">
@@ -57,7 +57,6 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
           {filteredpriceList.map((price) => (
             <tr key={price.id}>
               <td>
-                {/* Open platform in a different tab */}
                 <Link to={price.url} target="_blank" className="gameList__link">
                   <img
                     src={placeholderImageUrl}
@@ -67,8 +66,9 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
                 </Link>
               </td>
               <td>{price.platform_name}</td>
-              <td>{(price.discount * 100).toFixed(0)}%</td>{" "}
-              {/* Display discount as percentage */}
+              <td className={price.discount > 0.5 ? "high-discount" : ""}>
+                {(price.discount * 100).toFixed(0)}%
+              </td>
               <td>{price.discounted_price}</td>
               <td>{price.original_price}</td>
             </tr>

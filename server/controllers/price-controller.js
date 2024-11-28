@@ -144,8 +144,7 @@ const addPrice = async (req, res) => {
     if (validDiscount === null && validDiscountedPrice !== null) {
       // If discount is not provided, but discounted_price is, calculate the discount percentage
       calculatedDiscount =
-        ((validOriginalPrice - validDiscountedPrice) / validOriginalPrice) *
-        100;
+        (validOriginalPrice - validDiscountedPrice) / validOriginalPrice;
       calculatedDiscountedPrice = validDiscountedPrice; // Use provided discounted price
     } else if (validDiscount !== null && validDiscountedPrice === null) {
       // If discounted_price is not provided, calculate it from original_price and discount percentage
@@ -265,8 +264,7 @@ const editPrice = async (req, res) => {
     if (validDiscount === null && validDiscountedPrice !== null) {
       // If discount is not provided, but discounted_price is, calculate the discount percentage
       calculatedDiscount =
-        ((validOriginalPrice - validDiscountedPrice) / validOriginalPrice) *
-        100;
+        (validOriginalPrice - validDiscountedPrice) / validOriginalPrice;
       calculatedDiscountedPrice = validDiscountedPrice; // Use provided discounted price
     } else if (validDiscount !== null && validDiscountedPrice === null) {
       // If discounted_price is not provided, calculate it from original_price and discount percentage
