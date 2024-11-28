@@ -3,7 +3,8 @@ const VITE_API_URL = import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-// import PriceList from "../../components/PriceList/PriceList";
+import GamePriceList from "../../components/GamePriceList/GamePriceList";
+import GameInfo from "../../components/GameInfo/GameInfo";
 
 export default function GameDetailsWithPrices() {
   const { id } = useParams();
@@ -50,8 +51,15 @@ export default function GameDetailsWithPrices() {
     return <div>Loading game and price details...</div>;
   }
   return (
-    <>
-      <h1>GameDetailsWithPrices</h1>
-    </>
+    <div className="gameDetails__container">
+      <h1>GameDetailsWithPrices Page</h1>
+      <div className="gameDetails__container--shadow">
+        <GameInfo currentGame={currentGame} />
+        <GamePriceList
+          priceList={priceList}
+          getPricesforGame={getPricesforGame}
+        />
+      </div>
+    </div>
   );
 }
