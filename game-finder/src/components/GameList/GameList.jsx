@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 // separate bootstrap styles for the game list component using a module
 // import styles from "./GameList.scss";
@@ -62,11 +63,13 @@ export default function GameList({ games, fetchGames }) {
           {filteredGames.map((game) => (
             <tr key={game.id}>
               <td>
-                <img
-                  src={placeholderImageUrl}
-                  alt={game.title}
-                  className="gameArt"
-                />
+                <Link to={`/games/${game.id}`} className="gameList__link">
+                  <img
+                    src={placeholderImageUrl}
+                    alt={game.title}
+                    className="gameArt"
+                  />
+                </Link>
               </td>
               <td>{game.title}</td>
               <td>{new Date(game.release_date).toLocaleDateString()}</td>
