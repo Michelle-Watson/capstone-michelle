@@ -25,13 +25,17 @@
   width: 100%; /* Make the image responsive */
   // Original image resolution
   max-width: 1154px;
+  max-width: 1000px;
   height: auto; /* Maintain aspect ratio */
   border-radius: 1rem;
 }
 
 // Left-align the text (description, release date)
 .gameInfo__details {
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  //   text-align: left;
   //   max-width: 800px; /* Limit text container width */
 }
 
