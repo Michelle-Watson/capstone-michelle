@@ -1,5 +1,5 @@
 import "./Games.scss";
-const apiUrl = import.meta.env.VITE_API_URL;
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 import axios from "axios";
 import { useState, useEffect } from "react";
 import GameList from "../../components/GameList/GameList";
@@ -9,14 +9,15 @@ export default function Games() {
   useEffect(() => {
     fetchGames();
   }, []);
-  const fetchGames = async () => {
+
+  async function fetchGames() {
     try {
-      const { data } = await axios.get(`${apiUrl}/games`);
+      const { data } = await axios.get(`${VITE_API_URL}/games`);
       setGames(data);
     } catch (error) {
       console.error("Error fetching games:", error);
     }
-  };
+  }
 
   // for debugging
   // Log the fetched games after they have been set
