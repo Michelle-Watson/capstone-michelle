@@ -57,16 +57,18 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
           {filteredpriceList.map((price) => (
             <tr key={price.id}>
               <td>
-                <Link to={`/games/${price.id}`} className="gameList__link">
+                {/* Open platform in a different tab */}
+                <Link to={price.url} target="_blank" className="gameList__link">
                   <img
                     src={placeholderImageUrl}
-                    alt={price.title}
+                    alt={price.platform_name}
                     className="gameArt"
                   />
                 </Link>
               </td>
               <td>{price.platform_name}</td>
-              <td>{price.discount}</td>
+              <td>{(price.discount * 100).toFixed(0)}%</td>{" "}
+              {/* Display discount as percentage */}
               <td>{price.discounted_price}</td>
               <td>{price.original_price}</td>
             </tr>
