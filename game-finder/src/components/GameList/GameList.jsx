@@ -31,6 +31,14 @@ export default function GameList({ games, fetchGames }) {
     setSearchTerm(event.target.value);
   };
 
+  // Helper function to truncate the description to 100 characters
+  const truncateDescription = (description) => {
+    if (description && description.length > 100) {
+      return description.slice(0, 100) + "...";
+    }
+    return description;
+  };
+
   return (
     <div className="main-container">
       {/* Center the content */}
@@ -72,7 +80,7 @@ export default function GameList({ games, fetchGames }) {
                 </td>
                 <td>{game.title}</td>
                 <td>{new Date(game.release_date).toLocaleDateString()}</td>
-                <td>{game.description}</td>
+                <td>{truncateDescription(game.description)}</td>
               </tr>
             ))}
           </tbody>
