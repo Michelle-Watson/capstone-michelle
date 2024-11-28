@@ -89,7 +89,7 @@
     border: 1px solid $Cloud; // Default border color
     color: $night-form-field-text;
     background-color: $night-form-field;
-
+    transition: all 0.3s ease; // Smooth transition for focus effects
     &.warehouse-form__input-control--error {
       border-color: $Red; // Red border when there’s an error
     }

@@ -59,29 +59,36 @@ export default function GameForm() {
     }
   };
 
+  // Helper function to validate the URL
+  const isValidUrl = (url) => {
+    const regex =
+      /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
+    return regex.test(url);
+  };
+
   // Validates the form fields
   const validateFields = () => {
     const newErrors = {};
-    const phoneRegex = /^\d{11}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Checks for a valid email with "@" and "."
 
-    // Validates required fields and checks formats for phone and email fields
-    Object.keys(formData).forEach((field) => {
-      const fieldValue = formData[field]
-        ? formData[field].toString().trim()
-        : ""; // Safely convert to string and trim
-      if (!fieldValue) {
-        newErrors[field] = "This field is required.";
-      } else if (
-        field === "contact_phone" &&
-        !phoneRegex.test(fieldValue.replace(/\D/g, ""))
-      ) {
-        newErrors[field] =
-          "Phone number must include country and area code, e.g. +1 (123) 555-6789";
-      } else if (field === "contact_email" && !emailRegex.test(fieldValue)) {
-        newErrors[field] = "Invalid email format.";
-      }
-    });
+    if (!formData.title.trim()) {
+      newErrors.title = "Game Title is required.";
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = "Description is required.";
+    }
+
+    if (!formData.release_date.trim()) {
+      newErrors.release_date = "Release Date is required.";
+    }
+
+    if (!isValidUrl(formData.imageurlSmall)) {
+      newErrors.imageurlSmall = "Small image URL is required.";
+    }
+
+    if (!isValidUrl(formData.imageurlBig)) {
+      newErrors.imageurlBig = "BIG image URL is required.";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
