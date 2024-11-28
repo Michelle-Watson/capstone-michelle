@@ -2,10 +2,26 @@
 @use "./styles/partials/mixins" as *;
 @use "./styles/partials/variables" as *;
 
-.app-body {
+.app-container {
   margin: 0 auto;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: $night-bg;
+  color: $GameFinder-Purple-200;
+
+  @include responsive-margin;
 }
+
+main {
+  flex: 1;
+}
+
+// Remove any max-width constraints on main container elements
+// .container {
+//   max-width: none;
+//   width: 100%;
+// }
 
 .footer {
   position: relative;
@@ -15,6 +31,8 @@
 
   display: flex;
   justify-content: center;
+
+  margin-bottom: 2rem;
 
   @include body-small {
     color: $GameFinder-Purple-100;

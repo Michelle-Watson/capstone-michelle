@@ -23,8 +23,25 @@ $table-cell-padding-y-sm: 0;
 @import "../../styles/partials/typography";
 @import "../../styles/partials/variables";
 
+.main-container {
+  // Add a wrapper for centering
+  display: flex;
+  justify-content: center; // Horizontally center the content
+  align-items: center; // Vertically center the content
+  height: 100vh; // Take up full viewport height
+}
+
 .gameList {
-  margin: 1.25rem;
+  // margin: 1.25rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  max-width: $mobile-max-width;
+  @include tablet {
+    max-width: $tablet-max-width;
+  }
 
   .header {
     display: flex;

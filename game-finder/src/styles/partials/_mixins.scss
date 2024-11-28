@@ -1,103 +1,118 @@
 @use "variables" as *;
 
 @mixin tablet {
-	@media (min-width: $tablet-breakpoint) {
-		@content;
-	}
+  @media (min-width: $tablet-breakpoint) {
+    @content;
+  }
 }
 
 @mixin desktop {
-	@media (min-width: $desktop-breakpoint) {
-		@content;
-	}
+  @media (min-width: $desktop-breakpoint) {
+    @content;
+  }
+}
+
+@mixin responsive-margin {
+  margin: 1rem;
+  padding: $gutter-mobile;
+
+  @include tablet {
+    margin: 2rem;
+    padding: $gutter-tablet-desktop;
+  }
+
+  @include desktop {
+    margin: auto;
+    padding: $gutter-tablet-desktop;
+  }
 }
 
 // Define mixins for shared typography styles
 // h1
 @mixin page-header {
-	font-weight: $bold-700;
-	//font-size: 1.75rem; // Text size: 28px
-	line-height: 2.25rem; // Line height: 36px
-	font-size: 2.3125rem;
+  font-weight: $bold-700;
+  //font-size: 1.75rem; // Text size: 28px
+  line-height: 2.25rem; // Line height: 36px
+  font-size: 2.3125rem;
 
-	@include tablet {
-		// font-size: 2rem; // Text size: 32px
-		line-height: 2.5rem; // Line height: 40px
-		font-size: 2.6875rem;
-	}
+  @include tablet {
+    // font-size: 2rem; // Text size: 32px
+    line-height: 2.5rem; // Line height: 40px
+    font-size: 2.6875rem;
+  }
 }
 
 // h2
 @mixin subheader {
-	font-weight: $demi-600;
-	//font-size: 1.25rem; // Text size: 20px
-	line-height: 1.75rem; // Line height: 28px
-	font-size: 1.6875rem;
+  font-weight: $demi-600;
+  //font-size: 1.25rem; // Text size: 20px
+  line-height: 1.75rem; // Line height: 28px
+  font-size: 1.6875rem;
 
-	@include tablet {
-		//font-size: 1.5rem; // Text size: 24px
-		line-height: 2rem; // Line height: 32px
-		font-size: 2rem;
-	}
+  @include tablet {
+    //font-size: 1.5rem; // Text size: 24px
+    line-height: 2rem; // Line height: 32px
+    font-size: 2rem;
+  }
 }
 
 // h3
 @mixin labels-links-buttons {
-	font-weight: $demi-600;
-	font-size: 0.8125rem; // Text size: 13px
-	line-height: 1.25rem; // Line height: 20px
+  font-weight: $demi-600;
+  font-size: 0.8125rem; // Text size: 13px
+  line-height: 1.25rem; // Line height: 20px
 
-	@include tablet {
-		font-size: 0.875rem; // Text size: 14px
-		line-height: 1.375rem; // Line height: 22px
-	}
+  @include tablet {
+    font-size: 0.875rem; // Text size: 14px
+    line-height: 1.375rem; // Line height: 22px
+  }
 
-	@content;
+  @content;
 }
 
 @mixin table-header {
-	font-size: 0.6875rem; // Text size: 11px
-	line-height: 1rem; // Line height: 16px
+  font-size: 0.6875rem; // Text size: 11px
+  line-height: 1rem; // Line height: 16px
 
-	@include tablet {
-		font-size: 0.75rem; // Text size: 12px
-		line-height: 1.125rem; // Line height: 18px
-	}
+  @include tablet {
+    font-size: 0.75rem; // Text size: 12px
+    line-height: 1.125rem; // Line height: 18px
+  }
 }
 
 // p1
 @mixin body-large {
-	font-size: 0.9375rem; // Text size: 15px
-	line-height: 1.625rem; // Line height: 26px
+  font-size: 0.9375rem; // Text size: 15px
+  line-height: 1.625rem; // Line height: 26px
 
-	@include tablet {
-		font-size: 1rem; // Text size: 16px
-		line-height: 1.75rem; // Line height: 28px
-	}
+  @include tablet {
+    font-size: 1rem; // Text size: 16px
+    line-height: 1.75rem; // Line height: 28px
+  }
 }
 
 // p2
 @mixin body-medium {
-	font-size: 0.8125rem; // Text size: 13px
-	line-height: 1.25rem; // Line height: 20px
+  font-size: 0.8125rem; // Text size: 13px
+  line-height: 1.25rem; // Line height: 20px
 
-	@include tablet {
-		font-size: 0.875rem; // Text size: 14px
-		line-height: 1.375rem; // Line height: 22px
-	}
+  @include tablet {
+    font-size: 0.875rem; // Text size: 14px
+    line-height: 1.375rem; // Line height: 22px
+  }
 }
 
 // p3
 @mixin body-small {
-	font-size: 0.6875rem; // Text size: 11px
-	line-height: 1rem; // Line height: 16px
+  font-size: 0.6875rem; // Text size: 11px
+  line-height: 1rem; // Line height: 16px
 
-	@include tablet {
-		font-size: 0.75rem; // Text size: 12px
-		line-height: 1.125rem; // Line height: 18px
-	}
+  @include tablet {
+    font-size: 0.75rem; // Text size: 12px
+    line-height: 1.125rem; // Line height: 18px
+  }
 
-	@content;
+  @content;
 }
 
 // NavLink
@@ -106,7 +121,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  
+
   font-size: 1.125rem; // Text size: 18px
   font-weight: $demi-600;
   text-decoration: none;
@@ -120,9 +135,9 @@
     @include labels-links-buttons {
       border-radius: 1.5rem;
 
-			@content;
-		}
-	}
+      @content;
+    }
+  }
 
-	@content;
+  @content;
 }
