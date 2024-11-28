@@ -17,14 +17,20 @@
 }
 
 .warehouse-form {
-  background-color: $White;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  // Background colour of form
+  background-color: $night-fg;
+
+  box-shadow: 0 5px 1px $GameFinder-Aqua;
   position: relative;
   border-radius: 0.25rem;
   max-width: 600px;
   width: 100%;
   @include tablet {
     max-width: 1000px;
+  }
+  // Glowing drop shadow effect for the form
+  &:focus-within {
+    box-shadow: $GameFinder-Aqua; // Aqua glowing effect
   }
 
   &__header-container {
@@ -79,12 +85,20 @@
 
   // Apply red border when input has error class
   .input-control {
+    // $night-form-border
     border: 1px solid $Cloud; // Default border color
-    // color: $Instock-Black;
-    color: $GameFinder-Aqua;
+    color: $night-form-field-text;
+    background-color: $night-form-field;
 
     &.warehouse-form__input-control--error {
       border-color: $Red; // Red border when there’s an error
+    }
+
+    // Border color change on focus
+    &:focus {
+      // border-color: aqua; // Aqua border when focused
+      outline: none; // Remove default outline
+      box-shadow: 0 0 8px 2px $GameFinder-Aqua;
     }
   }
 
@@ -106,12 +120,13 @@
     display: flex;
     gap: $gutter-mobile;
     justify-content: center;
-    background-color: $Light-Grey;
+    // background-color: $Light-Grey;
+    background-color: $night-acent;
     padding: $padding-spacing-base-unit * 3 $padding-spacing-base-unit * 4;
     flex-direction: row;
     @include tablet {
       justify-content: end;
-      padding: 0 $padding-spacing-base-unit * 4;
+      padding: 1rem $padding-spacing-base-unit * 4;
     }
   }
 
