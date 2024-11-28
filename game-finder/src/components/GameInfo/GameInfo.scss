@@ -1,0 +1,41 @@
+// Import personal partials
+@import "../../styles/partials/global";
+@import "../../styles/partials/mixins";
+@import "../../styles/partials/typography";
+@import "../../styles/partials/variables";
+
+/* GameInfo.scss */
+.gameInfo__container {
+  display: flex;
+  flex-direction: column;
+  // Center the image horizontally
+  align-items: center;
+  // Set in App.scss
+  // margin: 0 50px;
+}
+
+.gameInfo__imageContainer {
+  display: flex;
+  //   margin-bottom: 20px; /* Space between the image and the text */
+  width: 100%;
+  justify-content: space-around;
+}
+
+.gameInfo__image {
+  width: 100%; /* Make the image responsive */
+  // Original image resolution
+  max-width: 1154px;
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 1rem;
+}
+
+// Left-align the text (description, release date)
+.gameInfo__details {
+  text-align: left;
+  //   max-width: 800px; /* Limit text container width */
+}
+
+// Center title
+.gameInfo__details h2 {
+  text-align: center;
+}
