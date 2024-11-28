@@ -178,7 +178,7 @@ export default [
     original_price: 15.69,
     discount: 0,
     discounted_price: 15.69,
-    url: "https://www.g2a.com/noita-steam-key-global-i10000190811002,
+    url: "https://www.g2a.com/noita-steam-key-global-i10000190811002",
   },
 
   // Add more games here
