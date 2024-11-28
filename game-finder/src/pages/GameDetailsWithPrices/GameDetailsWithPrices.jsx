@@ -52,7 +52,6 @@ export default function GameDetailsWithPrices() {
   }
   return (
     <div className="gameDetails__container">
-      <h1>GameDetailsWithPrices Page</h1>
       <div className="gameDetails__container--shadow">
         <GameInfo currentGame={currentGame} />
         <GamePriceList

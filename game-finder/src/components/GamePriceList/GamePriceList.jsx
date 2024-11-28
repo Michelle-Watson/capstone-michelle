@@ -28,42 +28,47 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
     "https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg";
 
   return (
-    <div className="gameList">
-      <div className="header">
-        <h1 className="title">List of Prices</h1>
-        <div className="searchHeader">
-          <form className="searchHeader__form">
-            <input
-              type="text"
-              className="searchHeader__input"
-              placeholder="Search platforms..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </form>
+    <div className="main-container">
+      <div className="gameList">
+        <div className="header">
+          <h1 className="title">List of Prices</h1>
+          <div className="searchHeader">
+            <form className="searchHeader__form">
+              <input
+                type="text"
+                className="searchHeader__input"
+                placeholder="Search platforms..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </form>
+          </div>
         </div>
-      </div>
-      <table className="table table-sm">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Platform</th>
-            <th>Discount</th>
-            <th>Discounted Price</th>
-            <th>Original Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredpriceList.map((price) => (
-            <tr key={price.id}>
-              <td>
-                <Link to={price.url} target="_blank" className="gameList__link">
-                  <img
-                    src={`/assets/icons/${price.platform_name.toLowerCase()}.svg`}
-                    alt={price.platform_name}
-                    className="logoArt"
-                  />
-                  {/* 
+        <table className="table table-sm">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Platform</th>
+              <th>Discount</th>
+              <th>Discounted Price</th>
+              <th>Original Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredpriceList.map((price) => (
+              <tr key={price.id}>
+                <td>
+                  <Link
+                    to={price.url}
+                    target="_blank"
+                    className="gameList__link"
+                  >
+                    <img
+                      src={`/assets/icons/${price.platform_name.toLowerCase()}.svg`}
+                      alt={price.platform_name}
+                      className="logoArt"
+                    />
+                    {/* 
                   <img
                     src={placeholderImageUrl}
                     alt={price.platform_name}
@@ -74,18 +79,19 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
                     alt={price.platform_name}
                     className="logoArt"
                   /> */}
-                </Link>
-              </td>
-              <td>{price.platform_name}</td>
-              <td className={price.discount > 0.5 ? "high-discount" : ""}>
-                {(price.discount * 100).toFixed(0)}%
-              </td>
-              <td>{price.discounted_price}</td>
-              <td>{price.original_price}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  </Link>
+                </td>
+                <td>{price.platform_name}</td>
+                <td className={price.discount > 0.5 ? "high-discount" : ""}>
+                  {(price.discount * 100).toFixed(0)}%
+                </td>
+                <td>{price.discounted_price}</td>
+                <td>{price.original_price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -36,7 +36,6 @@ export default function GameList({ games, fetchGames }) {
 
   return (
     <div className="main-container">
-      {" "}
       {/* Center the content */}
       <div className="gameList">
         <div className="header">
