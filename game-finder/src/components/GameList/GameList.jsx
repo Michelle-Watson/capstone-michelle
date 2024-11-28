@@ -35,49 +35,53 @@ export default function GameList({ games, fetchGames }) {
     "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/469600/capsule_231x87.jpg?t=1732210582"; // Placeholder image URL
 
   return (
-    <div className="gameList">
-      <div className="header">
-        <h1 className="title">List of Games</h1>
-        <div className="searchHeader">
-          <form className="searchHeader__form">
-            <input
-              type="text"
-              className="searchHeader__input"
-              placeholder="Search games..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
-          </form>
+    <div className="main-container">
+      {" "}
+      {/* Center the content */}
+      <div className="gameList">
+        <div className="header">
+          <h1 className="title">List of Games</h1>
+          <div className="searchHeader">
+            <form className="searchHeader__form">
+              <input
+                type="text"
+                className="searchHeader__input"
+                placeholder="Search games..."
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </form>
+          </div>
         </div>
-      </div>
-      <table className="table table-sm">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Title</th>
-            <th>Release Date</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredGames.map((game) => (
-            <tr key={game.id}>
-              <td>
-                <Link to={`/games/${game.id}`} className="gameList__link">
-                  <img
-                    src={placeholderImageUrl}
-                    alt={game.title}
-                    className="gameArt"
-                  />
-                </Link>
-              </td>
-              <td>{game.title}</td>
-              <td>{new Date(game.release_date).toLocaleDateString()}</td>
-              <td>{game.description}</td>
+        <table className="table table-sm">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Title</th>
+              <th>Release Date</th>
+              <th>Description</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredGames.map((game) => (
+              <tr key={game.id}>
+                <td>
+                  <Link to={`/games/${game.id}`} className="gameList__link">
+                    <img
+                      src={placeholderImageUrl}
+                      alt={game.title}
+                      className="gameArt"
+                    />
+                  </Link>
+                </td>
+                <td>{game.title}</td>
+                <td>{new Date(game.release_date).toLocaleDateString()}</td>
+                <td>{game.description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

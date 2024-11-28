@@ -1,18 +1,7 @@
-// Required
+// Required Bootstrap Imports
 @import "bootstrap/scss/functions";
-
-// Default variable overrides must come after function imports, but before rest of imports
-// https://getbootstrap.com/docs/5.0/customize/sass/#variable-defaults
-$table-cell-padding-y: 0;
-// $table-cell-padding-x: 0.0625rem;
-$table-cell-padding-y-sm: 0;
-// $table-cell-padding-x-sm: 0.0625rem;
-
-// Required
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/mixins";
-
-// Import only the Bootstrap components I need
 @import "bootstrap/scss/tables"; // table of games
 @import "bootstrap/scss/forms"; // for search header
 @import "bootstrap/scss/buttons"; // for button (optional)
@@ -23,26 +12,28 @@ $table-cell-padding-y-sm: 0;
 @import "../../styles/partials/typography";
 @import "../../styles/partials/variables";
 
+// Center the main container
 .main-container {
-  // Add a wrapper for centering
   display: flex;
   justify-content: center; // Horizontally center the content
-  align-items: center; // Vertically center the content
-  height: 100vh; // Take up full viewport height
+  // align-items: center; // Vertically center the content
+  height: 100vh; // Full viewport height
+  width: 100%; // Ensure full width for main container
 }
 
 .gameList {
-  // margin: 1.25rem;
-
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; // Start at the top of the container
+  width: 100%; // Ensure full width inside main container
 
+  // Set max-width for mobile and tablet using variables
   max-width: $mobile-max-width;
   @include tablet {
     max-width: $tablet-max-width;
   }
 
+  // Styles for the header section
   .header {
     display: flex;
     flex-direction: column;
@@ -117,7 +108,6 @@ $table-cell-padding-y-sm: 0;
 
   // Style for the game art image
   .gameArt {
-    // Same dimensions as Steamdb.info
     width: 107px;
     height: 40px;
     object-fit: cover; // Ensure the image is properly scaled within the container
