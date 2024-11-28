@@ -98,10 +98,25 @@ $table-cell-padding-y-sm: 0;
     @extend .table-striped;
     @extend .table-hover;
 
+    // Increase font size for table cells
+    td,
+    th {
+      line-height: 1.5; // Adjust line height for better readability
+      padding: 0.75rem; // Slightly increase padding to avoid text crowding
+    }
+
+    // Increase font weight for headers
+    th {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
     td {
+      font-size: 1.5rem;
       vertical-align: middle; // Center text vertically
     }
 
+    // Make platform icon take up minimal space
     td:first-child {
       width: 1%; // make the cell as narrow as possible
       white-space: nowrap; // Prevents wrapping
