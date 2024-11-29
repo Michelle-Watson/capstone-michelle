@@ -37,7 +37,7 @@ const formatReleaseDate = (timestamp) => {
   return `${year}-${month}-${day}`;
 };
 
-// Helper function to convert IGDB game data to your own db format
+// Helper function to convert IGDB game data to my own db format
 const convertIGDBGame = (igdbGame) => {
   return {
     id: igdbGame.id, // Map IGDB ID to your db ID
@@ -61,17 +61,13 @@ const getGamesFromIGDB = async () => {
     "Client-ID": process.env.TWITCH_CLIENT_ID,
     Authorization: `Bearer ${accessToken}`,
   };
+  // https://api-docs.igdb.com/#game
+  // similar games for future work
   const body = `
-  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date;
+  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games;
   where aggregated_rating > 80;
   sort aggregated_rating asc;
   limit 10;`;
-
-  // const body = `
-  //           fields name, genres.name, storyline, themes.name, cover.url, summary;
-  //           where aggregated_rating > 80;
-  //           sort aggregated_rating asc;
-  //           limit 10;`;
 
   try {
     const response = await axios.post(url, body, { headers });
