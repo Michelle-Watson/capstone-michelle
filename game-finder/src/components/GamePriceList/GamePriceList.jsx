@@ -83,7 +83,7 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
                 </td>
                 <td>{price.platform_name}</td>
                 <td className={price.discount > 50 ? "high-discount" : ""}>
-                  {price.discount}%
+                  - {Math.round(price.discount)}%
                 </td>
                 <td>{price.discounted_price}</td>
                 <td>{price.original_price}</td>
