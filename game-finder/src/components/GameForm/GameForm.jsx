@@ -140,44 +140,94 @@ export default function GameForm() {
               </h1>
             </div>
           </legend>
+
           <hr className="warehouse-form__divider" />
+
           <div className="warehouse-form__sections">
             {/* warehouse details inputs */}
             <section className="warehouse-form__warehouse-details">
               <h2 className="warehouse-form__section-title">Game Details</h2>
-              {gameFields.map((field) => (
-                <div className="warehouse-form__input-field" key={field.name}>
-                  <label
-                    htmlFor={field.name}
-                    className="warehouse-form__input-label"
-                  >
-                    {field.label}
-                  </label>
-                  <input
-                    type="text"
-                    id={field.name}
-                    name={field.name}
-                    value={formData[field.name]}
-                    onChange={handleChange}
-                    className={`input-control ${
-                      errors[field.name]
-                        ? "warehouse-form__input-control--error"
-                        : ""
-                    }`}
-                    placeholder={`${field.label}`}
-                  />
-                  {errors[field.name] && (
-                    <span className="warehouse-form__error-message">
-                      <img
-                        src="/assets/icons/error-24px.svg"
-                        alt="error icon"
-                        className="warehouse-form__error-icon"
-                      />
-                      {errors[field.name]}
-                    </span>
-                  )}
-                </div>
-              ))}
+              {gameFields.map((field) => {
+                // Choose field type
+                let inputElement = null;
+
+                // If the field is for description, render a textarea
+                if (field.name === "description") {
+                  inputElement = (
+                    <textarea
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      className={`input-control ${
+                        errors[field.name]
+                          ? "warehouse-form__input-control--error"
+                          : ""
+                      }`}
+                      placeholder={field.label}
+                    />
+                  );
+                }
+
+                // If the field is for release_date, render a text=date
+                else if (field.name === "release_date") {
+                  inputElement = (
+                    <input
+                      type="date"
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      className={`input-control ${
+                        errors[field.name]
+                          ? "warehouse-form__input-control--error"
+                          : ""
+                      }`}
+                    />
+                  );
+                }
+                // For other fields, render a normal text input
+                else {
+                  inputElement = (
+                    <input
+                      type="text"
+                      id={field.name}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      className={`input-control ${
+                        errors[field.name]
+                          ? "warehouse-form__input-control--error"
+                          : ""
+                      }`}
+                      placeholder={field.label}
+                    />
+                  );
+                }
+                return (
+                  // Render apporpriate field for each game field
+                  <div className="warehouse-form__input-field" key={field.name}>
+                    <label
+                      htmlFor={field.name}
+                      className="warehouse-form__input-label"
+                    >
+                      {field.label}
+                    </label>
+                    {inputElement}{" "}
+                    {/* Render the corresponding input element based on conditions */}
+                    {errors[field.name] && (
+                      <span className="warehouse-form__error-message">
+                        <img
+                          src="/assets/icons/error-24px.svg"
+                          alt="error icon"
+                          className="warehouse-form__error-icon"
+                        />
+                        {errors[field.name]}
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </section>
 
             <hr className="warehouse-form__divider warehouse-form__divider--tablet" />
