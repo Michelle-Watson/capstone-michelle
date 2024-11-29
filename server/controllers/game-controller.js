@@ -41,7 +41,7 @@ const convertIGDBGame = (igdbGame) => {
   return {
     id: igdbGame.id, // Map IGDB ID to your db ID
     title: igdbGame.name, // Map IGDB name to db title
-    description: igdbGame.summary || "", // Map IGDB summary to db description (if available)
+    description: igdbGame.storyline || igdbGame.summary || "",
     release_date: formatReleaseDate(igdbGame.first_release_date), // Convert and map release date
     imageurlSmall: `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${igdbGame.cover}.jpg`, // Assuming cover is available for image URL
     imageurlBig: `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.cover}.jpg`, // Assuming cover is available for image URL
