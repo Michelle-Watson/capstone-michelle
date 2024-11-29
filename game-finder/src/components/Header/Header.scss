@@ -28,39 +28,23 @@
   @include page-header;
 }
 
-/////////////////////////////////////////////
+// Additional styling: keep seperate for now
+// image and text for logo
+.nav__logo {
+  padding-bottom: 0.5rem; // Add some space between the logo and the border
+  border-bottom: 2px solid $GameFinder-Aqua; // Add bottom border with Aqua color
+  transition: all 0.3s ease-in-out; // Smooth transition for hover effect
 
-// Search Bar
-.search-header {
-  display: flex;
-
-  &__form {
+  // Hover effect to change color and scale the logo
+  &:hover {
+    color: $GameFinder-Aqua; // Change text color to Aqua on hover
+    transform: scale(1.05); // Slight zoom effect on hover
   }
 
-  &__input {
-    padding: 0.625rem;
-    @include labels-links-buttons;
-    border-radius: 1.25rem;
-    width: 20rem;
-    // padding between left side of form field and user input
-    padding-left: 2rem;
-    border: 0;
-    outline: solid 0.0625rem $Cloud;
-    background: url("../../assets/icons/search-24px.svg") no-repeat left center;
-    // position search icon on right end of input
-    background-position: right 1rem center;
-
-    color: $GameFinder-Purple-200;
-
-    &:focus {
-      outline: solid 0.125rem $GameFinder-Purple-1-button;
-      background: none;
-    }
-
-    &::placeholder {
-      color: $Slate;
-    }
-
-    transition: all 0.5s;
+  // Add a small logo image in future (image instead of text)
+  img {
+    width: 30px;
+    height: 30px;
+    margin-right: 0.5rem;
   }
 }
