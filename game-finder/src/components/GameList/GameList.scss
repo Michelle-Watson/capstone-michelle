@@ -14,6 +14,7 @@
 
 // Center the main container
 .main-container {
+  // background-color: $night-fg;
   display: flex;
   justify-content: center; // Horizontally center the content
   // align-items: center; // Vertically center the content
@@ -39,6 +40,7 @@
     flex-direction: column;
     gap: 1rem;
     margin-bottom: 1.25rem;
+    // border-bottom: 0 0 8px 2px $GameFinder-Aqua;
 
     @include tablet {
       flex-direction: row;
@@ -94,10 +96,36 @@
   // Keep Bootstrap styles for table and button
   .table {
     @extend .table;
+    background-color: $night-fg;
+    border-radius: 2rem;
+    box-shadow: 0 1px 4px $GameFinder-Aqua;
+    // so square corners don't go beyond table
+    overflow: hidden;
+
+    // border-collapse: separate; // Ensures rounded corners work on rows
     @extend .table-striped;
     @extend .table-hover;
     td {
       vertical-align: middle; // Center text vertically
+      // border-radius: 2rem;
+    }
+    th {
+      padding: 12px;
+      background-color: $GameFinder-Aqua;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    tr {
+      transition: all 0.3s ease-in-out;
+      // border-radius: 2rem; // Ensure row itself has rounded corners
+    }
+
+    tr:hover {
+      background-color: $GameFinder-Aqua;
+      color: black;
+      cursor: pointer;
+      transform: translateY(-2px);
     }
   }
 
@@ -111,6 +139,12 @@
     width: 107px;
     height: 40px;
     object-fit: cover; // Ensure the image is properly scaled within the container
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+      transform: scale(1.2);
+    }
   }
 }
 

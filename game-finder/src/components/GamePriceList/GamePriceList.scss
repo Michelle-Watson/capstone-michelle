@@ -141,6 +141,11 @@ $table-cell-padding-y-sm: 0;
     object-fit: contain; // cover -> contain
     display: block; // removes extra space below the image
     margin: 0 auto; // centers the image horizontally in its cell
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+      transform: scale(1.5);
+    }
   }
 }
 
