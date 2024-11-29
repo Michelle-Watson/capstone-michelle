@@ -3,7 +3,7 @@ import "./GameForm.scss";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const URL = import.meta.env.VITE_API_URL;
+const VITE_API_URL = import.meta.env.VITE_API_URL;
 
 export default function GameForm() {
   //to redirect user to game list after submission
@@ -16,7 +16,7 @@ export default function GameForm() {
   useEffect(() => {
     if (isEditMode) {
       axios
-        .get(`${URL}/games/${id}`)
+        .get(`${VITE_API_URL}/games/${id}`)
         .then((response) => {
           const gameData = response.data;
 
@@ -113,8 +113,8 @@ export default function GameForm() {
     if (validateFields()) {
       try {
         const response = isEditMode
-          ? await axios.put(`${URL}/games/${id}`, formData)
-          : await axios.post(`${URL}/games`, formData);
+          ? await axios.put(`${VITE_API_URL}/games/${id}`, formData)
+          : await axios.post(`${VITE_API_URL}/games`, formData);
         if (response.status === 201 || response.status === 200) {
           setFormData({
             title: "",
