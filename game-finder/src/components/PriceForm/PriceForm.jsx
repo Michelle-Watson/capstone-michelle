@@ -13,54 +13,85 @@ export default function PriceForm() {
   const { id } = useParams();
   const isEditMode = Boolean(id);
   console.log("isEditMode:", isEditMode);
-  useEffect(() => {
-    if (isEditMode) {
-      axios
-        .get(`${VITE_API_URL}/games/${id}`)
-        .then((response) => {
-          const gameData = response.data;
 
-          // Format the release_date if it exists
-          if (gameData.release_date) {
-            // Convert to yyyy-MM-dd format
-            const releaseDate = new Date(gameData.release_date)
-              .toISOString()
-              .split("T")[0];
-            gameData.release_date = releaseDate;
-          }
-
-          setFormData(gameData);
-        })
-        .catch((error) => {
-          if (error.response?.status === 404) {
-            navigate("/");
-          } else {
-            console.error("Error fetching game data:", error);
-          }
-        });
-    }
-  }, [isEditMode, id]);
+  // State to store warehouses list
+  const [games, setGames] = useState([]);
 
   // Field configurations for game and image sections
-  const gameFields = [
-    { label: "Game Title", name: "title" },
-    { label: "Description", name: "description" },
-    { label: "Release Date", name: "release_date" },
+  const storeFields = [
+    {
+      label: "Game Title",
+      name: "title",
+      options: ["Cyberpunk 2077", "Noita"],
+    },
+    {
+      label: "Store name",
+      name: "platform_name",
+      options: ["Steam", "Humble Bundle", "G2A", "Epic Games"],
+    },
+    { label: "URL to Store Page", name: "url" },
   ];
 
-  const imageFields = [
-    { label: "Image URL (small)", name: "imageurlSmall" },
-    { label: "Image URL (big)", name: "imageurlBig" },
+  const priceFields = [
+    { label: "Original Price", name: "original_price", type: "number" },
+    { label: "Discount (as a decimal)", name: "discount", type: "number" },
+    { label: "Discounted Price", name: "discounted_price", type: "number" },
   ];
 
   // Form data and error state management
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
-    release_date: "",
-    imageurlSmall: "",
-    imageurlBig: "",
+    platform_name: "",
+    url: "",
+    original_price: "",
+    discount: "",
+    discounted_price: "",
+    game_id: "", // Add game_id here to store the ID from the name
   });
+
+  useEffect(() => {
+    if (isEditMode) {
+      axios
+        .get(`${VITE_API_URL}/prices/${id}`)
+        .then((response) => {
+          const priceData = response.data;
+
+          // Any extra proecssing
+
+          //   setFormData(priceData);
+          setFormData({
+            title: priceData.title,
+            platform_name: priceData.platform_name,
+            url: priceData.url,
+            original_price: priceData.original_price,
+            discount: priceData.discount,
+            discounted_price: priceData.discounted_price,
+            game_id: priceData.game_id,
+          });
+          console.log("Fetched price data:", priceData);
+        })
+        .catch((error) => {
+          if (error.response?.status === 404) {
+            navigate("/");
+          } else {
+            console.error("Error fetching price data:", error);
+          }
+        });
+    }
+  }, [isEditMode, id, games]);
+
+  useEffect(() => {
+    fetchGames();
+  }, []);
+
+  async function fetchGames() {
+    try {
+      const { data } = await axios.get(`${VITE_API_URL}/games`);
+      setGames(data);
+    } catch (error) {
+      console.error("Error fetching games:", error);
+    }
+  }
 
   const [errors, setErrors] = useState({});
 
@@ -71,6 +102,19 @@ export default function PriceForm() {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+
+    // MAY SCRAP -=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    // If the 'warehouse' field changes, find the game_id by game title name
+    if (name === "title") {
+      const selectedTitle = warehouses.find((game) => game.title === value);
+
+      // Ensure warehouse_id is set correctly
+      setFormData((prev) => ({
+        ...prev,
+        game_id: selectedTitle ? selectedTitle.id : "", // this should be a number
+      }));
+    }
+    // -=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   };
 
   // Helper function to validate the URL
@@ -88,21 +132,18 @@ export default function PriceForm() {
       newErrors.title = "Game Title is required.";
     }
 
-    if (!formData.description.trim()) {
-      newErrors.description = "Description is required.";
+    if (!formData.platform_name.trim()) {
+      newErrors.description = "Store Name is required.";
     }
 
-    if (!formData.release_date.trim()) {
-      newErrors.release_date = "Release Date is required.";
+    if (!formData.url.trim()) {
+      newErrors.release_date = "url to store page is required.";
     }
 
-    if (!isValidUrl(formData.imageurlSmall)) {
-      newErrors.imageurlSmall = "Small image URL is required.";
-    }
-
-    if (!isValidUrl(formData.imageurlBig)) {
-      newErrors.imageurlBig = "BIG image URL is required.";
-    }
+    // Only need 2/3 fields
+    // original_price: "",
+    // discount: "",
+    // discounted_price: "",
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -113,26 +154,23 @@ export default function PriceForm() {
     if (validateFields()) {
       try {
         const response = isEditMode
-          ? await axios.put(`${VITE_API_URL}/games/${id}`, formData)
-          : await axios.post(`${VITE_API_URL}/games`, formData);
+          ? await axios.put(`${VITE_API_URL}/prices/${id}`, formData)
+          : await axios.post(`${VITE_API_URL}/prices`, formData);
         if (response.status === 201 || response.status === 200) {
           setFormData({
             title: "",
-            description: "",
-            release_date: "",
-            imageurlSmall: "",
-            imageurlBig: "",
+            platform_name: "",
+            url: "",
+            original_price: "",
+            discount: "",
+            discounted_price: "",
+            game_id: "",
           });
-          // Redirect to the item details page after saving the item in edit mode
-          if (isEditMode) {
-            navigate(`/games/${id}`); // Navigate to the details page of the edited game
-          } else {
-            navigate("/games"); // Navigate to games list if it's a new game
-          }
+          navigate(`/games/${game_id}`); // Navigate to the details page of the game the price was updated/added for
         }
       } catch (error) {
         console.error(
-          "Error connecting to the server. Please try again later.",
+          "Error adding/updating price to the server. Please try again later.",
           error
         );
       }
@@ -147,7 +185,7 @@ export default function PriceForm() {
           <legend className="game-form__header">
             <div className="game-form__header-container">
               <Link
-                to={isEditMode ? `/games/${id}` : "/games"} // Conditionally navigate based on edit mode
+                to={isEditMode ? `/prices/${id}` : "/prices"} // Conditionally navigate based on edit mode
                 className="game-form__icon"
               >
                 <img
@@ -157,7 +195,7 @@ export default function PriceForm() {
                 />
               </Link>
               <h1 className="game-form__title">
-                {isEditMode ? "Edit Game" : "Add New Game"}
+                {isEditMode ? "Edit Price" : "Add New Price"}
               </h1>
             </div>
           </legend>
@@ -167,8 +205,8 @@ export default function PriceForm() {
           <div className="game-form__sections">
             {/* game details inputs */}
             <section className="game-form__game-details">
-              <h2 className="game-form__section-title">Game Details</h2>
-              {gameFields.map((field) => {
+              <h2 className="game-form__section-title">Store Details</h2>
+              {storeFields.map((field) => {
                 // Choose field type
                 let inputElement = null;
 
@@ -255,8 +293,8 @@ export default function PriceForm() {
 
             {/* contact details inputs */}
             <section className="game-form__contact-details">
-              <h2 className="game-form__section-title">Image Details</h2>
-              {imageFields.map((field) => (
+              <h2 className="game-form__section-title">Discount Details</h2>
+              {priceFields.map((field) => (
                 <div className="game-form__input-field" key={field.name}>
                   <label
                     htmlFor={field.name}
