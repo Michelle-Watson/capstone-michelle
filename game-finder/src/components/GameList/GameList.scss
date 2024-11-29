@@ -98,7 +98,9 @@
     @extend .table;
     background-color: $night-fg;
     border-radius: 2rem;
+    border-radius: 2rem 2rem 0 0;
     box-shadow: 0 1px 4px $GameFinder-Aqua;
+
     // so square corners don't go beyond table
     overflow: hidden;
 
@@ -108,20 +110,24 @@
     td {
       vertical-align: middle; // Center text vertically
       // border-radius: 2rem;
+      // border-radius: 0;
     }
     th {
-      padding: 12px;
-      background-color: $GameFinder-Aqua;
-      color: #fff;
-      font-weight: bold;
+      // background-color: $GameFinder-Aqua;
+      // color: #fff;
+      // font-weight: bold;
+
+      // Add bottom border to header
+      border-bottom: 0.1rem solid $GameFinder-Aqua;
     }
 
-    tr {
+    tbody tr {
       transition: all 0.3s ease-in-out;
       // border-radius: 2rem; // Ensure row itself has rounded corners
+      // border-radius: 2rem;
     }
 
-    tr:hover {
+    tbody tr:hover {
       background-color: $GameFinder-Aqua;
       color: black;
       cursor: pointer;
