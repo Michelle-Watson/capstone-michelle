@@ -12,17 +12,29 @@ export default function PriceForm() {
   //Define an isEditMode Variable to check if the id parameter is present
   const { id } = useParams();
   const isEditMode = Boolean(id);
-  console.log("isEditMode:", isEditMode);
 
-  // State to store warehouses list
+  // State to store games list
   const [games, setGames] = useState([]);
+
+  // Form data and error state management
+  const [formData, setFormData] = useState({
+    title: "",
+    platform_name: "",
+    url: "",
+    original_price: "",
+    discount: "",
+    discounted_price: "",
+    game_id: "", // Add game_id here to store the ID from the name
+  });
 
   // Field configurations for game and image sections
   const storeFields = [
     {
       label: "Game Title",
       name: "title",
-      options: ["Cyberpunk 2077", "Noita"],
+      type: "select",
+      // Use games state to populate options
+      options: games.map((game) => game.title),
     },
     {
       label: "Store name",
@@ -38,17 +50,6 @@ export default function PriceForm() {
     { label: "Discounted Price", name: "discounted_price", type: "number" },
   ];
 
-  // Form data and error state management
-  const [formData, setFormData] = useState({
-    title: "",
-    platform_name: "",
-    url: "",
-    original_price: "",
-    discount: "",
-    discounted_price: "",
-    game_id: "", // Add game_id here to store the ID from the name
-  });
-
   useEffect(() => {
     if (isEditMode) {
       axios
@@ -57,6 +58,16 @@ export default function PriceForm() {
           const priceData = response.data;
 
           // Any extra proecssing
+          // If game_id is missing, try to find it using title
+          let game_id = priceData.game_id;
+
+          if (!game_id && priceData.title) {
+            // Find the game_id by title
+            const selectedGame = games.find(
+              (game) => game.title === priceData.title
+            );
+            game_id = selectedGame ? selectedGame.id : "";
+          }
 
           //   setFormData(priceData);
           setFormData({
@@ -68,7 +79,6 @@ export default function PriceForm() {
             discounted_price: priceData.discounted_price,
             game_id: priceData.game_id,
           });
-          console.log("Fetched price data:", priceData);
         })
         .catch((error) => {
           if (error.response?.status === 404) {
@@ -104,11 +114,11 @@ export default function PriceForm() {
     }
 
     // MAY SCRAP -=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-    // If the 'warehouse' field changes, find the game_id by game title name
+    // If the 'game title' field changes, find the game_id by game title name
     if (name === "title") {
-      const selectedTitle = warehouses.find((game) => game.title === value);
+      const selectedTitle = games.find((game) => game.title === value);
 
-      // Ensure warehouse_id is set correctly
+      // Ensure game_id is set correctly
       setFormData((prev) => ({
         ...prev,
         game_id: selectedTitle ? selectedTitle.id : "", // this should be a number
@@ -133,11 +143,11 @@ export default function PriceForm() {
     }
 
     if (!formData.platform_name.trim()) {
-      newErrors.description = "Store Name is required.";
+      newErrors.platform_name = "Store Name is required.";
     }
 
-    if (!formData.url.trim()) {
-      newErrors.release_date = "url to store page is required.";
+    if (!isValidUrl(formData.url)) {
+      newErrors.url = "URL to store page is required.";
     }
 
     // Only need 2/3 fields
@@ -153,9 +163,15 @@ export default function PriceForm() {
     event.preventDefault();
     if (validateFields()) {
       try {
+        // Now create the requestData with updated formData
+        const requestData = {
+          ...formData,
+          game_id: formData.game_id, // Ensure game_id is set correctly
+        };
+
         const response = isEditMode
-          ? await axios.put(`${VITE_API_URL}/prices/${id}`, formData)
-          : await axios.post(`${VITE_API_URL}/prices`, formData);
+          ? await axios.put(`${VITE_API_URL}/prices/${id}`, requestData)
+          : await axios.post(`${VITE_API_URL}/prices`, requestData);
         if (response.status === 201 || response.status === 200) {
           setFormData({
             title: "",
@@ -166,7 +182,7 @@ export default function PriceForm() {
             discounted_price: "",
             game_id: "",
           });
-          navigate(`/games/${game_id}`); // Navigate to the details page of the game the price was updated/added for
+          navigate(`/games`); // Navigate to the details page of the game the price was updated/added for
         }
       } catch (error) {
         console.error(
@@ -211,9 +227,9 @@ export default function PriceForm() {
                 let inputElement = null;
 
                 // If the field is for description, render a textarea
-                if (field.name === "description") {
+                if (field.options) {
                   inputElement = (
-                    <textarea
+                    <select
                       id={field.name}
                       name={field.name}
                       value={formData[field.name]}
@@ -223,26 +239,14 @@ export default function PriceForm() {
                           ? "game-form__input-control--error"
                           : ""
                       }`}
-                      placeholder={field.label}
-                    />
-                  );
-                }
-
-                // If the field is for release_date, render a text=date
-                else if (field.name === "release_date") {
-                  inputElement = (
-                    <input
-                      type="date"
-                      id={field.name}
-                      name={field.name}
-                      value={formData[field.name]}
-                      onChange={handleChange}
-                      className={`input-control ${
-                        errors[field.name]
-                          ? "game-form__input-control--error"
-                          : ""
-                      }`}
-                    />
+                    >
+                      <option value="">Select {field.label}</option>
+                      {field.options.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
                   );
                 }
                 // For other fields, render a normal text input
@@ -340,7 +344,7 @@ export default function PriceForm() {
               </Link>
 
               <button type="submit" className="button button--primary">
-                {isEditMode ? "Save" : "+ Add Game"}
+                {isEditMode ? "Save" : "+ Add Price"}
               </button>
             </div>
           </div>

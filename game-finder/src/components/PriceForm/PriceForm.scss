@@ -1,1 +1,12 @@
 @import "../GameForm/GameForm.scss";
+
+.game-form {
+  &__input-field select {
+    appearance: none; /* Remove the default dropdown arrow */
+    background: url("/assets/icons/arrow_drop_down-24px.svg") no-repeat right
+      0.625rem center;
+  }
+  &::placeholder {
+    font-family: "TitilliumWeb", sans-serif;
+  }
+}
