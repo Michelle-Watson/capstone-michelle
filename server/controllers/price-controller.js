@@ -4,7 +4,10 @@ const knex = initKnex(configuration);
 
 const index = async (_req, res) => {
   try {
-    const data = await knex("prices");
+    // Perform a JOIN between the "prices" table and "games" table
+    const data = await knex("prices")
+      .join("games", "prices.game_id", "=", "games.id") // Join condition
+      .select("prices.*", "games.title"); // Select all fields from prices, plus the title from games
 
     // Convert price fields to numbers before sending the response
     const formattedData = data.map((price) => ({
@@ -28,6 +31,7 @@ const findOne = async (req, res) => {
       .where("prices.id", req.params.id) // Look for the specific price using the ID
       .select(
         "prices.id",
+        "prices.game_id",
         // "games.title as game_title",
         "games.title",
         "prices.platform_name",
