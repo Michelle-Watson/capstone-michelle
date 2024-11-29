@@ -5,7 +5,7 @@ export default [
     game_id: 1,
     platform_name: "Steam",
     original_price: 79.99,
-    discount: 0,
+    discount: 0, // 0% off
     discounted_price: 79.99,
     url: "https://store.steampowered.com/app/1091500/Cyberpunk_2077/",
   },
@@ -14,7 +14,7 @@ export default [
     game_id: 1,
     platform_name: "Humble Bundle",
     original_price: 79.99,
-    discount: 0,
+    discount: 0, // 0% off
     discounted_price: 79.99,
     url: "https://www.humblebundle.com/store/cyberpunk-2077",
   },
@@ -23,7 +23,7 @@ export default [
     game_id: 1,
     platform_name: "G2A",
     original_price: 79.99,
-    discount: 0.32,
+    discount: 32, // 32% off
     discounted_price: 54.5,
     url: "https://www.g2a.com/cyberpunk-2077-gogcom-key-global-i10000156543001",
   },
@@ -32,19 +32,18 @@ export default [
     game_id: 1,
     platform_name: "Epic Games",
     original_price: 79.99,
-    discount: 0,
+    discount: 0, // 0% off
     discounted_price: 79.99,
     url: "https://store.epicgames.com/en-US/p/cyberpunk-2077",
   },
 
-  // Rest of the links haven't been validated yet
   // The Witcher 3 Prices
   {
     id: 5,
     game_id: 2,
     platform_name: "Steam",
     original_price: 39.99,
-    discount: 0.25,
+    discount: 25, // 25% off
     discounted_price: 29.99,
     url: "https://store.steampowered.com/app/292030",
   },
@@ -53,7 +52,7 @@ export default [
     game_id: 2,
     platform_name: "Humble Bundle",
     original_price: 39.99,
-    discount: 0.2,
+    discount: 20, // 20% off
     discounted_price: 31.99,
     url: "https://www.humblebundle.com/store/the-witcher-3-wild-hunt",
   },
@@ -62,7 +61,7 @@ export default [
     game_id: 2,
     platform_name: "G2A",
     original_price: 39.99,
-    discount: 0.15,
+    discount: 15, // 15% off
     discounted_price: 33.99,
     url: "https://www.g2a.com/the-witcher-3-wild-hunt-steam-key-global-i10000080055003",
   },
@@ -71,7 +70,7 @@ export default [
     game_id: 2,
     platform_name: "Epic Games",
     original_price: 39.99,
-    discount: 0.2,
+    discount: 20, // 20% off
     discounted_price: 31.99,
     url: "https://www.epicgames.com/store/en-US/p/the-witcher-3-wild-hunt",
   },
@@ -82,7 +81,7 @@ export default [
     game_id: 3,
     platform_name: "Steam",
     original_price: 59.99,
-    discount: 0.3,
+    discount: 30, // 30% off
     discounted_price: 41.99,
     url: "https://store.steampowered.com/app/1174180",
   },
@@ -91,7 +90,7 @@ export default [
     game_id: 3,
     platform_name: "Humble Bundle",
     original_price: 59.99,
-    discount: 0.25,
+    discount: 25, // 25% off
     discounted_price: 44.99,
     url: "https://www.humblebundle.com/store/red-dead-redemption-2",
   },
@@ -100,7 +99,7 @@ export default [
     game_id: 3,
     platform_name: "G2A",
     original_price: 59.99,
-    discount: 0.22,
+    discount: 22, // 22% off
     discounted_price: 46.79,
     url: "https://www.g2a.com/red-dead-redemption-2-steam-key-global-i10000080277001",
   },
@@ -109,7 +108,7 @@ export default [
     game_id: 3,
     platform_name: "Epic Games",
     original_price: 59.99,
-    discount: 0.25,
+    discount: 25, // 25% off
     discounted_price: 44.99,
     url: "https://www.epicgames.com/store/en-US/p/red-dead-redemption-2",
   },
@@ -120,7 +119,7 @@ export default [
     game_id: 4,
     platform_name: "Steam",
     original_price: 39.99,
-    discount: 0.5,
+    discount: 50, // 50% off
     discounted_price: 19.99,
     url: "https://store.steampowered.com/app/72850",
   },
@@ -129,7 +128,7 @@ export default [
     game_id: 4,
     platform_name: "Humble Bundle",
     original_price: 39.99,
-    discount: 0.4,
+    discount: 40, // 40% off
     discounted_price: 23.99,
     url: "https://www.humblebundle.com/store/the-elder-scrolls-v-skyrim-special-edition",
   },
@@ -138,7 +137,7 @@ export default [
     game_id: 4,
     platform_name: "G2A",
     original_price: 39.99,
-    discount: 0.35,
+    discount: 35, // 35% off
     discounted_price: 25.99,
     url: "https://www.g2a.com/the-elder-scrolls-v-skyrim-special-edition-steam-key-global-i10000080121003",
   },
@@ -147,7 +146,7 @@ export default [
     game_id: 4,
     platform_name: "Epic Games",
     original_price: 39.99,
-    discount: 0.4,
+    discount: 40, // 40% off
     discounted_price: 23.99,
     url: "https://www.epicgames.com/store/en-US/p/the-elder-scrolls-v-skyrim-special-edition",
   },
@@ -158,7 +157,7 @@ export default [
     game_id: 5,
     platform_name: "Steam",
     original_price: 22.79,
-    discount: 0.6,
+    discount: 60, // 60% off
     discounted_price: 9.11,
     url: "https://store.steampowered.com/app/881100/Noita/",
   },
@@ -167,7 +166,7 @@ export default [
     game_id: 5,
     platform_name: "Humble Bundle",
     original_price: 22.79,
-    discount: 0.6,
+    discount: 60, // 60% off
     discounted_price: 9.11,
     url: "https://www.humblebundle.com/store/noita?hmb_source=search_bar",
   },
@@ -176,7 +175,7 @@ export default [
     game_id: 5,
     platform_name: "G2A",
     original_price: 15.69,
-    discount: 0,
+    discount: 0, // 0% off
     discounted_price: 15.69,
     url: "https://www.g2a.com/noita-steam-key-global-i10000190811002",
   },

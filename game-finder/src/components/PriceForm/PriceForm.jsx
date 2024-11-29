@@ -150,10 +150,31 @@ export default function PriceForm() {
       newErrors.url = "URL to store page is required.";
     }
 
-    // Only need 2/3 fields
-    // original_price: "",
-    // discount: "",
-    // discounted_price: "",
+    if (!formData.original_price) {
+      newErrors.original_price = "Original price is required.";
+    } else if (!parseFloat(formData.original_price)) {
+      newErrors.original_price = "Original price must be a valid number.";
+    }
+
+    // Only need 2/3 discount fields
+
+    // Both can't be empty
+    if (!formData.discount && !formData.discounted_price) {
+      newErrors.discount =
+        "At least 1 of the discount fields must be provided.";
+      newErrors.discounted_price =
+        "At least 1 of the discount fields must be provided.";
+    }
+
+    // if discounted price not provided, discount must be provided and also be a number
+    if (!formData.discounted_price && !parseFloat(formData.discount)) {
+      newErrors.discount = "Discount must be a valid number.";
+    }
+
+    // if discount not provided, discounted_price must be provided and also be a number
+    if (!formData.discount && !parseFloat(formData.discounted_price)) {
+      newErrors.discounted_price = "Discounted price must be a valid number.";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -162,12 +183,25 @@ export default function PriceForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateFields()) {
+      // if discount isn't provided, convert discounted_price to number. set discount as undefined
+      if (!formData.discount) {
+        formData.discounted_price = Number(formData.discounted_price);
+        // formData.discount = undefined;
+      }
+      if (!formData.discounted_price) {
+        formData.discount = Number(formData.discount);
+        // formData.discounted_price = undefined;
+      }
       try {
         // Now create the requestData with updated formData
         const requestData = {
           ...formData,
           game_id: formData.game_id, // Ensure game_id is set correctly
+          // Parse number fields to numbers before sending to the server
+          original_price: Number(formData.original_price),
         };
+
+        console.log("Request data:", requestData);
 
         const response = isEditMode
           ? await axios.put(`${VITE_API_URL}/prices/${id}`, requestData)

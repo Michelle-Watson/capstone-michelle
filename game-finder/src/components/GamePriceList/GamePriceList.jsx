@@ -82,8 +82,8 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
                   </Link>
                 </td>
                 <td>{price.platform_name}</td>
-                <td className={price.discount > 0.5 ? "high-discount" : ""}>
-                  {(price.discount * 100).toFixed(0)}%
+                <td className={price.discount > 50 ? "high-discount" : ""}>
+                  {price.discount}%
                 </td>
                 <td>{price.discounted_price}</td>
                 <td>{price.original_price}</td>
