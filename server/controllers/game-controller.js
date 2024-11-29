@@ -1,15 +1,99 @@
 import initKnex from "knex";
 import configuration from "../knexfile.js";
+import axios from "axios";
 const knex = initKnex(configuration);
+
+// Fetch access token from Twitch
+const getTwitchAccessToken = async () => {
+  try {
+    const response = await axios.post(
+      "https://id.twitch.tv/oauth2/token",
+      null,
+      {
+        params: {
+          client_id: process.env.TWITCH_CLIENT_ID,
+          client_secret: process.env.TWITCH_CLIENT_SECRET,
+          grant_type: "client_credentials",
+        },
+      }
+    );
+
+    // Return the access token
+    return response.data.access_token;
+  } catch (err) {
+    console.error("Error fetching access token", err);
+    throw new Error("Could not fetch access token");
+  }
+};
+
+// Helper function to convert IGDB release date (UNIX timestamp) to YYYY-MM-DD format
+const formatReleaseDate = (timestamp) => {
+  if (!timestamp) return null;
+  const date = new Date(timestamp * 1000); // Convert UNIX timestamp to milliseconds
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (1-based)
+  const day = String(date.getDate()).padStart(2, "0"); // Get day
+  return `${year}-${month}-${day}`;
+};
+
+// Helper function to convert IGDB game data to your own db format
+const convertIGDBGame = (igdbGame) => {
+  return {
+    id: igdbGame.id, // Map IGDB ID to your db ID
+    title: igdbGame.name, // Map IGDB name to db title
+    description: igdbGame.summary || "", // Map IGDB summary to db description (if available)
+    release_date: formatReleaseDate(igdbGame.first_release_date), // Convert and map release date
+    imageurlSmall: `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${igdbGame.cover}.jpg`, // Assuming cover is available for image URL
+    imageurlBig: `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.cover}.jpg`, // Assuming cover is available for image URL
+  };
+};
+
+const getGamesFromIGDB = async () => {
+  const accessToken =
+    process.env.ACCESS_TOKEN || (await getTwitchAccessToken());
+  const url = "https://api.igdb.com/v4/games";
+  const headers = {
+    "Client-ID": process.env.TWITCH_CLIENT_ID,
+    Authorization: `Bearer ${accessToken}`,
+  };
+  const body = `
+  fields *;
+  where aggregated_rating > 80;
+  sort aggregated_rating asc;
+  limit 10;`;
+
+  // const body = `
+  //           fields name, genres.name, storyline, themes.name, cover.url, summary;
+  //           where aggregated_rating > 80;
+  //           sort aggregated_rating asc;
+  //           limit 10;`;
+
+  try {
+    const response = await axios.post(url, body, { headers });
+    // Convert the IGDB response into your dbGames format
+    const convertedGames = response.data.map(convertIGDBGame);
+    return convertedGames;
+  } catch (err) {
+    console.error("Error fetching games from IGDB", err);
+    throw new Error("Could not fetch games");
+  }
+};
 
 const index = async (_req, res) => {
   try {
     // get data from knex db, table games
-    const data = await knex("games");
+    const dbGames = await knex("games");
+
+    // Optionally fetch from the IGDB API
+    const igdbGames = await getGamesFromIGDB();
+
+    // Combine the data from your database and the IGDB API
+    const allGames = [...dbGames, ...igdbGames];
+
     // knex("games")
     // is the same as
     // knex.select("*").from("games")
-    res.status(200).json(data);
+    res.status(200).json(allGames);
   } catch (err) {
     res.status(400).send(`Error retrieving games: ${err}`);
   }
