@@ -59,8 +59,13 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
               <tr key={price.id}>
                 <td>
                   <Link
-                    to={price.url}
+                    to={
+                      price.url.startsWith("http")
+                        ? price.url
+                        : `https://${price.url}`
+                    } // Ensure it's an absolute URL
                     target="_blank"
+                    // rel="noopener noreferrer"
                     className="gameList__link"
                   >
                     <img
@@ -68,17 +73,6 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
                       alt={price.platform_name}
                       className="logoArt"
                     />
-                    {/* 
-                  <img
-                    src={placeholderImageUrl}
-                    alt={price.platform_name}
-                    className="logoArt"
-                  />
-                  <img
-                    src={`/assets/icons/${price.platform_name.toLowerCase()}.svg`}
-                    alt={price.platform_name}
-                    className="logoArt"
-                  /> */}
                   </Link>
                 </td>
                 <td>{price.platform_name}</td>
