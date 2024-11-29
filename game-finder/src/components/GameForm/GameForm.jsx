@@ -12,11 +12,25 @@ export default function GameForm() {
   //Define an isEditMode Variable to check if the id parameter is present
   const { id } = useParams();
   const isEditMode = Boolean(id);
+  console.log("isEditMode:", isEditMode);
   useEffect(() => {
     if (isEditMode) {
       axios
         .get(`${URL}/games/${id}`)
-        .then((response) => setFormData(response.data))
+        .then((response) => {
+          const gameData = response.data;
+
+          // Format the release_date if it exists
+          if (gameData.release_date) {
+            // Convert to yyyy-MM-dd format
+            const releaseDate = new Date(gameData.release_date)
+              .toISOString()
+              .split("T")[0];
+            gameData.release_date = releaseDate;
+          }
+
+          setFormData(gameData);
+        })
         .catch((error) => {
           if (error.response?.status === 404) {
             navigate("/");
@@ -109,8 +123,12 @@ export default function GameForm() {
             imageurlSmall: "",
             imageurlBig: "",
           });
-
-          navigate(`/games/${id}`);
+          // Redirect to the item details page after saving the item in edit mode
+          if (isEditMode) {
+            navigate(`/games/${id}`); // Navigate to the details page of the edited game
+          } else {
+            navigate("/games"); // Navigate to games list if it's a new game
+          }
         }
       } catch (error) {
         console.error(
@@ -128,7 +146,10 @@ export default function GameForm() {
         <form onSubmit={handleSubmit}>
           <legend className="warehouse-form__header">
             <div className="warehouse-form__header-container">
-              <Link to={`/games/${id}`} className="warehouse-form__icon">
+              <Link
+                to={isEditMode ? `/games/${id}` : "/games"} // Conditionally navigate based on edit mode
+                className="warehouse-form__icon"
+              >
                 <img
                   src="/assets/icons/arrow_back-24px.svg"
                   alt="arrow back icon"
@@ -274,7 +295,7 @@ export default function GameForm() {
           <div className="warehouse-form__actions">
             <div className="warehouse-form__actions-container">
               <Link
-                to={`/games/${id}`}
+                to={isEditMode ? `/games/${id}` : "/games"} // Conditionally navigate
                 className="button button--secondary warehouse-form__button--link"
               >
                 Cancel
