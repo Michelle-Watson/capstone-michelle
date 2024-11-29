@@ -43,8 +43,11 @@ const convertIGDBGame = (igdbGame) => {
     title: igdbGame.name, // Map IGDB name to db title
     description: igdbGame.storyline || igdbGame.summary || "",
     release_date: formatReleaseDate(igdbGame.first_release_date), // Convert and map release date
-    imageurlSmall: `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${igdbGame.cover}.jpg`, // Assuming cover is available for image URL
-    imageurlBig: `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.cover}.jpg`, // Assuming cover is available for image URL
+    // image_id: co5qi9
+    // cover.url: "//images.igdb.com/igdb/image/upload/t_thumb/co1wj7.jpg"
+    // construct own URL to account for size
+    imageurlSmall: `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${igdbGame.cover.image_id}.png`,
+    imageurlBig: `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.cover.image_id}.png`,
   };
 };
 
@@ -57,7 +60,7 @@ const getGamesFromIGDB = async () => {
     Authorization: `Bearer ${accessToken}`,
   };
   const body = `
-  fields *;
+  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id;
   where aggregated_rating > 80;
   sort aggregated_rating asc;
   limit 10;`;
