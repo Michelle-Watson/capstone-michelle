@@ -49,14 +49,17 @@ const getPricesForGame = async (req, res) => {
 };
 
 const createGame = async (req, res) => {
-  const { title, description, release_date } = req.body;
+  const { title, description, release_date, imageurlSmall, imageurlBig } =
+    req.body;
 
   // Validate the required fields
   if (
     !title?.trim() ||
     !description?.trim() ||
     !release_date?.trim() ||
-    isNaN(new Date(release_date)) // Check if the release date is a valid date
+    isNaN(new Date(release_date)) || // Check if the release date is a valid date
+    !imageurlSmall?.trim() ||
+    !imageurlBig?.trim()
   ) {
     return res.status(400).json({
       message:
@@ -70,6 +73,8 @@ const createGame = async (req, res) => {
       title,
       description,
       release_date,
+      imageurlSmall,
+      imageurlBig,
     };
 
     // const result = await knex("user").games(req.body);
@@ -86,14 +91,17 @@ const createGame = async (req, res) => {
 };
 
 const editGame = async (req, res) => {
-  const { title, description, release_date } = req.body;
+  const { title, description, release_date, imageurlSmall, imageurlBig } =
+    req.body;
 
   // Validate the required fields
   if (
     !title?.trim() ||
     !description?.trim() ||
     !release_date?.trim() ||
-    isNaN(new Date(release_date)) // Check if the release date is a valid date
+    isNaN(new Date(release_date)) || // Check if the release date is a valid date
+    !imageurlSmall?.trim() ||
+    !imageurlBig?.trim()
   ) {
     return res.status(400).json({
       message:
@@ -109,6 +117,8 @@ const editGame = async (req, res) => {
         title,
         description,
         release_date,
+        imageurlSmall,
+        imageurlBig,
       });
 
     // If no rows were updated, it means the game with the provided ID was not found
