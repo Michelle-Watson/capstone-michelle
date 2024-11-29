@@ -28,7 +28,8 @@ const getTwitchAccessToken = async () => {
 
 // Helper function to convert IGDB release date (UNIX timestamp) to YYYY-MM-DD format
 const formatReleaseDate = (timestamp) => {
-  if (!timestamp) return null;
+  // return null sets date as 1969-12-31, just set it as such so db doesn't have a null value
+  if (!timestamp) return `1969-12-31`;
   const date = new Date(timestamp * 1000); // Convert UNIX timestamp to milliseconds
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Get month (1-based)
@@ -42,6 +43,7 @@ const convertIGDBGame = (igdbGame) => {
     id: igdbGame.id, // Map IGDB ID to your db ID
     title: igdbGame.name, // Map IGDB name to db title
     description: igdbGame.storyline || igdbGame.summary || "",
+    consoles: igdbGame.genres.map((genre) => genre.name), // Map IGDB genres to db
     release_date: formatReleaseDate(igdbGame.first_release_date), // Convert and map release date
     // image_id: co5qi9
     // cover.url: "//images.igdb.com/igdb/image/upload/t_thumb/co1wj7.jpg"
@@ -60,7 +62,7 @@ const getGamesFromIGDB = async () => {
     Authorization: `Bearer ${accessToken}`,
   };
   const body = `
-  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id;
+  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date;
   where aggregated_rating > 80;
   sort aggregated_rating asc;
   limit 10;`;
