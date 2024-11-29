@@ -4,7 +4,7 @@
 @import "../../styles/partials/typography";
 @import "../../styles/partials/variables";
 
-.warehouse-management {
+.game-management {
   display: flex;
   justify-content: center;
   padding: 0 $padding-spacing-base-unit * 2;
@@ -16,7 +16,7 @@
   }
 }
 
-.warehouse-form {
+.game-form {
   // Background colour of form
   background-color: $night-fg;
 
@@ -59,7 +59,7 @@
     }
   }
 
-  &__warehouse-details,
+  &__game-details,
   &__contact-details {
     flex-grow: 1;
     padding: $padding-spacing-base-unit $padding-spacing-base-unit * 4;
@@ -92,7 +92,7 @@
     color: $night-form-field-text;
     background-color: $night-form-field;
     transition: all 0.3s ease; // Smooth transition for focus effects
-    &.warehouse-form__input-control--error {
+    &.game-form__input-control--error {
       border-color: $Red; // Red border when there’s an error
     }
 
