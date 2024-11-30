@@ -54,6 +54,17 @@ const convertIGDBGame = (igdbGame) => {
 };
 
 const getGamesFromIGDB = async () => {
+  // Step 1: Fetch the list of game IDs already in database
+  const dbGames = await knex("games");
+  const dbGameIds = dbGames.map((game) => game.id); // Get an array of game IDs
+
+  // Step 2: Prepare the `where` clause to exclude these IDs from the IGDB API request
+  // IGDB's query language supports `!=` and `in` operators for filtering
+  const excludeCondition =
+    dbGameIds.length > 0
+      ? `where id != (${dbGameIds.join(", ")}) & aggregated_rating > 80` // Exclude IDs already in DB
+      : "where aggregated_rating > 80"; // Fallback in case no IDs are in the DB
+
   const accessToken =
     process.env.ACCESS_TOKEN || (await getTwitchAccessToken());
   const url = "https://api.igdb.com/v4/games";
@@ -65,9 +76,11 @@ const getGamesFromIGDB = async () => {
   // similar games for future work
   const body = `
   fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games;
-  where aggregated_rating > 80;
+  ${excludeCondition};
   sort aggregated_rating asc;
   limit 10;`;
+
+  console.log("body", body);
 
   try {
     const response = await axios.post(url, body, { headers });
@@ -88,6 +101,11 @@ const index = async (_req, res) => {
     // Optionally fetch from the IGDB API
     const igdbGames = await getGamesFromIGDB();
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    // Remove if the call to IGDB excludes ids already in my database
+    // excluded ids from the API call, can remove below
+    // keep in case
+
     // Create a set of ids from dbGames
     const dbGameIds = new Set(dbGames.map((game) => game.id));
 
@@ -96,8 +114,10 @@ const index = async (_req, res) => {
       (igdbGame) => !dbGameIds.has(igdbGame.id)
     );
 
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
     // Combine the data from my database and the IGDB API
-    const allGames = [...dbGames, ...uniqueIgdbGames];
+    const allGames = [...dbGames, ...igdbGames];
 
     // knex("games")
     // is the same as
