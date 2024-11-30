@@ -40,7 +40,7 @@ const formatReleaseDate = (timestamp) => {
 // Helper function to convert IGDB game data to my own db format
 const convertIGDBGame = (igdbGame) => {
   return {
-    id: igdbGame.id, // Map IGDB ID to your db ID
+    id: igdbGame.id, // Map IGDB ID to my db ID
     title: igdbGame.name, // Map IGDB name to db title
     description: igdbGame.storyline || igdbGame.summary || "",
     consoles: igdbGame.genres.map((genre) => genre.name), // Map IGDB genres to db
@@ -71,7 +71,7 @@ const getGamesFromIGDB = async () => {
 
   try {
     const response = await axios.post(url, body, { headers });
-    // Convert the IGDB response into your dbGames format
+    // Convert the IGDB response into my dbGames format
     const convertedGames = response.data.map(convertIGDBGame);
     return convertedGames;
   } catch (err) {
@@ -88,8 +88,16 @@ const index = async (_req, res) => {
     // Optionally fetch from the IGDB API
     const igdbGames = await getGamesFromIGDB();
 
-    // Combine the data from your database and the IGDB API
-    const allGames = [...dbGames, ...igdbGames];
+    // Create a set of ids from dbGames
+    const dbGameIds = new Set(dbGames.map((game) => game.id));
+
+    // Filter out games from igdbGames that already exist in dbGames
+    const uniqueIgdbGames = igdbGames.filter(
+      (igdbGame) => !dbGameIds.has(igdbGame.id)
+    );
+
+    // Combine the data from my database and the IGDB API
+    const allGames = [...dbGames, ...uniqueIgdbGames];
 
     // knex("games")
     // is the same as
@@ -102,16 +110,58 @@ const index = async (_req, res) => {
 
 const findOne = async (req, res) => {
   try {
+    // 1. Try to find game in db
     const gameFound = await knex("games").where({ id: req.params.id });
 
-    if (gameFound.length === 0) {
-      return res.status(404).json({
-        message: `Game with ID ${req.params.id} not found`,
-      });
+    // 2. If found in db, return it
+    if (gameFound.length > 0) {
+      // If game is found in DB, return it
+      return res.json(gameFound[0]);
     }
 
-    const gameData = gameFound[0];
-    res.json(gameData);
+    // 3. If not found in db, try to fetch from IGDB API
+    const accessToken =
+      process.env.ACCESS_TOKEN || (await getTwitchAccessToken());
+    const url = "https://api.igdb.com/v4/games";
+    const headers = {
+      "Client-ID": process.env.TWITCH_CLIENT_ID,
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const body = `
+  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games;
+  where id = ${req.params.id};`;
+
+    console.log("req.params.id", req.params.id);
+
+    const response = await axios.post(url, body, { headers });
+
+    if (!response.data || response.data.length === 0) {
+      return res.status(404).json({
+        message: `Game with ID ${req.params.id} not found in IGDB.`,
+      });
+    }
+    const igdbGame = response.data[0];
+
+    const convertedGame = convertIGDBGame(igdbGame);
+
+    // Remove `consoles` field (if it exists) before inserting into DB
+    delete convertedGame.consoles;
+
+    // Debug: Log the converted game before inserting it
+    console.log("Converted game to insert:", convertedGame);
+
+    // Add game to db - errors here now
+    // await knex("games").insert(convertedGame);
+    // 4. Insert or update the game in the database with the custom ID from IGDB API
+    const insertedGame = await knex("games")
+      .insert(convertedGame)
+      .onConflict("id") // Resolving conflict based on the `id`
+      .merge(); // This will update the existing entry if there is a conflict
+
+    console.log("after tryna add to db");
+
+    // Send added game as the response
+    res.json(insertedGame);
   } catch (error) {
     res.status(500).json({
       message: `Unable to retrieve game data for game with ID ${req.params.id}`,
