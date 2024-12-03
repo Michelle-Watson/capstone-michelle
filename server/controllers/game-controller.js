@@ -17,6 +17,7 @@ const getTwitchAccessToken = async () => {
         },
       }
     );
+    console.log("Access token fetched successfully", response.data.access_token);
 
     // Return the access token
     return response.data.access_token;
