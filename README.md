@@ -20,8 +20,8 @@ DB_HOST=127.0.0.1
 DB_NAME=capstone
 DB_USER=root
 DB_PASSWORD=rootroot
-TWITCH_CLIENT_ID=06jij3imvklkpn1e2npprp1jju5je3
-TWITCH_CLIENT_SECRET=u7dmisygpax0rzvteksnfv3i4hxaqu
+TWITCH_CLIENT_ID=
+TWITCH_CLIENT_SECRET=
 ACCESS_TOKEN=
 ```
 

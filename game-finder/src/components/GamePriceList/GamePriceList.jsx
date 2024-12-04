@@ -24,6 +24,10 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
     setSearchTerm(event.target.value);
   };
 
+  if (!filteredpriceList) {
+    return <div>Loading Prices...</div>;
+  }
+
   const placeholderImageUrl =
     "https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg";
 

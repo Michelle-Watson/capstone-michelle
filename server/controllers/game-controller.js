@@ -190,6 +190,7 @@ const findOne = async (req, res) => {
   }
 };
 
+// Make API calls to get prices of games
 const getPricesForGame = async (req, res) => {
   try {
     const prices = await knex("games")
