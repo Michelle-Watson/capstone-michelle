@@ -183,11 +183,11 @@ Video game prices can vary significantly between different digital storefronts, 
 #### ADMIN: Add/Edit Game Page
 
 <div style="text-align: center;">
-  <img src="screenshots/2.0 Desktop - Add New Game" alt="2.0 Desktop - Add New Game" style="width: 40rem;"/>
+  <img src="screenshots/2.0 Desktop - Add New Game.png" alt="2.0 Desktop - Add New Game" style="width: 40rem;"/>
 </div>
 
 <div style="text-align: center;">
-  <img src="screenshots/2.1 Mobile - Edit Game" alt="2.1 Mobile - Edit Game" style="width: 40rem;"/>
+  <img src="screenshots/2.1 Mobile - Edit Game.png" alt="2.1 Mobile - Edit Game" style="width: 40rem;"/>
 </div>
 
 - Allow admin user to add/edit a game from the game database
@@ -195,11 +195,11 @@ Video game prices can vary significantly between different digital storefronts, 
 #### Game Detail Page
 
 <div style="text-align: center;">
-  <img src="screenshots/4.0 Mobile - Add New Price" alt="4.0 Mobile - Add New Price" style="width: 40rem;"/>
+  <img src="screenshots/4.0 Mobile - Add New Price.png" alt="4.0 Mobile - Add New Price" style="width: 40rem;"/>
 </div>
 
 <div style="text-align: center;">
-  <img src="screenshots/4.1 Desktop - Edit Price" alt="4.1 Desktop - Edit Price" style="width: 40rem;"/>
+  <img src="screenshots/4.1 Desktop - Edit Price.png" alt="4.1 Desktop - Edit Price" style="width: 40rem;"/>
 </div>
 
 - Allow admin user to add/edit a price from the price database
@@ -515,7 +515,6 @@ Response:
 </a>
 </p>
 
-
 ## Extra Support
 
 ### How do I setup a local Database?
@@ -523,6 +522,7 @@ Response:
 Here's a walkthrough of how to install MySQL. MySQL is an open-source and free relational database management system (RDBMS). We install MySQL server, which holds and manages the data, and a client, MySQL Workbench, which is what we will use to run our queries.
 
 #### MySQL Install For Mac
+
 <div class="markdown--TOg2r body--vb2Ya"><p>MySQL is an open-source and free relational database management system (RDBMS). We install MySQL server, which holds and manages the data, and a client, MySQL Workbench, which is what we will use to run our queries.</p>
 <strong>Downloading and Running the MySQL Server and MySQL Workbench Installers</strong>
 <p>There are very detailed instructions on the install process for Mac OSX for reference <a href="https://dev.mysql.com/doc/refman/8.0/en/macos-installation.html" target="_blank" rel="noopener noreferrer">here</a>, however please follow the instructions below to ensure a standard working environment.</p>
@@ -582,6 +582,7 @@ Here's a walkthrough of how to install MySQL. MySQL is an open-source and free r
 <p>To start or stop the MySQL Server, open the settings panel:</p>
 
 <strong>Optional: Command Line Tools for MySQL</strong>
+
 <p>In order to access MySQL from the command line, you will need to update your PATH in a file called <code>.zshrc</code>.</p>
 <ol>
 <li>Open terminal and enter <code>touch ~/.zshrc &amp;&amp; open ~/.zshrc</code></li>
@@ -610,10 +611,8 @@ Here's a walkthrough of how to install MySQL. MySQL is an open-source and free r
 </ul>
 </div>
 
-
-
-
 #### MySQL Install For Windows
+
 <div class="markdown--TOg2r body--vb2Ya"><p>MySQL is an open-source and free relational database management system (RDBMS). We install MySQL server, which holds and manages the data, and a client, MySQL Workbench, which is what we will use to run our queries.</p>
 <p>Everything that we will need can be installed through the MySQL installer. We will download the installer first and choose the elements of MySQL that we need.</p>
 
@@ -661,6 +660,7 @@ Here's a walkthrough of how to install MySQL. MySQL is an open-source and free r
 </ol>
 
 **Product Configuration**
+
 <p>We now need to configure the MySQL server.</p>
 <ol start="12">
 <li>You should see the server in the Product Configuration List. Click on Next.</li>
@@ -720,7 +720,8 @@ Here's a walkthrough of how to install MySQL. MySQL is an open-source and free r
 <p>While the MySQL Server process can be stopped or started as a Windows Service, it can be controlled more conveniently through the taskbar using MySQL Notifier. Download and run the latest installer from https://downloads.mysql.com/archives/notifier/</p>
 <p>Once complete, you should have a new taskbar icon to easily start and stop the MySQL Server.</p>
 
- <strong>Optional: Command Line Tools for MySQL</strong>
+<strong>Optional: Command Line Tools for MySQL</strong>
+
 <p>In order to access MySQL from the command line, you will need to update a system variable called <strong>Path</strong>.</p>
 <ol>
 <li>Right click on the Windows <strong>Start Menu</strong> and select <strong>System</strong></li>
@@ -751,5 +752,3 @@ Here's a walkthrough of how to install MySQL. MySQL is an open-source and free r
 <li>Is your query well formed, and expected to return results?</li>
 </ul>
 </div>
-
-
