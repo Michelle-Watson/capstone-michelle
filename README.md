@@ -27,7 +27,7 @@
 1. Clone the repository: `git clone <repo-link>`
 
 ```
-`git clone https://github.com/Michelle-Watson/capstone-michelle.git`
+git clone https://github.com/Michelle-Watson/capstone-michelle.git
 ```
 
 ### Setup Server
