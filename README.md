@@ -5,6 +5,23 @@
   </span>
 </h1>
 
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000)
+![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)
+![HTML](https://img.shields.io/badge/HTML-%23E34F26.svg?logo=html5&logoColor=white)
+![Sass](https://img.shields.io/badge/Sass-C69?logo=sass&logoColor=fff)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?logo=react-router&logoColor=white)
+![NodeJS](https://img.shields.io/badge/Node.js-6DA55F?logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-%23404d59.svg?logo=express&logoColor=%2361DAFB)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=fff)
+![Twitch](https://img.shields.io/badge/Twitch-%239146FF.svg?logo=Twitch&logoColor=white)
+
+![Steam](https://img.shields.io/badge/Steam-%23000000.svg?logo=steam&logoColor=white)
+![Humble Bundle](https://img.shields.io/badge/Humble%20Bundle-%23CF2E34.svg?logo=HumbleBundle&logoColor=white)
+![G2A](https://img.shields.io/badge/G2A-F05F00?logo=g2a&logoColor=fff)
+![GOG.com](https://img.shields.io/badge/GOG.com-86328A?logo=gogdotcom&logoColor=fff)
+![Epic Games](https://img.shields.io/badge/Epic%20Games-%23313131.svg?logo=epicgames&logoColor=white)
+
+
 ## Setup
 
 1. Clone the repository: `git clone <repo-link>`
@@ -92,7 +109,11 @@ VITE_API_URL=http://localhost:5050
 
 - 🤳🏾 Filters
   - home page fetches a list of games from my personal db, as well as a list of 10 unique games sorted by rating. I’d like to add filters so that the fetched list of games from the API, will be based on the users preference.
-- 📉 Real Price Data
+- 📉 Real Price Data ![Steam](https://img.shields.io/badge/Steam-%23000000.svg?logo=steam&logoColor=white)
+![Humble Bundle](https://img.shields.io/badge/Humble%20Bundle-%23CF2E34.svg?logo=HumbleBundle&logoColor=white)
+![G2A](https://img.shields.io/badge/G2A-F05F00?logo=g2a&logoColor=fff)
+![GOG.com](https://img.shields.io/badge/GOG.com-86328A?logo=gogdotcom&logoColor=fff)
+![Epic Games](https://img.shields.io/badge/Epic%20Games-%23313131.svg?logo=epicgames&logoColor=white)
   - IGDB API doesn’t have price data
   - no APIs to fetch price data for a specific PC game
   - PLAN: incorporate live price data using unofficial APIs or web scraping
@@ -138,10 +159,42 @@ Video game prices can vary significantly between different digital storefronts, 
 
 ### Tech Stack
 
-- **Front-end:** React, Sass, Axios, React Router
-- **Back-end:** Node.js, Express.js
-- **Database:** MySQL, Knex
-- **Authentication _(optional future enhancement)_:** Firebase, bcrypt for password hashing, Twitch OAuth
+**Front-end:**
+- React
+- Sass
+- Axios
+- React Router
+
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![SASS](https://img.shields.io/badge/SASS-CC6699?style=for-the-badge&logo=sass&logoColor=white)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+
+
+**Back-end:**
+- Axios
+- Node.js
+- Express.js
+
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-404d59?style=for-the-badge&logo=express&logoColor=white)
+
+
+**Database:**
+- MySQL
+- Knex
+
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+
+
+**Authentication _(optional future enhancement)_:**
+- Firebase
+- bcrypt for password hashing
+- Twitch OAuth
+
+![Firebase](https://img.shields.io/badge/Firebase-039BE5?style=for-the-badge&logo=Firebase&logoColor=white)
+![Twitch](https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=Twitch&logoColor=white)
 
 ### APIs
 
