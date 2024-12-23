@@ -5,15 +5,6 @@
   </span>
 </h1>
 
-<style>
-  h1:hover {
-    transform: scale(1.05);
-  }
-  h1:hover span {
-    color: #02dac4;
-  }
-</style>
-
 ## Setup
 
 1. Clone the repository: `git clone <repo-link>`
