@@ -1,4 +1,18 @@
-# My Capstone
+<h1 style="display: inline-flex; align-items: center; transition: all 0.3s ease-in-out;">
+  <img src="oneshot.png" width="30" style="margin-right: 0.5rem; vertical-align: middle;" />
+  <span style="color: #bb86fc; font-family: sans-serif; padding-bottom: 0.5rem; border-bottom: 2px solid #02dac4;">
+    GameDeal Finder
+  </span>
+</h1>
+
+<style>
+  h1:hover {
+    transform: scale(1.05);
+  }
+  h1:hover span {
+    color: #02dac4;
+  }
+</style>
 
 ## Setup
 
