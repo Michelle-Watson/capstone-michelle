@@ -24,8 +24,9 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
     setSearchTerm(event.target.value);
   };
 
-  const placeholderImageUrl =
-    "https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg";
+  if (!filteredpriceList) {
+    return <div>Loading Prices...</div>;
+  }
 
   return (
     <div className="main-container">
@@ -65,7 +66,6 @@ export default function GamePriceList({ priceList, getPricesforGame }) {
                         : `https://${price.url}`
                     } // Ensure it's an absolute URL
                     target="_blank"
-                    // rel="noopener noreferrer"
                     className="gameList__link"
                   >
                     <img

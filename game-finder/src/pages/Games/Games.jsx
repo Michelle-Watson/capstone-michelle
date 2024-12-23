@@ -19,7 +19,6 @@ export default function Games() {
     }
   }
 
-  // for debugging
   // Log the fetched games after they have been set
   useEffect(() => {
     console.log("Fetched games:", games);

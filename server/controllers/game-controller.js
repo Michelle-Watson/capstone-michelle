@@ -17,6 +17,7 @@ const getTwitchAccessToken = async () => {
         },
       }
     );
+    console.log("Access token fetched successfully", response.data.access_token);
 
     // Return the access token
     return response.data.access_token;
@@ -189,6 +190,7 @@ const findOne = async (req, res) => {
   }
 };
 
+// Make API calls to get prices of games
 const getPricesForGame = async (req, res) => {
   try {
     const prices = await knex("games")

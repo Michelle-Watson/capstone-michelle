@@ -162,4 +162,9 @@ $table-cell-padding-y-sm: 0;
   ) !important;
   color: $GameFinder-Aqua !important;
   font-weight: $bold-700;
+
+  &:hover {
+    // transform: scale(1.5);
+    color: $GameFinder-Purple-400 !important;
+  }
 }

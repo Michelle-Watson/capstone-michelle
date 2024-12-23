@@ -39,6 +39,10 @@ export default function GameList({ games, fetchGames }) {
     return description;
   };
 
+  if (!filteredGames) {
+    return <div>Loading Games...</div>;
+  }
+
   return (
     <div className="main-container">
       {/* Center the content */}
