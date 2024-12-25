@@ -2,6 +2,8 @@ import initKnex from "knex";
 import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
 
+import { updateSteamPrice } from "../helpers/steam-helper.js";
+
 const index = async (_req, res) => {
   try {
     // Perform a JOIN between the "prices" table and "games" table
@@ -38,7 +40,10 @@ const findOne = async (req, res) => {
         "prices.original_price",
         "prices.discount",
         "prices.discounted_price",
-        "prices.url"
+        "prices.url",
+        "prices.created_at",
+        // For testing whether the price is being updated or not
+        "prices.updated_at"
       );
 
     // If no price is found, return a 404 response
@@ -51,19 +56,43 @@ const findOne = async (req, res) => {
     // Extract the first (and only) record from the array of results
     const priceData = priceFound[0];
 
-    // Convert price fields to numbers before sending the response
-    const formattedPriceData = {
-      ...priceData,
-      original_price: parseFloat(priceData.original_price),
-      discount: parseFloat(priceData.discount),
-      discounted_price: parseFloat(priceData.discounted_price),
-    };
+    console.log("priceData", priceData);
 
-    // Return the price data
-    res.json(formattedPriceData);
+    // Check platform and update price
+    let updatedPriceData;
+    let combinedPriceData = { ...priceData }; // Start with priceData
+
+    if (priceData.platform_name === "Steam") {
+      updatedPriceData = await updateSteamPrice(priceData);
+      // Combine the price data first (before responding)
+      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+
+      // Update the database with the combined data
+      await knex("prices").where("id", priceData.id).update(updatedPriceData);
+
+      // Now respond with the combined data (after checking or modifying it)
+      res.json(combinedPriceData);
+    } else {
+      const formattedPriceData = {
+        ...priceData,
+        original_price: parseFloat(priceData.original_price),
+        discount: parseFloat(priceData.discount),
+        discounted_price: parseFloat(priceData.discounted_price),
+      };
+
+      console.log("formattedPriceData", formattedPriceData);
+
+      // Return the price data
+      res.json(formattedPriceData);
+
+      // Uncomment this block to update the price for unsupported platforms
+      // return res
+      //   .status(400)
+      //   .json({ message: `Unsupported platform: ${priceData.platform_name}` });
+    }
   } catch (error) {
     res.status(500).json({
-      message: `Unable to retrieve price data for price with ID ${req.params.id}: ${error}`,
+      message: `Unable to retrieve and update price data: ${error.message}`,
     });
   }
 };
