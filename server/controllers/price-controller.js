@@ -34,7 +34,6 @@ const findOne = async (req, res) => {
       .select(
         "prices.id",
         "prices.game_id",
-        // "games.title as game_title",
         "games.title",
         "prices.platform_name",
         "prices.original_price",
@@ -42,7 +41,6 @@ const findOne = async (req, res) => {
         "prices.discounted_price",
         "prices.url",
         "prices.created_at",
-        // For testing whether the price is being updated or not
         "prices.updated_at"
       );
 
@@ -54,9 +52,17 @@ const findOne = async (req, res) => {
     }
 
     // Extract the first (and only) record from the array of results
-    const priceData = priceFound[0];
+    let priceData = priceFound[0];
 
-    console.log("priceData", priceData);
+    // Explicitly convert the price fields to floats to ensure consistency
+    priceData = {
+      ...priceData,
+      original_price: parseFloat(priceData.original_price),
+      discount: parseFloat(priceData.discount),
+      discounted_price: parseFloat(priceData.discounted_price),
+    };
+
+    console.log("priceData after parsing", priceData);
 
     // Check platform and update price
     let updatedPriceData;
@@ -73,22 +79,13 @@ const findOne = async (req, res) => {
       // Now respond with the combined data (after checking or modifying it)
       res.json(combinedPriceData);
     } else {
-      const formattedPriceData = {
-        ...priceData,
-        original_price: parseFloat(priceData.original_price),
-        discount: parseFloat(priceData.discount),
-        discounted_price: parseFloat(priceData.discounted_price),
-      };
+      // Since priceData is already parsed, no need to parse again
+      combinedPriceData = { ...combinedPriceData, ...priceData };
 
-      console.log("formattedPriceData", formattedPriceData);
+      console.log("formattedPriceData", combinedPriceData);
 
-      // Return the price data
-      res.json(formattedPriceData);
-
-      // Uncomment this block to update the price for unsupported platforms
-      // return res
-      //   .status(400)
-      //   .json({ message: `Unsupported platform: ${priceData.platform_name}` });
+      // Return the combined price data
+      res.json(combinedPriceData);
     }
   } catch (error) {
     res.status(500).json({
