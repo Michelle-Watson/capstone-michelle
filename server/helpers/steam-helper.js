@@ -25,24 +25,39 @@ export const updateSteamPrice = async (priceData) => {
     const $ = cheerio.load(html);
 
     // Scrape price details, website structure are comments below the code
-    const originalPriceText = $(".discount_original_price").text().trim();
+    const originalPriceText = $(".discount_original_price")
+      .first()
+      .text()
+      .trim();
     // Ex) <div class="discount_original_price">CDN$ 79.99</div>
-    const discountedPriceText = $(".discount_final_price").text().trim();
+
+    const discountedPriceText = $(".discount_final_price")
+      .first()
+      .text()
+      .trim();
     // Ex) <div class="discount_final_price">CDN$ 35.99</div>
-    const discountText = $(".discount_pct").text().trim();
+
+    const discountText = $(".discount_pct").first().text().trim();
     // Ex) <div class="discount_pct">-55%</div>
 
+    // Extract the currency from the originalPriceText
+    const currencyMatch = originalPriceText.match(/^[^\d]+/); // Matches non-digit characters at the start
+    const currency = currencyMatch ? currencyMatch[0].trim() : null;
+
     // Debugging
-    console.log("originalPriceText", originalPriceText);
-    console.log("discountedPriceText", discountedPriceText);
-    console.log("discountText", discountText);
+    console.log("First originalPriceText:", originalPriceText);
+    console.log("First discountedPriceText:", discountedPriceText);
+    console.log("First discountText:", discountText);
+
+    // Future Consideration: Always save prices with an associated ISO 4217 currency code.
+    console.log("Extracted Currency:", currency);
 
     // Parse prices and discounts
     const originalPrice =
-      parseFloat(originalPriceText.replace("$", "")) ||
+      parseFloat(originalPriceText.replace(/[^\d.]/g, "")) ||
       priceData.original_price;
     const discountedPrice =
-      parseFloat(discountedPriceText.replace("$", "")) || originalPrice;
+      parseFloat(discountedPriceText.replace(/[^\d.]/g, "")) || originalPrice;
     const discount = discountText
       ? parseFloat(discountText.replace("-", "").replace("%", ""))
       : 0;
