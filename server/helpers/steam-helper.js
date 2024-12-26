@@ -1,19 +1,41 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+import fs from "fs";
 
 export const updateSteamPrice = async (priceData) => {
   try {
     // Fetch the page
-    const response = await axios.get(priceData.url);
+    // const response = await axios.get(priceData.url);
+    const url = priceData.url;
+
+    // Add the 'birthtime' cookie to simulate age verification
+    // otherwise, we are redirected to the agecheck: https://store.steampowered.com/agecheck/app/1091500/ instead
+    const response = await axios.get(url, {
+      headers: {
+        Cookie: "birthtime=568022401; mature_content=1",
+      },
+    });
+
     const html = response.data;
+
+    // verify html is of the correct page
+    fs.writeFileSync("./steam_store.html", html);
 
     // Load the HTML into cheerio
     const $ = cheerio.load(html);
 
-    // Scrape price details (update selectors as necessary)
-    const originalPriceText = $(".game_purchase_price").text().trim();
+    // Scrape price details, website structure are comments below the code
+    const originalPriceText = $(".discount_original_price").text().trim();
+    // Ex) <div class="discount_original_price">CDN$ 79.99</div>
     const discountedPriceText = $(".discount_final_price").text().trim();
+    // Ex) <div class="discount_final_price">CDN$ 35.99</div>
     const discountText = $(".discount_pct").text().trim();
+    // Ex) <div class="discount_pct">-55%</div>
+
+    // Debugging
+    console.log("originalPriceText", originalPriceText);
+    console.log("discountedPriceText", discountedPriceText);
+    console.log("discountText", discountText);
 
     // Parse prices and discounts
     const originalPrice =
