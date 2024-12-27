@@ -3,6 +3,7 @@ import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
 
 import { updateSteamPrice } from "../helpers/steam-helper.js";
+import { updateHumbleBundlePrice } from "../helpers/humblebundle-helper.js";
 
 const index = async (_req, res) => {
   try {
@@ -70,6 +71,18 @@ const findOne = async (req, res) => {
 
     if (priceData.platform_name === "Steam") {
       updatedPriceData = await updateSteamPrice(priceData);
+      // Combine the price data first (before responding)
+      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+
+      // Update the database with the combined data
+      await knex("prices").where("id", priceData.id).update(updatedPriceData);
+
+      // Now respond with the combined data (after checking or modifying it)
+      res.json(combinedPriceData);
+    } else if (priceData.platform_name === "Humble Bundle") {
+      updatedPriceData = await updateHumbleBundlePrice(priceData);
+      console.log("priceData after updateHumbleBundlePrice", updatedPriceData);
+
       // Combine the price data first (before responding)
       combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
 

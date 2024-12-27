@@ -24,6 +24,10 @@
     "express": "^4.21.1",
     "fs": "^0.0.1-security",
     "knex": "^3.1.0",
-    "mysql2": "^3.11.4"
+    "mysql2": "^3.11.4",
+    "puppeteer": "^23.11.1",
+    "puppeteer-core": "^23.11.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
