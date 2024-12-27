@@ -73,51 +73,15 @@ const findOne = async (req, res) => {
 
     if (priceData.platform_name === "Steam") {
       updatedPriceData = await updateSteamPrice(priceData);
-      // Combine the price data first (before responding)
-      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
-
-      // Update the database with the combined data
-      await knex("prices").where("id", priceData.id).update(updatedPriceData);
-
-      // Now respond with the combined data (after checking or modifying it)
-      res.json(combinedPriceData);
     } else if (priceData.platform_name === "Humble Bundle") {
       updatedPriceData = await updateHumbleBundlePrice(priceData);
-      console.log("priceData after updateHumbleBundlePrice", updatedPriceData);
-
-      // Combine the price data first (before responding)
-      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
-
-      // Update the database with the combined data
-      await knex("prices").where("id", priceData.id).update(updatedPriceData);
-
-      // Now respond with the combined data (after checking or modifying it)
-      res.json(combinedPriceData);
     } else if (priceData.platform_name === "G2A") {
       updatedPriceData = await updateG2APrice(priceData);
-      console.log("priceData after updateG2APrice", updatedPriceData);
-
-      // Combine the price data first (before responding)
-      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
-
-      // Update the database with the combined data
-      await knex("prices").where("id", priceData.id).update(updatedPriceData);
-
-      // Now respond with the combined data (after checking or modifying it)
-      res.json(combinedPriceData);
     } else if (priceData.platform_name === "Epic Games") {
       updatedPriceData = await updateEpicGamesPrice(priceData);
-      console.log("priceData after updateEpicGamesPrice", updatedPriceData);
-
-      // Combine the price data first (before responding)
-      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
-
-      // Update the database with the combined data
-      await knex("prices").where("id", priceData.id).update(updatedPriceData);
-
-      // Now respond with the combined data (after checking or modifying it)
-      res.json(combinedPriceData);
     } else {
+      // no scrapping logic implemented, don't update the db, just return what's there
+
       // Since priceData is already parsed, no need to parse again
       combinedPriceData = { ...combinedPriceData, ...priceData };
 
@@ -126,6 +90,15 @@ const findOne = async (req, res) => {
       // Return the combined price data
       res.json(combinedPriceData);
     }
+
+    // Combine the price data first (before responding)
+    combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+
+    // Update the database with the combined data
+    await knex("prices").where("id", priceData.id).update(updatedPriceData);
+
+    // Now respond with the combined data (after checking or modifying it)
+    res.json(combinedPriceData);
   } catch (error) {
     res.status(500).json({
       message: `Unable to retrieve and update price data: ${error.message}`,
