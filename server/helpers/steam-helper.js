@@ -6,7 +6,9 @@ export const updateSteamPrice = async (priceData) => {
   try {
     // Fetch the page
     // const response = await axios.get(priceData.url);
-    const url = priceData.url;
+    let url = priceData.url;
+    // testing non-discounted game logic
+    // url = "https://store.steampowered.com/app/3121110/Zort";
 
     // Add the 'birthtime' cookie to simulate age verification
     // otherwise, we are redirected to the agecheck: https://store.steampowered.com/agecheck/app/1091500/ instead
@@ -24,30 +26,57 @@ export const updateSteamPrice = async (priceData) => {
     // Load the HTML into cheerio
     const $ = cheerio.load(html);
 
-    // Scrape price details, website structure are comments below the code
-    const originalPriceText = $(".discount_original_price")
-      .first()
-      .text()
-      .trim();
-    // Ex) <div class="discount_original_price">CDN$ 79.99</div>
+    // Locate the first game purchase section (ensures we targetting the base game, no bundles)
+    const gameSection = $(".game_area_purchase_game").first();
 
-    const discountedPriceText = $(".discount_final_price")
-      .first()
-      .text()
-      .trim();
-    // Ex) <div class="discount_final_price">CDN$ 35.99</div>
+    // Initialize default values for price details
+    let originalPriceText = "";
+    let discountedPriceText = "";
+    let discountText = "";
+    let isDiscounted = false;
 
-    const discountText = $(".discount_pct").first().text().trim();
-    // Ex) <div class="discount_pct">-55%</div>
+    // Check if the base game is discounted
+    if (gameSection.find(".discount_original_price").length > 0) {
+      // If the discount selectors exist, the game is discounted
+      originalPriceText = gameSection
+        .find(".discount_original_price")
+        .first()
+        .text()
+        .trim();
+      // Example: <div class="discount_original_price">CDN$ 79.99</div>
+
+      discountedPriceText = gameSection
+        .find(".discount_final_price")
+        .first()
+        .text()
+        .trim();
+      // Example: <div class="discount_final_price">CDN$ 35.99</div>
+
+      discountText = gameSection.find(".discount_pct").first().text().trim();
+      // Example: <div class="discount_pct">-55%</div>
+
+      isDiscounted = true;
+    } else {
+      // If the game is not discounted, only the original price exists
+      originalPriceText = gameSection
+        .find(".game_purchase_price")
+        .first()
+        .text()
+        .trim();
+      discountedPriceText = originalPriceText; // No discount, so the discounted price is the same
+      discountText = ""; // No discount, so set it as an empty string
+      isDiscounted = false;
+    }
 
     // Extract the currency from the originalPriceText
     const currencyMatch = originalPriceText.match(/^[^\d]+/); // Matches non-digit characters at the start
     const currency = currencyMatch ? currencyMatch[0].trim() : null;
 
-    // Debugging
-    console.log("First originalPriceText:", originalPriceText);
-    console.log("First discountedPriceText:", discountedPriceText);
-    console.log("First discountText:", discountText);
+    // Debugging output
+    console.log("Original Price Text:", originalPriceText);
+    console.log("Discounted Price Text:", discountedPriceText);
+    console.log("Discount Text:", discountText);
+    console.log("Is Discounted:", isDiscounted);
 
     // Future Consideration: Always save prices with an associated ISO 4217 currency code.
     console.log("Extracted Currency:", currency);
