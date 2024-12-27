@@ -9,8 +9,6 @@ import { updateEpicGamesPrice } from "../helpers/epicgames-helper.js";
 
 import cron from "node-cron"; // Import the node-cron package
 
-// console.log("Script started...");
-
 // Function to update all prices
 const updateAllPrices = async () => {
   try {
@@ -67,22 +65,6 @@ cron.schedule("0 0 * * *", () => {
   console.log("Running price update job...");
   updateAllPrices();
 });
-
-/*
-// Allow manual execution of the update
-if (import.meta.url === new URL(import.meta.url).toString()) {
-  console.log("Manually running price update...");
-  updateAllPrices()
-    .then(() => {
-      console.log("Price update completed.");
-      process.exit(0); // Exit the script after completing the update
-    })
-    .catch((error) => {
-      console.error(`Error running price update: ${error.message}`);
-      process.exit(1); // Exit with an error code if there's an issue
-    });
-}
-*/
 
 const index = async (_req, res) => {
   try {
@@ -456,4 +438,4 @@ const isValidUrl = (url) => {
   return regex.test(url);
 };
 
-export { index, findOne, addPrice, editPrice, removePrice };
+export { index, findOne, addPrice, editPrice, removePrice, updateAllPrices };

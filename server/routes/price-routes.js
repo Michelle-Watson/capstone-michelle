@@ -11,4 +11,7 @@ router
   .put(priceController.editPrice)
   .delete(priceController.removePrice);
 
+// New route to trigger updateAllPrices manually
+router.route("/update-prices").post(priceController.updateAllPrices);
+
 export default router;
