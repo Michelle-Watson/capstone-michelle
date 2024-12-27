@@ -5,6 +5,7 @@ const knex = initKnex(configuration);
 import { updateSteamPrice } from "../helpers/steam-helper.js";
 import { updateHumbleBundlePrice } from "../helpers/humblebundle-helper.js";
 import { updateG2APrice } from "../helpers/g2a-helper.js";
+import { updateEpicGamesPrice } from "../helpers/epicgames-helper.js";
 
 const index = async (_req, res) => {
   try {
@@ -93,9 +94,20 @@ const findOne = async (req, res) => {
       // Now respond with the combined data (after checking or modifying it)
       res.json(combinedPriceData);
     } else if (priceData.platform_name === "G2A") {
-      console.log("About to updateG2APrice");
       updatedPriceData = await updateG2APrice(priceData);
       console.log("priceData after updateG2APrice", updatedPriceData);
+
+      // Combine the price data first (before responding)
+      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+
+      // Update the database with the combined data
+      await knex("prices").where("id", priceData.id).update(updatedPriceData);
+
+      // Now respond with the combined data (after checking or modifying it)
+      res.json(combinedPriceData);
+    } else if (priceData.platform_name === "Epic Games") {
+      updatedPriceData = await updateEpicGamesPrice(priceData);
+      console.log("priceData after updateEpicGamesPrice", updatedPriceData);
 
       // Combine the price data first (before responding)
       combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
