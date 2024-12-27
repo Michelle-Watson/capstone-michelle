@@ -29,34 +29,40 @@ const updateAllPrices = async () => {
       let updatedPriceData;
       let combinedPriceData = { ...price };
 
-      // Check platform and update price
-      if (price.platform_name === "Steam") {
-        updatedPriceData = await updateSteamPrice(price);
-      } else if (price.platform_name === "Humble Bundle") {
-        updatedPriceData = await updateHumbleBundlePrice(price);
-      } else if (price.platform_name === "G2A") {
-        updatedPriceData = await updateG2APrice(price);
-      } else if (price.platform_name === "Epic Games") {
-        updatedPriceData = await updateEpicGamesPrice(price);
-      } else {
-        // If no scrapping logic implemented, don't update the db
-        combinedPriceData = { ...combinedPriceData, ...price };
+      try {
+        // Check platform and update price
+        if (price.platform_name === "Steam") {
+          updatedPriceData = await updateSteamPrice(price);
+        } else if (price.platform_name === "Humble Bundle") {
+          updatedPriceData = await updateHumbleBundlePrice(price);
+        } else if (price.platform_name === "G2A") {
+          updatedPriceData = await updateG2APrice(price);
+        } else if (price.platform_name === "Epic Games") {
+          updatedPriceData = await updateEpicGamesPrice(price);
+        } else {
+          // If no scraping logic implemented, don't update the db
+          combinedPriceData = { ...combinedPriceData, ...price };
+        }
+
+        // Combine the price data first (before updating DB)
+        combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+
+        // Update the database with the updated price
+        await knex("prices").where("id", price.id).update(updatedPriceData);
+
+        console.log(
+          `Price updated for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url}`
+        );
+      } catch (err) {
+        console.error(
+          `Error updating price for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url} - ${err.message}`
+        );
+        // If error occurs, log it and continue to next game
+        continue;
       }
-
-      // Combine the price data first (before updating DB)
-      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
-
-      // Update the database with the updated price
-      await knex("prices").where("id", price.id).update(updatedPriceData);
-
-      console.log(
-        `Price updated for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url}`
-      );
     }
   } catch (error) {
-    console.error(
-      `Error updating price for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url} - ${error.message}`
-    );
+    console.error("Error retrieving or processing prices:", error);
   }
 };
 
