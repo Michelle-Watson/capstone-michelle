@@ -22,14 +22,29 @@ export const updateHumbleBundlePrice = async (priceData) => {
 
     const page = await browser.newPage();
 
+    // Set cookies before navigating
+    const cookies = [
+      {
+        name: "hb_age_check",
+        value: "25",
+        domain: ".humblebundle.com",
+      },
+    ];
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    );
+    await page.setCookie(...cookies);
+
     // Navigate to the URL and wait for the page to load
     await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
 
+    console.log("Now on the page of:", url);
+
     // Take a screenshot to debug
-    // await page.screenshot({ path: "./humble-bundle-debug-screenshot.png" });
-    // const pageContent = await page.content();
+    await page.screenshot({ path: "./humble-bundle-debug-screenshot.png" });
+    const pageContent = await page.content();
     // Save the page content to verify if the right page is being scraped
-    // fs.writeFileSync("hb_store.html", pageContent);
+    fs.writeFileSync("hb_store.html", pageContent);
 
     // Wait for the required element to load
     // games w/o discount will have .current-price

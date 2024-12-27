@@ -7,6 +7,83 @@ import { updateHumbleBundlePrice } from "../helpers/humblebundle-helper.js";
 import { updateG2APrice } from "../helpers/g2a-helper.js";
 import { updateEpicGamesPrice } from "../helpers/epicgames-helper.js";
 
+import cron from "node-cron"; // Import the node-cron package
+
+// console.log("Script started...");
+
+// Function to update all prices
+const updateAllPrices = async () => {
+  try {
+    // Get all prices from the database
+    const data = await knex("prices")
+      .join("games", "prices.game_id", "=", "games.id")
+      .select("prices.*", "games.title");
+
+    for (let price of data) {
+      // Explicitly convert the price fields to floats to ensure consistency
+      price = {
+        ...price,
+        original_price: parseFloat(price.original_price),
+        discount: parseFloat(price.discount),
+        discounted_price: parseFloat(price.discounted_price),
+      };
+
+      let updatedPriceData;
+      let combinedPriceData = { ...price };
+
+      // Check platform and update price
+      if (price.platform_name === "Steam") {
+        updatedPriceData = await updateSteamPrice(price);
+      } else if (price.platform_name === "Humble Bundle") {
+        updatedPriceData = await updateHumbleBundlePrice(price);
+      } else if (price.platform_name === "G2A") {
+        updatedPriceData = await updateG2APrice(price);
+      } else if (price.platform_name === "Epic Games") {
+        updatedPriceData = await updateEpicGamesPrice(price);
+      } else {
+        // If no scrapping logic implemented, don't update the db
+        combinedPriceData = { ...combinedPriceData, ...price };
+      }
+
+      // Combine the price data first (before updating DB)
+      combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+
+      // Update the database with the updated price
+      await knex("prices").where("id", price.id).update(updatedPriceData);
+
+      console.log(
+        `Price updated for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url}`
+      );
+    }
+  } catch (error) {
+    console.error(
+      `Error updating price for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url} - ${error.message}`
+    );
+  }
+};
+
+// Schedule the job to run every night at midnight
+cron.schedule("0 0 * * *", () => {
+  console.log("Running price update job...");
+  updateAllPrices();
+});
+
+/*
+// Allow manual execution of the update
+if (import.meta.url === new URL(import.meta.url).toString()) {
+  console.log("Manually running price update...");
+  updateAllPrices()
+    .then(() => {
+      console.log("Price update completed.");
+      process.exit(0); // Exit the script after completing the update
+    })
+    .catch((error) => {
+      console.error(`Error running price update: ${error.message}`);
+      process.exit(1); // Exit with an error code if there's an issue
+    });
+}
+*/
+
 const index = async (_req, res) => {
   try {
     // Perform a JOIN between the "prices" table and "games" table
@@ -56,6 +133,8 @@ const findOne = async (req, res) => {
 
     // Extract the first (and only) record from the array of results
     let priceData = priceFound[0];
+
+    console.log("priceFound", priceFound);
 
     // Explicitly convert the price fields to floats to ensure consistency
     priceData = {
