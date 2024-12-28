@@ -79,6 +79,11 @@ const createPricesForGame = async (req, res) => {
 
   priceData = formatPriceFields(priceData);
 
+  // Step 4: Check if a price entry already exists for this game and platform
+  const existingPrice = await knex("prices")
+    .where({ game_id: gameId, platform_name: "Steam" })
+    .first(); // Look for an existing price entry
+
   let updatedPriceData;
   let combinedPriceData = { ...priceData };
 
@@ -91,17 +96,43 @@ const createPricesForGame = async (req, res) => {
     // Combine the price data first (before updating DB)
     combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
 
-    // Insert the new price into the 'prices' table
-    const result = await knex("prices").insert(combinedPriceData);
+    if (existingPrice) {
+      // If an existing price entry is found, update it
+      updatedPriceData = {
+        ...combinedPriceData,
+        updated_at: knex.fn.now(), // Set the updated timestamp
+      };
 
-    // Retrieve the inserted price (we'll use `game_id` to fetch it back)
-    const newPriceId = result[0]; // The first element is the id of the newly inserted row
-    const createdPrice = await knex("prices").where({ id: newPriceId }).first();
+      // Update the existing price record in the database
+      await knex("prices")
+        .where({ id: existingPrice.id })
+        .update(updatedPriceData);
 
-    res.status(200).json({
-      message: "Price successfully scraped and added for Steam.",
-      price: createdPrice,
-    });
+      // Fetch the updated price record
+      const updatedPrice = await knex("prices")
+        .where({ id: existingPrice.id })
+        .first();
+
+      // Return the updated price entry
+      return res.status(200).json({
+        message: "Price successfully updated for Steam.",
+        price: updatedPrice,
+      });
+    } else {
+      // Insert the new price into the 'prices' table
+      const result = await knex("prices").insert(combinedPriceData);
+
+      // Retrieve the inserted price (we'll use `game_id` to fetch it back)
+      const newPriceId = result[0]; // The first element is the id of the newly inserted row
+      const createdPrice = await knex("prices")
+        .where({ id: newPriceId })
+        .first();
+
+      res.status(200).json({
+        message: "Price successfully added for Steam.",
+        price: createdPrice,
+      });
+    }
   } catch (error) {
     console.error("Error creating prices for Steam:", error);
     res.status(500).json({
