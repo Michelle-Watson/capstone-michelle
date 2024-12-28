@@ -11,9 +11,9 @@ import { updateEpicGamesPrice } from "../helpers/epicgames-helper.js";
 import cron from "node-cron"; // Import the node-cron package
 
 // Helper function to log errors to a log file
-const logErrorToFile = (message) => {
-  const timestamp = new Date().toISOString(); // Get current timestamp
-  const logMessage = `[${timestamp}] ERROR: ${message}\n`; // Format log message
+const logErrorToFile = (errorType, message) => {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${errorType.toUpperCase()}: ${message}\n`;
   fs.appendFile("error.log", logMessage, (err) => {
     if (err) {
       console.error("Error writing to log file:", err.message);
@@ -31,12 +31,7 @@ const updateAllPrices = async (req, res) => {
 
     for (let price of data) {
       // Explicitly convert the price fields to floats to ensure consistency
-      price = {
-        ...price,
-        original_price: parseFloat(price.original_price),
-        discount: parseFloat(price.discount),
-        discounted_price: parseFloat(price.discounted_price),
-      };
+      price = formatPriceFields(price);
 
       let updatedPriceData;
       let combinedPriceData = { ...price };
@@ -101,12 +96,7 @@ const index = async (_req, res) => {
       .select("prices.*", "games.title"); // Select all fields from prices, plus the title from games
 
     // Convert price fields to numbers before sending the response
-    const formattedData = data.map((price) => ({
-      ...price,
-      original_price: parseFloat(price.original_price),
-      discount: parseFloat(price.discount),
-      discounted_price: parseFloat(price.discounted_price),
-    }));
+    const formattedData = data.map(formatPriceFields);
 
     res.status(200).json(formattedData);
   } catch (err) {
@@ -146,12 +136,7 @@ const findOne = async (req, res) => {
     console.log("priceFound", priceFound);
 
     // Explicitly convert the price fields to floats to ensure consistency
-    priceData = {
-      ...priceData,
-      original_price: parseFloat(priceData.original_price),
-      discount: parseFloat(priceData.discount),
-      discounted_price: parseFloat(priceData.discounted_price),
-    };
+    priceData = formatPriceFields(priceData);
 
     console.log("priceData after parsing", priceData);
 
@@ -300,12 +285,7 @@ const addPrice = async (req, res) => {
     const createdPrice = await knex("prices").where({ id: newPriceId }).first();
 
     // Ensure the returned price fields are numbers
-    const formattedCreatedPrice = {
-      ...createdPrice,
-      original_price: parseFloat(createdPrice.original_price),
-      discount: parseFloat(createdPrice.discount),
-      discounted_price: parseFloat(createdPrice.discounted_price),
-    };
+    const formattedCreatedPrice = formatPriceFields(createdPrice);
 
     // Return the newly created price with the related game_id and other details
     res.status(201).json(formattedCreatedPrice);
@@ -419,12 +399,7 @@ const editPrice = async (req, res) => {
     const updatedPriceData = await knex("prices").where("id", priceId).first();
 
     // Ensure the returned price fields are numbers
-    const formattedUpdatedPrice = {
-      ...updatedPriceData,
-      original_price: parseFloat(updatedPriceData.original_price),
-      discount: parseFloat(updatedPriceData.discount),
-      discounted_price: parseFloat(updatedPriceData.discounted_price),
-    };
+    const formattedUpdatedPrice = formatPriceFields(updatedPriceData);
 
     // Return the updated price with the related game_id and other details
     res.status(200).json(formattedUpdatedPrice);
@@ -464,5 +439,12 @@ const isValidUrl = (url) => {
     /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
   return regex.test(url);
 };
+
+const formatPriceFields = (price) => ({
+  ...price,
+  original_price: parseFloat(price.original_price),
+  discount: parseFloat(price.discount),
+  discounted_price: parseFloat(price.discounted_price),
+});
 
 export { index, findOne, addPrice, editPrice, removePrice, updateAllPrices };

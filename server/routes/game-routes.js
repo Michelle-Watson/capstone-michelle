@@ -20,4 +20,7 @@ router
 
 router.route("/:id/prices").get(gameController.getPricesForGame);
 
+// New route to craft url for the 4 supported stores manually
+// router.route("/:id/create-prices").post(gameController.createPricesforGame);
+
 export default router;
