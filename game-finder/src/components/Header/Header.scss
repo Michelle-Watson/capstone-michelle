@@ -5,17 +5,22 @@
 
 .nav {
   padding: 2rem 2rem; // top-bot, left-right
+  display: flex;
+  justify-content: center; // Horizontally center the content
+  width: 100%;
 }
 
 .nav__container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-direction: column;
-  gap: 2rem;
+  justify-content: flex-start;
+  width: 100%;
 
+  // Set max-width for mobile and tablet using variables
+  max-width: $mobile-max-width + 200px;
   @include tablet {
-    flex-direction: row;
+    // make width of nav container slightly larger than body content
+    max-width: 1300px; // $tablet-max-width = 1100px
   }
 }
 
@@ -26,11 +31,7 @@
   align-items: center;
   color: $GameFinder-Purple-200;
   @include page-header;
-}
 
-// Additional styling: keep seperate for now
-// image and text for logo
-.nav__logo {
   padding-bottom: 0.5rem; // Add some space between the logo and the border
   border-bottom: 2px solid $GameFinder-Aqua; // Add bottom border with Aqua color
   transition: all 0.3s ease-in-out; // Smooth transition for hover effect
@@ -46,5 +47,57 @@
     width: 30px;
     height: 30px;
     margin-right: 0.5rem;
+  }
+}
+
+// Styles for the header section
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  // border-bottom: 0 0 8px 2px $GameFinder-Aqua;
+
+  @include tablet {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.searchHeader {
+  flex-grow: 1;
+  max-width: 100%;
+
+  @include tablet {
+    max-width: 60%;
+  }
+
+  &__form {
+    width: 100%;
+  }
+
+  &__input {
+    padding: 0.625rem;
+    @include labels-links-buttons;
+    border-radius: 1.25rem;
+    width: 100%;
+    padding-left: 2rem;
+    border: 0;
+    outline: solid 0.0625rem $Cloud;
+    background: url("../../assets/icons/search-24px.svg") no-repeat left center;
+    background-position: right 1rem center;
+    color: $GameFinder-Purple-200;
+
+    &:focus {
+      outline: solid 0.125rem $GameFinder-Purple-1-button;
+      background: none;
+    }
+
+    &::placeholder {
+      color: $Slate;
+    }
+
+    transition: all 0.5s;
   }
 }

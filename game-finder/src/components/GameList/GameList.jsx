@@ -54,7 +54,7 @@ export default function GameList({ games, fetchGames }) {
               <input
                 type="text"
                 className="searchHeader__input"
-                placeholder="Search games..."
+                placeholder="Filter games..."
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
