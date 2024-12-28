@@ -93,16 +93,22 @@ const formatReleaseDate = (timestamp) => {
 // Helper function to convert IGDB game data to my own db format
 const convertIGDBGame = (igdbGame) => {
   return {
-    id: igdbGame.id, // Map IGDB ID to my db ID
-    title: igdbGame.name, // Map IGDB name to db title
+    id: igdbGame.id || null, // If id is missing, return null
+    title: igdbGame.name || "Untitled Game", // Default to "Untitled Game" if name is missing
     description: igdbGame.storyline || igdbGame.summary || "",
-    consoles: igdbGame.genres.map((genre) => genre.name), // Map IGDB genres to db
-    release_date: formatReleaseDate(igdbGame.first_release_date), // Convert and map release date
+    consoles: igdbGame.genres?.map((genre) => genre.name) || [], // Safely map genres, default to empty array
+    release_date: igdbGame.first_release_date
+      ? formatReleaseDate(igdbGame.first_release_date)
+      : "Unknown", // Format release date or use "Unknown"
     // image_id: co5qi9
     // cover.url: "//images.igdb.com/igdb/image/upload/t_thumb/co1wj7.jpg"
     // construct own URL to account for size
-    imageurlSmall: `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${igdbGame.cover.image_id}.png`,
-    imageurlBig: `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.cover.image_id}.png`,
+    imageurlSmall: igdbGame.cover?.image_id
+      ? `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${igdbGame.cover.image_id}.png`
+      : "", // Safe cover image URL
+    imageurlBig: igdbGame.cover?.image_id
+      ? `https://images.igdb.com/igdb/image/upload/t_cover_big_2x/${igdbGame.cover.image_id}.png`
+      : "", // Safe cover image URL
   };
 };
 
@@ -140,8 +146,8 @@ const getGamesFromIGDB = async (query) => {
   if (query && query.trim() !== "") {
     excludeCondition =
       dbGameIds.length > 0
-        ? `where id != (${dbGameIds.join(", ")}) & platforms = 6` // Exclude IDs already in DB
-        : "where platforms = 6"; // Fallback in case no IDs are in the DB
+        ? `where id != (${dbGameIds.join(", ")}) & platforms = (6)` // Exclude IDs already in DB
+        : "where platforms = (6)"; // Fallback in case no IDs are in the DB
 
     // Prepend the search query
     console.log("Search query present");
@@ -158,9 +164,34 @@ const getGamesFromIGDB = async (query) => {
   console.log("Request body:", body); // Debugging to ensure the body is correct
 
   try {
+    console.log("Trying to fetch results");
     const response = await axios.post(url, body, { headers });
+
     // Convert the IGDB response into my dbGames format
-    const convertedGames = response.data.map(convertIGDBGame);
+    console.log("API response:", response.data); // Log the full response to see the structure
+
+    // Check if the response data is an array and contains the expected structure
+    if (!Array.isArray(response.data)) {
+      console.error("Expected an array but got:", response.data);
+      throw new Error("Invalid response format from IGDB API");
+    }
+
+    // Check if any items in the response data have the `platforms` property
+    if (response.data.some((game) => !game.platforms)) {
+      console.error(
+        "Some games are missing the 'platforms' field:",
+        response.data
+      );
+      throw new Error("Some games are missing the 'platforms' field");
+    }
+
+    // Now map the data as usual
+    const convertedGames = response.data.map((game) => {
+      console.log("Converting game:", game); // Log the game data being converted
+      return convertIGDBGame(game);
+    });
+
+    console.log("Mapped data:", convertedGames); // Log the result after mapping
     return convertedGames;
   } catch (err) {
     console.error("Error fetching games from IGDB", err);
