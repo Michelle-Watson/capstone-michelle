@@ -2,7 +2,7 @@ export default [
   // Cyberpunk 2077 Prices
   {
     id: 1,
-    game_id: 1,
+    game_id: 1877,
     platform_name: "Steam",
     original_price: 79.99,
     discount: 0, // 0% off
@@ -11,7 +11,7 @@ export default [
   },
   {
     id: 2,
-    game_id: 1,
+    game_id: 1877,
     platform_name: "Humble Bundle",
     original_price: 79.99,
     discount: 0, // 0% off
@@ -20,7 +20,7 @@ export default [
   },
   {
     id: 3,
-    game_id: 1,
+    game_id: 1877,
     platform_name: "G2A",
     original_price: 79.99,
     discount: 32, // 32% off
@@ -29,7 +29,7 @@ export default [
   },
   {
     id: 4,
-    game_id: 1,
+    game_id: 1877,
     platform_name: "Epic Games",
     original_price: 79.99,
     discount: 0, // 0% off
@@ -40,7 +40,7 @@ export default [
   // The Witcher 3 Prices
   {
     id: 5,
-    game_id: 2,
+    game_id: 1942,
     platform_name: "Steam",
     original_price: 39.99,
     discount: 25, // 25% off
@@ -49,7 +49,7 @@ export default [
   },
   {
     id: 6,
-    game_id: 2,
+    game_id: 1942,
     platform_name: "Humble Bundle",
     original_price: 39.99,
     discount: 20, // 20% off
@@ -58,7 +58,7 @@ export default [
   },
   {
     id: 7,
-    game_id: 2,
+    game_id: 1942,
     platform_name: "G2A",
     original_price: 39.99,
     discount: 15, // 15% off
@@ -67,7 +67,7 @@ export default [
   },
   {
     id: 8,
-    game_id: 2,
+    game_id: 1942,
     platform_name: "Epic Games",
     original_price: 39.99,
     discount: 20, // 20% off
@@ -78,7 +78,7 @@ export default [
   // Red Dead Redemption 2 Prices
   {
     id: 9,
-    game_id: 3,
+    game_id: 25076,
     platform_name: "Steam",
     original_price: 59.99,
     discount: 30, // 30% off
@@ -87,7 +87,7 @@ export default [
   },
   {
     id: 10,
-    game_id: 3,
+    game_id: 25076,
     platform_name: "Humble Bundle",
     original_price: 59.99,
     discount: 25, // 25% off
@@ -96,7 +96,7 @@ export default [
   },
   {
     id: 11,
-    game_id: 3,
+    game_id: 25076,
     platform_name: "G2A",
     original_price: 59.99,
     discount: 22, // 22% off
@@ -105,7 +105,7 @@ export default [
   },
   {
     id: 12,
-    game_id: 3,
+    game_id: 25076,
     platform_name: "Epic Games",
     original_price: 59.99,
     discount: 25, // 25% off
@@ -116,7 +116,7 @@ export default [
   // The Elder Scrolls V: Skyrim Prices
   {
     id: 13,
-    game_id: 4,
+    game_id: 472,
     platform_name: "Steam",
     original_price: 39.99,
     discount: 50, // 50% off
@@ -125,7 +125,7 @@ export default [
   },
   {
     id: 14,
-    game_id: 4,
+    game_id: 472,
     platform_name: "Humble Bundle",
     original_price: 39.99,
     discount: 40, // 40% off
@@ -134,27 +134,27 @@ export default [
   },
   {
     id: 15,
-    game_id: 4,
+    game_id: 472,
     platform_name: "G2A",
     original_price: 39.99,
     discount: 35, // 35% off
     discounted_price: 25.99,
-    url: "https://www.g2a.com/the-elder-scrolls-v-skyrim-special-edition-steam-key-global-i10000080121003",
+    url: "https://www.g2a.com/the-elder-scrolls-v-skyrim-special-edition-steam-key-global-i10000029090004",
   },
   {
     id: 16,
-    game_id: 4,
+    game_id: 472,
     platform_name: "Epic Games",
     original_price: 39.99,
     discount: 40, // 40% off
     discounted_price: 23.99,
-    url: "https://www.epicgames.com/store/en-US/p/the-elder-scrolls-v-skyrim-special-edition",
+    url: "https://store.epicgames.com/en-US/p/skyrim",
   },
 
   // Noita Prices
   {
     id: 17,
-    game_id: 5,
+    game_id: 52006,
     platform_name: "Steam",
     original_price: 22.79,
     discount: 60, // 60% off
@@ -163,7 +163,7 @@ export default [
   },
   {
     id: 18,
-    game_id: 5,
+    game_id: 52006,
     platform_name: "Humble Bundle",
     original_price: 22.79,
     discount: 60, // 60% off
@@ -172,12 +172,21 @@ export default [
   },
   {
     id: 19,
-    game_id: 5,
+    game_id: 52006,
     platform_name: "G2A",
     original_price: 15.69,
     discount: 0, // 0% off
     discounted_price: 15.69,
     url: "https://www.g2a.com/noita-steam-key-global-i10000190811002",
+  },
+  {
+    id: 20,
+    game_id: 203722,
+    platform_name: "Steam",
+    original_price: 25.99,
+    discount: 33,
+    discounted_price: 17.41,
+    url: "https://store.steampowered.com/app/1868140/DAVE_THE_DIVER/",
   },
 
   // Add more games here

@@ -17,7 +17,10 @@ const getTwitchAccessToken = async () => {
         },
       }
     );
-    console.log("Access token fetched successfully", response.data.access_token);
+    console.log(
+      "Access token fetched successfully",
+      response.data.access_token
+    );
 
     // Return the access token
     return response.data.access_token;
@@ -63,8 +66,10 @@ const getGamesFromIGDB = async () => {
   // IGDB's query language supports `!=` and `in` operators for filtering
   const excludeCondition =
     dbGameIds.length > 0
-      ? `where id != (${dbGameIds.join(", ")}) & aggregated_rating > 80` // Exclude IDs already in DB
-      : "where aggregated_rating > 80"; // Fallback in case no IDs are in the DB
+      ? `where id != (${dbGameIds.join(
+          ", "
+        )}) & aggregated_rating > 80 & platforms = 6` // Exclude IDs already in DB
+      : "where aggregated_rating > 80 & platforms = 6"; // Fallback in case no IDs are in the DB
 
   const accessToken =
     process.env.ACCESS_TOKEN || (await getTwitchAccessToken());
@@ -75,8 +80,12 @@ const getGamesFromIGDB = async () => {
   };
   // https://api-docs.igdb.com/#game
   // similar games for future work
+
+  // Comparing PC games only for now (scarpped stores are for PC games)
+  // where platforms = 6 -> PC (Microsoft Windows)
+  // https://gist.github.com/ahmed-abdelazim/b533b443388baaafab3fc377e71e0109
   const body = `
-  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games;
+  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games.name, platforms.name;
   ${excludeCondition};
   sort aggregated_rating asc;
   limit 10;`;
@@ -149,7 +158,7 @@ const findOne = async (req, res) => {
       Authorization: `Bearer ${accessToken}`,
     };
     const body = `
-  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games;
+  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games.name, platforms.name;
   where id = ${req.params.id};`;
 
     console.log("req.params.id", req.params.id);
