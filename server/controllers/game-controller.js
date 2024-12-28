@@ -36,107 +36,120 @@ const getTwitchAccessToken = async () => {
   }
 };
 
-const createPricesForGame = async (req, res) => {
-  // 1. Try to find game in db
-  const gameFound = await knex("games").where({ id: req.params.id });
-  // console.log("gameFound, gameId: " + JSON.stringify(gameFound[0], null, 2));
+// Utility function to create price data for any platform
+const createPriceData = (gameId, gameTitle, platformName, storeUrl) => {
+  return {
+    game_id: gameId, // This will be the IGDB game ID
+    platform_name: platformName,
+    url: storeUrl,
+    original_price: 0, // Will be updated after scraping
+    discounted_price: 0, // Will be updated after scraping
+    discount: 0, // Will be updated after scraping
+  };
+};
 
-  // If the game isn't found, send a 404 response
-  if (!gameFound) {
-    return res
-      .status(404)
-      .json({ message: `Game with ID ${req.params.id} not found.` });
+// Utility function to check and update or insert price data
+const updateOrInsertPrice = async (gameId, platformName, priceData) => {
+  const existingPrice = await knex("prices")
+    .where({ game_id: gameId, platform_name: platformName })
+    .first(); // Look for an existing price entry
+
+  let updatedPriceData = { ...priceData };
+
+  if (existingPrice) {
+    // If an existing price entry is found, update it
+    updatedPriceData = {
+      ...updatedPriceData,
+      updated_at: knex.fn.now(), // Set the updated timestamp
+    };
+
+    // Update the existing price record in the database
+    await knex("prices")
+      .where({ id: existingPrice.id })
+      .update(updatedPriceData);
+
+    // Fetch the updated price record
+    const updatedPrice = await knex("prices")
+      .where({ id: existingPrice.id })
+      .first();
+
+    return {
+      message: `Price successfully updated for ${platformName}.`,
+      price: updatedPrice,
+    };
+  } else {
+    // Insert the new price into the 'prices' table
+    const result = await knex("prices").insert(updatedPriceData);
+
+    // Retrieve the inserted price (we'll use `game_id` to fetch it back)
+    const newPriceId = result[0]; // The first element is the id of the newly inserted row
+    const createdPrice = await knex("prices").where({ id: newPriceId }).first();
+
+    return {
+      message: `Price successfully added for ${platformName}.`,
+      price: createdPrice,
+    };
   }
+};
 
-  const gameId = gameFound[0].id; // The gameId is the ID from the database (IGDB ID)
-
-  const gameTitle = gameFound[0].title || "Balatro"; // Retrieve the title from the game object
-
-  // Step 2: Get Steam App ID using fuzzy matching
+// Store-specific function for Steam
+const getSteamStoreData = async (gameTitle, gameId) => {
   const steamAppId = await getSteamAppId(gameTitle);
 
   if (!steamAppId) {
-    return res.status(404).json({
-      message: `Steam App ID not found for game title: "${gameTitle}"`,
-    });
+    throw new Error(`Steam App ID not found for game title: "${gameTitle}"`);
   }
 
-  // Step 3: Create the Steam URL using the found App ID
   const steamUrl = `https://store.steampowered.com/app/${steamAppId}/${gameTitle.replace(
     /\s+/g,
     "_"
   )}`;
 
-  // Prepare the price data
-  let priceData = {
-    game_id: gameId, // This will be the IGDB game ID
-    platform_name: "Steam",
-    url: steamUrl,
-    original_price: 0, // Will be updated after scraping
-    discounted_price: 0, // Will be updated after scraping
-    discount: 0, // Will be updated after scraping
+  const priceData = createPriceData(gameId, gameTitle, "Steam", steamUrl);
+  const updatedPriceData = await updateSteamPrice(priceData); // Update price info using your updateSteamPrice function
+  return {
+    priceData: { ...priceData, ...updatedPriceData },
+    platformName: "Steam",
   };
+};
 
-  priceData = formatPriceFields(priceData);
-
-  // Step 4: Check if a price entry already exists for this game and platform
-  const existingPrice = await knex("prices")
-    .where({ game_id: gameId, platform_name: "Steam" })
-    .first(); // Look for an existing price entry
-
-  let updatedPriceData;
-  let combinedPriceData = { ...priceData };
-
+// Function to create prices for a game
+const createPricesForGame = async (req, res) => {
   try {
-    // Step 4: Update price if platform is Steam
-    if (priceData.platform_name === "Steam") {
-      updatedPriceData = await updateSteamPrice(priceData);
+    // 1. Try to find the game in the database
+    const gameFound = await knex("games").where({ id: req.params.id }).first(); // Using .first() to retrieve the first match
+
+    if (!gameFound) {
+      return res
+        .status(404)
+        .json({ message: `Game with ID ${req.params.id} not found.` });
     }
 
-    // Combine the price data first (before updating DB)
-    combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+    const gameId = gameFound.id; // The IGDB game ID
+    const gameTitle = gameFound.title || "Balatro"; // Retrieve the title from the game object
 
-    if (existingPrice) {
-      // If an existing price entry is found, update it
-      updatedPriceData = {
-        ...combinedPriceData,
-        updated_at: knex.fn.now(), // Set the updated timestamp
-      };
+    // Step 2: Get the platform-specific data
+    let platformData;
 
-      // Update the existing price record in the database
-      await knex("prices")
-        .where({ id: existingPrice.id })
-        .update(updatedPriceData);
+    // Handle Steam platform for now, you can extend this for other platforms
+    platformData = await getSteamStoreData(gameTitle, gameId);
 
-      // Fetch the updated price record
-      const updatedPrice = await knex("prices")
-        .where({ id: existingPrice.id })
-        .first();
+    // Step 3: Update or Insert the price data for the platform (e.g., Steam)
+    const { message, price } = await updateOrInsertPrice(
+      gameId,
+      platformData.platformName,
+      platformData.priceData
+    );
 
-      // Return the updated price entry
-      return res.status(200).json({
-        message: "Price successfully updated for Steam.",
-        price: updatedPrice,
-      });
-    } else {
-      // Insert the new price into the 'prices' table
-      const result = await knex("prices").insert(combinedPriceData);
-
-      // Retrieve the inserted price (we'll use `game_id` to fetch it back)
-      const newPriceId = result[0]; // The first element is the id of the newly inserted row
-      const createdPrice = await knex("prices")
-        .where({ id: newPriceId })
-        .first();
-
-      res.status(200).json({
-        message: "Price successfully added for Steam.",
-        price: createdPrice,
-      });
-    }
+    // Return the appropriate response
+    return res.status(200).json({
+      message,
+      price,
+    });
   } catch (error) {
-    console.error("Error creating prices for Steam:", error);
-    res.status(500).json({
-      message: `Error creating prices for game with ID ${gameId}: ${error.message}`,
+    console.error("Error creating prices:", error);
+    return res.status(500).json({
+      message: `Error creating prices for game with ID ${req.params.id}: ${error.message}`,
     });
   }
 };
