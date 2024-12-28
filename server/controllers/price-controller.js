@@ -1,6 +1,7 @@
 import initKnex from "knex";
 import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
+import fs from "fs";
 
 import { updateSteamPrice } from "../helpers/steam-helper.js";
 import { updateHumbleBundlePrice } from "../helpers/humblebundle-helper.js";
@@ -9,8 +10,19 @@ import { updateEpicGamesPrice } from "../helpers/epicgames-helper.js";
 
 import cron from "node-cron"; // Import the node-cron package
 
+// Helper function to log errors to a log file
+const logErrorToFile = (message) => {
+  const timestamp = new Date().toISOString(); // Get current timestamp
+  const logMessage = `[${timestamp}] ERROR: ${message}\n`; // Format log message
+  fs.appendFile("error.log", logMessage, (err) => {
+    if (err) {
+      console.error("Error writing to log file:", err.message);
+    }
+  });
+};
+
 // Function to update all prices
-const updateAllPrices = async () => {
+const updateAllPrices = async (req, res) => {
   try {
     // Get all prices from the database
     const data = await knex("prices")
@@ -54,15 +66,24 @@ const updateAllPrices = async () => {
           `Price updated for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url}`
         );
       } catch (err) {
-        console.error(
-          `Error updating price for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url} - ${err.message}`
-        );
+        const errorMessage = `Error updating price for game "${price.title}" on platform "${price.platform_name}" with URL: ${price.url} - ${err.message}`;
+        console.error(errorMessage);
+        // Log error to the log file
+        logErrorToFile(errorMessage);
         // If error occurs, log it and continue to next game
         continue;
       }
     }
+    // After all prices are updated, send a response (to stop the hanging)
+    console.log("All prices have been updated successfully.");
+    res
+      .status(200)
+      .json({ message: "All prices have been updated successfully." });
   } catch (error) {
-    console.error("Error retrieving or processing prices:", error);
+    const errorMessage = `Error retrieving or processing prices: ${error.message}`;
+    console.error(errorMessage);
+    // Log error to the log file
+    logErrorToFile(errorMessage);
   }
 };
 
