@@ -52,8 +52,27 @@ const searchGames = async (req, res) => {
   }
 
   try {
-    const games = await getGamesFromIGDB(query); // Use a modified version of getGamesFromIGDB
-    res.status(200).json(games);
+    // Step 1: Fetch all games from the database
+    const dbGames = await knex("games");
+
+    // Step 2: Check if any titles in the database contain the search query (case-insensitive)
+    const dbQueryGames = dbGames.filter(
+      (game) => game.title.toLowerCase().includes(query.toLowerCase()) // Match titles based on query
+    );
+
+    // Step 3: Fetch games from IGDB
+    const igdbGames = await getGamesFromIGDB(query);
+
+    // Step 4: Combine the results, with priority to database games
+    const allGames = [
+      ...dbQueryGames, // Start with the database games
+      ...igdbGames.filter(
+        (igdbGame) => !dbQueryGames.some((dbGame) => dbGame.id === igdbGame.id) // Only add IGDB games if they don't already exist in DB
+      ),
+    ];
+
+    // Step 5: Send the combined results
+    res.status(200).json(allGames);
   } catch (err) {
     console.error("Error searching for games:", err);
     res.status(500).json({ message: "Error searching for games." });
