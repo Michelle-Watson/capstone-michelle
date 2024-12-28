@@ -1,9 +1,10 @@
 import initKnex from "knex";
 import configuration from "../knexfile.js";
 import axios from "axios";
+
 const knex = initKnex(configuration);
 
-import { formatPriceFields } from "../helpers/utils.js";
+import { formatPriceFields, getSteamAppId } from "../helpers/utils.js";
 
 import { updateSteamPrice } from "../helpers/steam-helper.js";
 import * as priceController from "./price-controller.js";
@@ -51,14 +52,22 @@ const createPricesForGame = async (req, res) => {
 
   const gameTitle = gameFound[0].title || "Balatro"; // Retrieve the title from the game object
 
-  // Hardcoding the Steam ID for now (replace with actual mapping logic in the future)
-  const steamId = "2379780"; // Steam ID for Cyberpunk 2077
-  const steamUrl = `https://store.steampowered.com/app/${steamId}/${gameTitle.replace(
+  // Step 2: Get Steam App ID using fuzzy matching
+  const steamAppId = await getSteamAppId(gameTitle);
+
+  if (!steamAppId) {
+    return res.status(404).json({
+      message: `Steam App ID not found for game title: "${gameTitle}"`,
+    });
+  }
+
+  // Step 3: Create the Steam URL using the found App ID
+  const steamUrl = `https://store.steampowered.com/app/${steamAppId}/${gameTitle.replace(
     /\s+/g,
     "_"
   )}`;
 
-  // Prepare the price data to pass to the updateSteamPrice function
+  // Prepare the price data
   let priceData = {
     game_id: gameId, // This will be the IGDB game ID
     platform_name: "Steam",
@@ -74,6 +83,7 @@ const createPricesForGame = async (req, res) => {
   let combinedPriceData = { ...priceData };
 
   try {
+    // Step 4: Update price if platform is Steam
     if (priceData.platform_name === "Steam") {
       updatedPriceData = await updateSteamPrice(priceData);
     }
