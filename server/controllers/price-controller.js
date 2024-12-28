@@ -3,6 +3,8 @@ import configuration from "../knexfile.js";
 const knex = initKnex(configuration);
 import fs from "fs";
 
+import { formatPriceFields } from "../helpers/utils.js";
+
 import { updateSteamPrice } from "../helpers/steam-helper.js";
 import { updateHumbleBundlePrice } from "../helpers/humblebundle-helper.js";
 import { updateG2APrice } from "../helpers/g2a-helper.js";
@@ -439,12 +441,5 @@ const isValidUrl = (url) => {
     /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/[^\s]*)?$/;
   return regex.test(url);
 };
-
-const formatPriceFields = (price) => ({
-  ...price,
-  original_price: parseFloat(price.original_price),
-  discount: parseFloat(price.discount),
-  discounted_price: parseFloat(price.discounted_price),
-});
 
 export { index, findOne, addPrice, editPrice, removePrice, updateAllPrices };

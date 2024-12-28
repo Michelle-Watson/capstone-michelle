@@ -3,6 +3,11 @@ import configuration from "../knexfile.js";
 import axios from "axios";
 const knex = initKnex(configuration);
 
+import { formatPriceFields } from "../helpers/utils.js";
+
+import { updateSteamPrice } from "../helpers/steam-helper.js";
+import * as priceController from "./price-controller.js";
+
 // Fetch access token from Twitch
 const getTwitchAccessToken = async () => {
   try {
@@ -27,6 +32,71 @@ const getTwitchAccessToken = async () => {
   } catch (err) {
     console.error("Error fetching access token", err);
     throw new Error("Could not fetch access token");
+  }
+};
+
+const createPricesForGame = async (req, res) => {
+  // 1. Try to find game in db
+  const gameFound = await knex("games").where({ id: req.params.id });
+  // console.log("gameFound, gameId: " + JSON.stringify(gameFound[0], null, 2));
+
+  // If the game isn't found, send a 404 response
+  if (!gameFound) {
+    return res
+      .status(404)
+      .json({ message: `Game with ID ${req.params.id} not found.` });
+  }
+
+  const gameId = gameFound[0].id; // The gameId is the ID from the database (IGDB ID)
+
+  const gameTitle = gameFound[0].title || "Balatro"; // Retrieve the title from the game object
+
+  // Hardcoding the Steam ID for now (replace with actual mapping logic in the future)
+  const steamId = "2379780"; // Steam ID for Cyberpunk 2077
+  const steamUrl = `https://store.steampowered.com/app/${steamId}/${gameTitle.replace(
+    /\s+/g,
+    "_"
+  )}`;
+
+  // Prepare the price data to pass to the updateSteamPrice function
+  let priceData = {
+    game_id: gameId, // This will be the IGDB game ID
+    platform_name: "Steam",
+    url: steamUrl,
+    original_price: 0, // Will be updated after scraping
+    discounted_price: 0, // Will be updated after scraping
+    discount: 0, // Will be updated after scraping
+  };
+
+  priceData = formatPriceFields(priceData);
+
+  let updatedPriceData;
+  let combinedPriceData = { ...priceData };
+
+  try {
+    if (priceData.platform_name === "Steam") {
+      updatedPriceData = await updateSteamPrice(priceData);
+    }
+
+    // Combine the price data first (before updating DB)
+    combinedPriceData = { ...combinedPriceData, ...updatedPriceData };
+
+    // Insert the new price into the 'prices' table
+    const result = await knex("prices").insert(combinedPriceData);
+
+    // Retrieve the inserted price (we'll use `game_id` to fetch it back)
+    const newPriceId = result[0]; // The first element is the id of the newly inserted row
+    const createdPrice = await knex("prices").where({ id: newPriceId }).first();
+
+    res.status(200).json({
+      message: "Price successfully scraped and added for Steam.",
+      price: createdPrice,
+    });
+  } catch (error) {
+    console.error("Error creating prices for Steam:", error);
+    res.status(500).json({
+      message: `Error creating prices for game with ID ${gameId}: ${error.message}`,
+    });
   }
 };
 
@@ -430,6 +500,7 @@ export {
   searchGames,
   index,
   findOne,
+  createPricesForGame,
   getPricesForGame,
   createGame,
   editGame,
