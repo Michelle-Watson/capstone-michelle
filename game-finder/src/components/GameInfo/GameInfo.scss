@@ -23,10 +23,10 @@
 
 .gameInfo__image {
   width: 100%; /* Make the image responsive */
-  // Original image resolution
-  max-width: 1154px;
-  max-width: 1000px;
+  max-width: 1000px; /* Optional: Limit the width to 1000px */
   height: auto; /* Maintain aspect ratio */
+  max-height: 500px; /* Set a maximum height for the image */
+  object-fit: cover; /* Ensure the image covers the container while maintaining aspect ratio */
   border-radius: 1rem;
 }
 
