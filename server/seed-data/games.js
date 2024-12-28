@@ -25,7 +25,7 @@ export default [
     id: 25076,
     title: "Red Dead Redemption 2",
     description:
-      "RPG and sequel to The Witcher 2 (2011), The Witcher 3 follows witcher Geralt of Rivia as he seeks out his former lover and his young subject while intermingling with the political workings of the wartorn Northern Kingdoms. Geralt has to fight monsters and deal with people of all sorts in order to solve complex problems and settle contentious disputes, each ranging from the personal to the world-changing.",
+      "Red Dead Redemption 2 is the epic tale of outlaw Arthur Morgan and the infamous Van der Linde gang, on the run across America at the dawn of the modern age.",
     release_date: "2018-10-26",
     imageurlSmall:
       "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/1174180/capsule_231x87.jpg?t=1732026284",
@@ -36,7 +36,7 @@ export default [
     id: 472,
     title: "The Elder Scrolls V: Skyrim",
     description:
-      "Red Dead Redemption 2 is the epic tale of outlaw Arthur Morgan and the infamous Van der Linde gang, on the run across America at the dawn of the modern age.",
+      "Skyrim reimagines and revolutionizes the open-world fantasy epic, bringing to life a complete virtual world open for you to explore any way you choose. Play any type of character you can imagine, and do whatever you want; the legendary freedom of choice, storytelling, and adventure of The Elder Scrolls is realized like never before.",
     release_date: "2011-11-11",
     imageurlSmall:
       "https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/489830/capsule_231x87.jpg?t=1732565566",
