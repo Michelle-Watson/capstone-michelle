@@ -3,7 +3,14 @@ import * as gameController from "../controllers/game-controller.js";
 import express from "express";
 const router = express.Router();
 
-router.route("/").get(gameController.index).post(gameController.createGame);
+router
+  .route("/")
+  .get(gameController.handleGamesRequest)
+  .post(gameController.createGame);
+// index -> handleGamesRequest
+
+// The search route
+// router.route("/").get(gameController.searchGames); // Add this for handling search
 
 router
   .route("/:id")

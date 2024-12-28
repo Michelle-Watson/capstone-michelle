@@ -30,6 +30,36 @@ const getTwitchAccessToken = async () => {
   }
 };
 
+const handleGamesRequest = async (req, res) => {
+  const { query } = req.query; // Extract the query parameter from the URL
+
+  if (query && query.trim() !== "") {
+    // If a query is provided, perform a search
+    console.log("Query provided: ", query);
+    return searchGames(req, res);
+  } else {
+    // If no query, return all games (listing)
+    return index(req, res);
+  }
+};
+
+// Helper function to search games based on query
+const searchGames = async (req, res) => {
+  const { query } = req.query; // Get the search query from URL parameter
+
+  if (!query || query.trim() === "") {
+    return res.status(400).json({ message: "Search term cannot be empty." });
+  }
+
+  try {
+    const games = await getGamesFromIGDB(query); // Use a modified version of getGamesFromIGDB
+    res.status(200).json(games);
+  } catch (err) {
+    console.error("Error searching for games:", err);
+    res.status(500).json({ message: "Error searching for games." });
+  }
+};
+
 // Helper function to convert IGDB release date (UNIX timestamp) to YYYY-MM-DD format
 const formatReleaseDate = (timestamp) => {
   // return null sets date as 1969-12-31, just set it as such so db doesn't have a null value
@@ -57,14 +87,14 @@ const convertIGDBGame = (igdbGame) => {
   };
 };
 
-const getGamesFromIGDB = async () => {
+const getGamesFromIGDB = async (query) => {
   // Step 1: Fetch the list of game IDs already in database
   const dbGames = await knex("games");
   const dbGameIds = dbGames.map((game) => game.id); // Get an array of game IDs
 
   // Step 2: Prepare the `where` clause to exclude these IDs from the IGDB API request
   // IGDB's query language supports `!=` and `in` operators for filtering
-  const excludeCondition =
+  let excludeCondition =
     dbGameIds.length > 0
       ? `where id != (${dbGameIds.join(
           ", "
@@ -81,16 +111,32 @@ const getGamesFromIGDB = async () => {
   // https://api-docs.igdb.com/#game
   // similar games for future work
 
+  // Step 3: Create the base body
+  let body = "";
+
+  // Step 4: If there is a query, prepend the search term at the start
   // Comparing PC games only for now (scarpped stores are for PC games)
   // where platforms = 6 -> PC (Microsoft Windows)
   // https://gist.github.com/ahmed-abdelazim/b533b443388baaafab3fc377e71e0109
-  const body = `
-  fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games.name, platforms.name;
+  if (query && query.trim() !== "") {
+    excludeCondition =
+      dbGameIds.length > 0
+        ? `where id != (${dbGameIds.join(", ")}) & platforms = 6` // Exclude IDs already in DB
+        : "where platforms = 6"; // Fallback in case no IDs are in the DB
+
+    // Prepend the search query
+    console.log("Search query present");
+    body = `search "${query}"; fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games.name, platforms.name;
+  ${excludeCondition};`;
+  } else {
+    console.log("NO search query present");
+    body = `fields name, genres.name, storyline, summary, themes.name, cover.url, cover.image_id, first_release_date, similar_games.name, platforms.name;
   ${excludeCondition};
   sort aggregated_rating asc;
   limit 10;`;
+  }
 
-  console.log("body", body);
+  console.log("Request body:", body); // Debugging to ensure the body is correct
 
   try {
     const response = await axios.post(url, body, { headers });
@@ -330,4 +376,13 @@ const removeGame = async (req, res) => {
   }
 };
 
-export { index, findOne, getPricesForGame, createGame, editGame, removeGame };
+export {
+  searchGames,
+  index,
+  findOne,
+  getPricesForGame,
+  createGame,
+  editGame,
+  removeGame,
+  handleGamesRequest,
+};
