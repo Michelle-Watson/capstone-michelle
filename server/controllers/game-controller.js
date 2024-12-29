@@ -161,31 +161,42 @@ const createPricesForGame = async (req, res) => {
     const gameId = gameFound.id; // The IGDB game ID
     const gameTitle = gameFound.title || "Balatro"; // Retrieve the title from the game object
 
-    // Step 2: Get the platform-specific data
-    let platformData;
+    // 2. Define the stores and their corresponding functions
+    const stores = [
+      { name: "Steam", getData: getSteamStoreData },
+      { name: "Humble Bundle", getData: getHumbleBundleStoreData },
+      // Add more stores here as you need
+    ];
 
-    // Handle Steam platform for now, extend for other platforms via for loop?
-    // platformData = await getSteamStoreData(gameTitle, gameId);
-    // Steam: All bundles are on the same URL, so this link will never need to be updated
-    // Humble Bundle: Each bundle has a seperate URL, we should show the cheapest bundle that includes the base game. But when the bundle is no longer the cheapest option, we should switch the URL to the base game. So whenever we update Humble Bundle Prices, we should also update the URL. How do we do this w/o adding circular logic? Add a bool flag to the humblebundle-helper?
-    // If creating a price: Create URL, send isURLUpdated=true to updateHBPrice
-    // If updating all prices: send bool isURLUpdated = false to updateHBPrice, if false, call 'createURL' fxn to update HB price
-    // Do individually for testing
-    platformData = await getHumbleBundleStoreData(gameTitle, gameId);
+    // 3. Initialize an empty array to hold the price data for all stores
+    const prices = [];
 
-    // Step 3: Update or Insert the price data for the platform (e.g., Steam)
-    const { message, price } = await updateOrInsertPrice(
-      gameId,
-      platformData.platformName,
-      platformData.priceData
-    );
+    // 4. Loop through each store and fetch its price data
+    for (let store of stores) {
+      const { name, getData } = store;
 
-    const formattedPrice = formatPriceFields(price);
+      // Fetch platform-specific data (prices, etc.)
+      const platformData = await getData(gameTitle, gameId);
 
-    // Return the appropriate response
+      // Update or Insert the price data for the platform (e.g., Steam)
+      const priceResult = await updateOrInsertPrice(
+        gameId,
+        platformData.platformName,
+        platformData.priceData
+      );
+      const formattedPrice = formatPriceFields(priceResult.price);
+
+      // Store the price data with the platform name in the result
+      prices.push({
+        platform: name,
+        price: formattedPrice,
+      });
+    }
+
+    // 5. Return the combined result for all stores
     return res.status(200).json({
-      message,
-      formattedPrice,
+      message: "Prices updated successfully",
+      prices, // This will include an array of prices for each platform
     });
   } catch (error) {
     console.error("Error creating prices:", error);
