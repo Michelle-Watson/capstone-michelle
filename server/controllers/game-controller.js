@@ -6,7 +6,10 @@ const knex = initKnex(configuration);
 
 import { formatPriceFields, getSteamAppId } from "../helpers/utils.js";
 
-import { updateSteamPrice } from "../helpers/steam-helper.js";
+import {
+  updateSteamPrice,
+  getSteamAppIdViaSearch,
+} from "../helpers/steam-helper.js";
 import * as priceController from "./price-controller.js";
 
 // Fetch access token from Twitch
@@ -94,7 +97,8 @@ const updateOrInsertPrice = async (gameId, platformName, priceData) => {
 
 // Store-specific function for Steam
 const getSteamStoreData = async (gameTitle, gameId) => {
-  const steamAppId = await getSteamAppId(gameTitle);
+  // const steamAppId = await getSteamAppId(gameTitle);
+  const steamAppId = await getSteamAppIdViaSearch(gameTitle);
 
   if (!steamAppId) {
     throw new Error(`Steam App ID not found for game title: "${gameTitle}"`);

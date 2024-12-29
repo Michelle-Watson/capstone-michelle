@@ -12,6 +12,7 @@ const formatPriceFields = (price) => ({
 // ERROR: "url": "https://store.steampowered.com/app/362003/Grand_Theft_Auto_V",
 // The Steam ID is incorrect, it should be this URL: https://store.steampowered.com/app/271590/Grand_Theft_Auto_V/, debug the fuzzy filter?
 // https://partner.steamgames.com/doc/webapi/isteamapps
+// Scrap this for now since I'm not getting the correct idea, use getSteamAppIdViaSearch instead
 const getSteamAppId = async (gameTitle) => {
   try {
     // Fetch the list of all games from Steam's API

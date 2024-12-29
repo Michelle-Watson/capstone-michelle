@@ -2,6 +2,40 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
 
+export const getSteamAppIdViaSearch = async (gameTitle) => {
+  try {
+    // Fetch the search results page
+    const response = await axios.get(
+      `https://store.steampowered.com/search/?term=${gameTitle.replace(
+        /\s+/g,
+        "+"
+      )}`
+    );
+    const html = response.data;
+
+    // verify html is of the correct page
+    fs.writeFileSync("./steam_results.html", html);
+
+    // Load the HTML into Cheerio for parsing
+    const $ = cheerio.load(html);
+
+    // Extract the AppID of the first result
+    const firstGame = $(".search_result_row").first();
+    const appId = firstGame.attr("data-ds-appid");
+
+    if (appId) {
+      console.log(`Found App ID for "${gameTitle}": ${appId}`);
+      return appId;
+    } else {
+      console.log("No App ID found for the first result.");
+      return null;
+    }
+  } catch (err) {
+    console.error("Error fetching Steam App ID:", err.message);
+    return null; // Handle any errors gracefully
+  }
+};
+
 export const updateSteamPrice = async (priceData) => {
   try {
     // Fetch the page
