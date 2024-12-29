@@ -8,9 +8,71 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 // Apply stealth plugin
 puppeteerExtra.use(StealthPlugin());
 
-export const updateHumbleBundlePrice = async (priceData) => {
+export const getHumbleBundleURLViaSearch = async (gameTitle) => {
+  try {
+    // Launch Puppeteer using puppeteer-extra
+    const browser = await puppeteerExtra.launch({
+      headless: true, // Set to false if you want to see the browser window for debugging
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+
+    console.log("Launched Puppeteer:");
+
+    const page = await browser.newPage();
+
+    // Navigate to the Humble Bundle search page
+    const url = `https://humblebundle.com/store/search?search=${gameTitle.replace(
+      /\s+/g,
+      "%20"
+    )}`;
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+
+    console.log("Now on the page:", url);
+
+    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    // DEBUGGING
+    await page.screenshot({ path: "./humble-bundle-debug-screenshot.png" });
+    const pageContent = await page.content();
+    fs.writeFileSync("./HB_results.html", pageContent);
+    // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+    // Wait for the first result to appear (the first result should have the class '.entity-link')
+    await page.waitForSelector(".entity-link");
+
+    // Extract the href of the first result link (cheapest option that includes the base game)
+    const firstGameLink = await page.$(".entity-link");
+
+    // Get the relative URL from the 'href' attribute and prepend the base URL
+    const gameURL = await page.evaluate(
+      (el) => el.getAttribute("href"),
+      firstGameLink
+    );
+
+    const fullGameURL = `https://humblebundle.com${gameURL}`;
+
+    console.log(`Found URL for "${gameTitle}": ${fullGameURL}`);
+
+    // Close the browser
+    await browser.close();
+
+    return fullGameURL;
+  } catch (err) {
+    console.error("Error fetching Humble Bundle URL:", err.message);
+    return null; // Handle any errors gracefully
+  }
+};
+
+export const updateHumbleBundlePrice = async (
+  priceData,
+  isURLUpdated = false
+) => {
   try {
     let url = priceData.url;
+
+    // Default isURLUpdated to false if not provided, this ensures the URL is always most up to date unless we are created the price for the first time (then isURLUpdated is true)
+    if (isURLUpdated == false) {
+      getHumbleBundleURLViaSearch(priceData);
+    }
 
     // Launch Puppeteer using puppeteer-extra
     const browser = await puppeteerExtra.launch({
