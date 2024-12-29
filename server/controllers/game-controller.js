@@ -4,12 +4,13 @@ import axios from "axios";
 
 const knex = initKnex(configuration);
 
-import { formatPriceFields, getSteamAppId } from "../helpers/utils.js";
+import { formatPriceFields } from "../helpers/utils.js";
 
 import {
   updateSteamPrice,
   getSteamAppIdViaSearch,
 } from "../helpers/steam-helper.js";
+
 import * as priceController from "./price-controller.js";
 
 // Fetch access token from Twitch
@@ -110,7 +111,33 @@ const getSteamStoreData = async (gameTitle, gameId) => {
   )}`;
 
   const priceData = createPriceData(gameId, gameTitle, "Steam", steamUrl);
-  const updatedPriceData = await updateSteamPrice(priceData); // Update price info using your updateSteamPrice function
+  const updatedPriceData = await updateSteamPrice(priceData); // Update price info using updateSteamPrice function
+  return {
+    priceData: { ...priceData, ...updatedPriceData },
+    platformName: "Steam",
+  };
+};
+
+// Store-specific function for Humble Bundle
+const getHumbleBundleStoreData = async (gameTitle, gameId) => {
+  const steamAppId = await getHumbleBundleURLViaSearch(gameTitle);
+
+  if (!steamAppId) {
+    throw new Error(`Steam App ID not found for game title: "${gameTitle}"`);
+  }
+
+  const steamUrl = `https://store.steampowered.com/app/${steamAppId}/${gameTitle.replace(
+    /\s+/g,
+    "_"
+  )}`;
+
+  const priceData = createPriceData(
+    gameId,
+    gameTitle,
+    "Humble Bundle",
+    steamUrl
+  );
+  const updatedPriceData = await updateSteamPrice(priceData); // Update price info using updateSteamPrice function
   return {
     priceData: { ...priceData, ...updatedPriceData },
     platformName: "Steam",
@@ -135,8 +162,15 @@ const createPricesForGame = async (req, res) => {
     // Step 2: Get the platform-specific data
     let platformData;
 
-    // Handle Steam platform for now, you can extend this for other platforms
+    // Handle Steam platform for now, extend for other platforms via for loop?
     platformData = await getSteamStoreData(gameTitle, gameId);
+    // Steam: All bundles are on the same URL, so this link will never need to be updated
+    // Humble Bundle: Each bundle has a seperate URL, we should show the cheapest bundle that includes the base game. But when the bundle is no longer the cheapest option, we should switch the URL to the base game. So whenever we update Humble Bundle Prices, we should also update the URL. How do we do this w/o adding circular logic? Add a bool flag to the humblebundle-helper?
+    // If creating a price: Create URL, send isURLUpdated=true to updateHBPrice
+    // If updating all prices: send bool isURLUpdated = false to updateHBPrice, if false, call 'createURL' fxn to update HB price
+    // Do individually for testing
+    let isURLUpdated = false;
+    // platformData = await getHumbleBundleStoreData(gameTitle, gameId);
 
     // Step 3: Update or Insert the price data for the platform (e.g., Steam)
     const { message, price } = await updateOrInsertPrice(
@@ -145,10 +179,12 @@ const createPricesForGame = async (req, res) => {
       platformData.priceData
     );
 
+    const formattedPrice = formatPriceFields(price);
+
     // Return the appropriate response
     return res.status(200).json({
       message,
-      price,
+      formattedPrice,
     });
   } catch (error) {
     console.error("Error creating prices:", error);
