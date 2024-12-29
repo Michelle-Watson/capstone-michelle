@@ -71,7 +71,7 @@ export const updateHumbleBundlePrice = async (
 
     // Default isURLUpdated to false if not provided, this ensures the URL is always most up to date unless we are created the price for the first time (then isURLUpdated is true)
     if (isURLUpdated == false) {
-      getHumbleBundleURLViaSearch(priceData);
+      getHumbleBundleURLViaSearch(priceData.title);
     }
 
     // Launch Puppeteer using puppeteer-extra
