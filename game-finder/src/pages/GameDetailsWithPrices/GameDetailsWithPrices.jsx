@@ -65,7 +65,7 @@ export default function GameDetailsWithPrices() {
   useEffect(() => {
     getGame();
     getPricesforGame();
-  }, [id, priceList, isCreatingPrices]);
+  }, [id, isCreatingPrices]);
 
   useEffect(() => {
     console.log("Fetched game:", currentGame);
