@@ -1,7 +1,9 @@
 import initKnex from "knex";
 import configuration from "../knexfile.js";
 import axios from "axios";
-
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
 const knex = initKnex(configuration);
 
 import { formatPriceFields } from "../helpers/utils.js";
@@ -21,29 +23,45 @@ import * as priceController from "./price-controller.js";
 // Fetch access token from Twitch
 const getTwitchAccessToken = async () => {
   try {
-    const response = await axios.post(
-      "https://id.twitch.tv/oauth2/token",
-      null,
-      {
-        params: {
-          client_id: process.env.TWITCH_CLIENT_ID,
-          client_secret: process.env.TWITCH_CLIENT_SECRET,
-          grant_type: "client_credentials",
-        },
-      }
-    );
-    console.log(
-      "Access token fetched successfully",
-      response.data.access_token
-    );
+    // Check if the ACCESS_TOKEN already exists in .env
+    let accessToken = process.env.ACCESS_TOKEN;
 
-    // Return the access token
-    return response.data.access_token;
+    // If no access token in .env, fetch a new one
+    if (!accessToken || accessToken === "null") {
+      console.log("No ACCESS_TOKEN found, fetching new one...");
+
+      const response = await axios.post(
+        "https://id.twitch.tv/oauth2/token",
+        null,
+        {
+          params: {
+            client_id: process.env.TWITCH_CLIENT_ID,
+            client_secret: process.env.TWITCH_CLIENT_SECRET,
+            grant_type: "client_credentials",
+          },
+        }
+      );
+
+      console.log(
+        "Access token fetched successfully:",
+        response.data.access_token
+      );
+
+      // Save the new token in the .env file
+      accessToken = response.data.access_token;
+      // await updateEnvFile("ACCESS_TOKEN", accessToken); // Update the .env file with new token
+    }
+
+    // Return the access token (either existing or newly fetched)
+    return accessToken;
   } catch (err) {
     console.error("Error fetching access token", err);
     throw new Error("Could not fetch access token");
   }
 };
+
+// Function to update .env file with new ACCESS_TOKEN (is this even possible)
+// const updateEnvFile = async (key, value) => {};
 
 // Utility function to create price data for any platform
 const createPriceData = (gameId, gameTitle, platformName, storeUrl) => {
@@ -302,8 +320,8 @@ const getGamesFromIGDB = async (query) => {
         )}) & aggregated_rating > 80 & platforms = 6` // Exclude IDs already in DB
       : "where aggregated_rating > 80 & platforms = 6"; // Fallback in case no IDs are in the DB
 
-  const accessToken =
-    process.env.ACCESS_TOKEN || (await getTwitchAccessToken());
+  // token could be expired though
+  const accessToken = await getTwitchAccessToken();
   const url = "https://api.igdb.com/v4/games";
   const headers = {
     "Client-ID": process.env.TWITCH_CLIENT_ID,
@@ -422,8 +440,7 @@ const findOne = async (req, res) => {
     }
 
     // 3. If not found in db, try to fetch from IGDB API
-    const accessToken =
-      process.env.ACCESS_TOKEN || (await getTwitchAccessToken());
+    const accessToken = await getTwitchAccessToken();
     const url = "https://api.igdb.com/v4/games";
     const headers = {
       "Client-ID": process.env.TWITCH_CLIENT_ID,
