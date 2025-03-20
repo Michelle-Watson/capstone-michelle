@@ -11,7 +11,8 @@ export default function GameDetailsWithPrices() {
   let navigate = useNavigate();
 
   const [currentGame, setcurrentGame] = useState(null);
-  const [priceList, setpriceList] = useState(null);
+  const [priceList, setpriceList] = useState([]);
+  const [isCreatingPrices, setIsCreatingPrices] = useState(false); // To show loading while creating prices
 
   async function getGame() {
     try {
@@ -36,20 +37,49 @@ export default function GameDetailsWithPrices() {
       console.error(`Cannot retrieve prices for game with id ${id}: ${error}`);
     }
   };
+  // Function to create prices for the game
+  const createPricesForGame = async () => {
+    setIsCreatingPrices(true); // Show loading indicator
+    try {
+      const response = await axios.post(
+        `${VITE_API_URL}/games/${id}/create-prices`
+      );
+      if (response.status === 201) {
+        // After creating, fetch prices again to update the price list
+        await getPricesforGame();
+        console.log("Updated prices for game with id ${id");
+      } else {
+        // If the response is not successful, log the response status
+        console.warn(
+          `Failed to create prices for game with id ${id}. Status: ${response.status}`
+        );
+      }
+    } catch (error) {
+      // Log the error but don't throw it to prevent the app from crashing
+      console.error(`Error creating prices for game with id ${id}:`, error);
+    } finally {
+      setIsCreatingPrices(false); // Hide loading indicator
+    }
+  };
 
   useEffect(() => {
     getGame();
     getPricesforGame();
-  }, [id]);
+  }, [id, priceList, isCreatingPrices]);
 
   useEffect(() => {
     console.log("Fetched game:", currentGame);
     console.log("Fetched prices:", priceList);
   }, [currentGame]);
 
-  if (!currentGame || !priceList) {
-    return <div>Loading game and price details...</div>;
+  if (!currentGame) {
+    return <div>Loading game details...</div>;
   }
+
+  if (priceList === null) {
+    return <div>Loading prices...</div>;
+  }
+
   return (
     <div className="gameDetails__container">
       <div className="gameDetails__container--shadow">
@@ -58,6 +88,18 @@ export default function GameDetailsWithPrices() {
           priceList={priceList}
           getPricesforGame={getPricesforGame}
         />
+        {/* If no prices exist, display the "Create Prices" button */}
+        {priceList.length === 0 && (
+          <div className="create-prices__button">
+            <button
+              className="button button--primary button--center"
+              onClick={createPricesForGame}
+              disabled={isCreatingPrices}
+            >
+              {isCreatingPrices ? "Creating Prices..." : "Create Prices"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

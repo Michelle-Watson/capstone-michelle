@@ -1,9 +1,9 @@
 import initKnex from "knex";
 import configuration from "../knexfile.js";
 import axios from "axios";
-import fs from "fs";
-import path from "path";
-import dotenv from "dotenv";
+// import fs from "fs";
+// import path from "path";
+// import dotenv from "dotenv";
 const knex = initKnex(configuration);
 
 import { formatPriceFields } from "../helpers/utils.js";
@@ -178,6 +178,7 @@ const createPricesForGame = async (req, res) => {
 
     const gameId = gameFound.id; // The IGDB game ID
     const gameTitle = gameFound.title || "Balatro"; // Retrieve the title from the game object
+    console.log(`Creating prices for game "${gameTitle}"`);
 
     // 2. Define the stores and their corresponding functions
     const stores = [

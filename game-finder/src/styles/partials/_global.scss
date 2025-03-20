@@ -29,26 +29,33 @@ body {
 h1 {
   @include page-header;
 }
+
 h2 {
   @include subheader;
 }
+
 h3 {
   @include labels-links-buttons;
 }
+
 h4 {
   @include table-header;
 }
+
 p {
   .p1 {
     @include body-large;
   }
+
   .p2 {
     @include body-medium;
   }
+
   .p3 {
     @include body-small;
   }
 }
+
 // Need to explicitly specify font family for input and text area, otherwise its consolas
 input,
 textarea,
@@ -63,6 +70,9 @@ button {
 }
 
 //BUTTON
+
+
+
 .button {
   font-family: "TitilliumWeb", sans-serif;
   text-decoration: none;
@@ -105,12 +115,19 @@ button {
       border: 0.0625rem solid $GameFinder-Purple-1-button;
     }
   }
+
   &--delete {
     background-color: $Red;
     color: $White;
+
     &:hover {
       background-color: $night-bg;
     }
+  }
+
+  &--center {
+    margin: 0 auto;
+    display: block;
   }
 }
 
