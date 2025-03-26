@@ -183,8 +183,8 @@ const createPricesForGame = async (req, res) => {
     // 2. Define the stores and their corresponding functions
     const stores = [
       { name: "Steam", getData: getSteamStoreData },
-      { name: "Humble Bundle", getData: getHumbleBundleStoreData },
-      // Add more stores here as you need
+      // { name: "Humble Bundle", getData: getHumbleBundleStoreData }, // comment out for now, focus on Steam
+      // Add more stores here as needed
     ];
 
     // 3. Initialize an empty array to hold the price data for all stores
