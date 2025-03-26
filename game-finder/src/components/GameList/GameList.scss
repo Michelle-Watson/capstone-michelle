@@ -7,9 +7,7 @@
 @import "bootstrap/scss/buttons"; // for button (optional)
 
 // Import personal partials
-@import "../../styles/partials/global";
 @import "../../styles/partials/mixins";
-@import "../../styles/partials/typography";
 @import "../../styles/partials/variables";
 
 // Center the main container
@@ -30,6 +28,7 @@
 
   // Set max-width for mobile and tablet using variables
   max-width: $mobile-max-width;
+
   @include tablet {
     max-width: $tablet-max-width;
   }
@@ -75,8 +74,7 @@
       padding-left: 2rem;
       border: 0;
       outline: solid 0.0625rem $Cloud;
-      background: url("../../assets/icons/search-24px.svg") no-repeat left
-        center;
+      background: url("../../assets/icons/search-24px.svg") no-repeat left center;
       background-position: right 1rem center;
       color: $GameFinder-Purple-200;
 
@@ -107,11 +105,13 @@
     // border-collapse: separate; // Ensures rounded corners work on rows
     @extend .table-striped;
     @extend .table-hover;
+
     td {
       vertical-align: middle; // Center text vertically
       // border-radius: 2rem;
       // border-radius: 0;
     }
+
     th {
       // background-color: $GameFinder-Aqua;
       // color: #fff;

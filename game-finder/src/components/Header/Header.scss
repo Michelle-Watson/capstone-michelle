@@ -1,6 +1,4 @@
-@use "../../styles/partials/global" as *;
 @use "../../styles/partials/mixins" as *;
-@use "../../styles/partials/typography" as *;
 @use "../../styles/partials/variables" as *;
 
 .nav {
@@ -18,6 +16,7 @@
 
   // Set max-width for mobile and tablet using variables
   max-width: $mobile-max-width + 200px;
+
   @include tablet {
     // make width of nav container slightly larger than body content
     max-width: 1300px; // $tablet-max-width = 1100px

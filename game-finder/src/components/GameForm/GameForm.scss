@@ -1,16 +1,16 @@
 // Import personal partials
-@import "../../styles/partials/global";
 @import "../../styles/partials/mixins";
-@import "../../styles/partials/typography";
 @import "../../styles/partials/variables";
 
 .game-management {
   display: flex;
   justify-content: center;
   padding: 0 $padding-spacing-base-unit * 2;
+
   @include tablet {
     padding: 0 $padding-spacing-base-unit $padding-spacing-base-unit * 4;
   }
+
   @include desktop {
     padding: 0 $padding-spacing-base-unit $padding-spacing-base-unit * 8;
   }
@@ -25,9 +25,11 @@
   border-radius: 0.25rem;
   max-width: 600px;
   width: 100%;
+
   @include tablet {
     max-width: 1000px;
   }
+
   // Glowing drop shadow effect for the form
   &:focus-within {
     box-shadow: $GameFinder-Aqua; // Aqua glowing effect
@@ -92,6 +94,7 @@
     color: $night-form-field-text;
     background-color: $night-form-field;
     transition: all 0.3s ease; // Smooth transition for focus effects
+
     &.game-form__input-control--error {
       border-color: $Red; // Red border when there’s an error
     }
@@ -111,6 +114,7 @@
     display: flex;
     align-items: center; // Align icon and text
   }
+
   // Icon styling within error message
   &__error-icon {
     margin-right: 4px; // Add spacing between icon and text
@@ -126,6 +130,7 @@
     background-color: $night-acent;
     padding: $padding-spacing-base-unit * 3 $padding-spacing-base-unit * 4;
     flex-direction: row;
+
     @include tablet {
       justify-content: end;
       padding: 1rem $padding-spacing-base-unit * 4;
@@ -141,6 +146,8 @@
 }
 
 textarea.input-control {
-  min-height: 9rem; /* Makes the textarea taller */
-  resize: vertical; /* Allow user to resize the textarea vertically */
+  min-height: 9rem;
+  /* Makes the textarea taller */
+  resize: vertical;
+  /* Allow user to resize the textarea vertically */
 }

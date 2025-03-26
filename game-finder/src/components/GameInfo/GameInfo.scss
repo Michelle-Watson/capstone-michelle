@@ -1,7 +1,5 @@
 // Import personal partials
-@import "../../styles/partials/global";
 @import "../../styles/partials/mixins";
-@import "../../styles/partials/typography";
 @import "../../styles/partials/variables";
 
 /* GameInfo.scss */
@@ -22,11 +20,16 @@
 }
 
 .gameInfo__image {
-  width: 100%; /* Make the image responsive */
-  max-width: 1000px; /* Optional: Limit the width to 1000px */
-  height: auto; /* Maintain aspect ratio */
-  max-height: 500px; /* Set a maximum height for the image */
-  object-fit: cover; /* Ensure the image covers the container while maintaining aspect ratio */
+  width: 100%;
+  /* Make the image responsive */
+  max-width: 1000px;
+  /* Optional: Limit the width to 1000px */
+  height: auto;
+  /* Maintain aspect ratio */
+  max-height: 500px;
+  /* Set a maximum height for the image */
+  object-fit: cover;
+  /* Ensure the image covers the container while maintaining aspect ratio */
   border-radius: 1rem;
 }
 
