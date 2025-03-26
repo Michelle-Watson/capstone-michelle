@@ -27,7 +27,7 @@ dist-ssr
 .env
 
 # Ignore .html files
-*.html
+server/*.html
 
 # Ignore .png files
-*.png
+server/*.png
