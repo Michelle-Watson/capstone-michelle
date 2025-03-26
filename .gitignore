@@ -25,3 +25,9 @@ dist-ssr
 
 .DS_Store
 .env
+
+# Ignore .html files
+*.html
+
+# Ignore .png files
+*.png
