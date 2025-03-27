@@ -14,7 +14,7 @@ export const getSteamAppIdViaSearch = async (gameTitle) => {
     const html = response.data;
 
     // verify html is of the correct page
-    fs.writeFileSync("./steam_results.html", html);
+    fs.writeFileSync("./steam_search_results.html", html);
 
     // Load the HTML into Cheerio for parsing
     const $ = cheerio.load(html);
@@ -39,7 +39,7 @@ export const getSteamAppIdViaSearch = async (gameTitle) => {
 export const updateSteamPrice = async (priceData) => {
   try {
     // Fetch the page
-    console.log("priceData", priceData);
+    console.log("Before updating priceData", priceData);
     let url = priceData.url;
     // testing non-discounted game logic
     // url = "https://store.steampowered.com/app/3121110/Zort";
@@ -64,11 +64,15 @@ export const updateSteamPrice = async (priceData) => {
     const gameTitleFromUrl = priceData.url.split("/").pop().replace(/_/g, " "); // Convert underscores to spaces
     console.log("gameTitleFromUrl", gameTitleFromUrl);
 
-    // Locate the first game purchase section (ensures we targetting the base game, no bundles). Scrap, the first game section got GTAV is a shark card bundle, this isn't robust anymore
+    // Locate the first game purchase section (ensures we targetting the base game, no bundles).
+    // Scrap, the first game section got GTAV is a shark card bundle, this isn't robust anymore
     // const gameSection = $(".game_area_purchase_game").first();
 
     // Locate all 'game_area_purchase_game' sections
     const gameSections = $(".game_area_purchase_game");
+
+    // NEW ISSUE FOUND: the first purchase game section is to download the demo, so exclude game sections that have the word 'demo',  include those with the word 'Buy' in the front?
+    // TODO: IGNORE: game_area_purchase_game demo_above_purchase
 
     // Initialize default values for price details
     let originalPriceText = "";
@@ -83,6 +87,9 @@ export const updateSteamPrice = async (priceData) => {
       const title = $(section).find("h1").text().trim();
 
       // If the section title contains the game title, it's the correct game section
+      // ERR FOUND: Buy Call of Duty®: Black Ops 6, if it doens't match exatly, it errors out. We're not looking for the 'R', so we say we can't find it
+      // https://store.steampowered.com/app/2933620/Call_of_Duty_Black_Ops_6/
+      // TODO: fuzzy search, if it contains each word in this order, we're good?
       if (title.includes(gameTitleFromUrl)) {
         gameSection = $(section);
         return false; // Break the loop when we find the first matching section

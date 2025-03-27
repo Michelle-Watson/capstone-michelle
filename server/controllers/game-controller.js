@@ -134,7 +134,9 @@ const getSteamStoreData = async (gameTitle, gameId) => {
   )}`;
 
   const priceData = createPriceData(gameId, gameTitle, "Steam", steamUrl);
+  console.log("priceData empty: ", priceData);
   const updatedPriceData = await updateSteamPrice(priceData); // Update price info using updateSteamPrice function
+  console.log("priceData filled: ", updatedPriceData);
   return {
     priceData: { ...priceData, ...updatedPriceData },
     platformName: "Steam",
